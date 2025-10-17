@@ -1,8 +1,10 @@
 import app from "./app";
 import { AppDataSource } from "./config/data-source";
 import { errorHandler } from "./middlewares/errorHandler";
+import dotenv from 'dotenv';
+dotenv.config();
 
-const PORT = 4000;
+const PORT = process.env.PORT;
 
 
 app.use(errorHandler);
