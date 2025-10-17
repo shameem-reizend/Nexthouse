@@ -12,6 +12,8 @@ app.use(errorHandler);
 AppDataSource.initialize()
 .then(() => {
     app.listen(PORT, () => {
+        console.log("**********")
+        console.log("Database connected")
         console.log(`Server running at http://localhost:${PORT}`);
     });
 })
