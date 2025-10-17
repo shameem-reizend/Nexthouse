@@ -1,5 +1,7 @@
 import { DataSource } from "typeorm";
 import dotenv from "dotenv";
+import { User } from "../entities/User.entity";
+import { Address } from "../entities/Address.entity";
 dotenv.config();
 
 export const AppDataSource = new DataSource({
@@ -12,5 +14,5 @@ export const AppDataSource = new DataSource({
     synchronize: true,
     logging: false,
 
-    entities: [],
+    entities: [User,Address],
 });
