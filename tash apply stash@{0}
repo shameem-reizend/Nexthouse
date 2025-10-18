@@ -1,0 +1,121 @@
+[1mdiff --git a/backend/src/app.ts b/backend/src/app.ts[m
+[1mindex b7cd2dd..d7a03a5 100644[m
+[1m--- a/backend/src/app.ts[m
+[1m+++ b/backend/src/app.ts[m
+[36m@@ -1,11 +1,11 @@[m
+ import express, { Request, Response } from "express";[m
+[31m-import categoryRoutes from './routes/category.routes'[m
+[32m+[m[32mimport categoryRoutes from "./routes/category.routes";[m
+ import { errorHandler } from "./middlewares/errorHandler";[m
+[31m-[m
+[32m+[m[32mimport productRoutes from "./routes/product.routes";[m
+ const app = express();[m
+ [m
+[31m-app.use('/category', categoryRoutes);[m
+[31m-[m
+[32m+[m[32mapp.use("/category", categoryRoutes);[m
+[32m+[m[32mapp.use("/product", productRoutes);[m
+ [m
+ app.get("/", (req: Request, res: Response) => {[m
+   res.send("Hello, TypeScript + Express");[m
+[1mdiff --git a/backend/src/entities/Product.entity.ts b/backend/src/entities/Product.entity.ts[m
+[1mindex 35358e1..bd38aae 100644[m
+[1m--- a/backend/src/entities/Product.entity.ts[m
+[1m+++ b/backend/src/entities/Product.entity.ts[m
+[36m@@ -1,9 +1,16 @@[m
+[31m-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";[m
+[32m+[m[32mimport {[m
+[32m+[m[32m  Column,[m
+[32m+[m[32m  Entity,[m
+[32m+[m[32m  JoinColumn,[m
+[32m+[m[32m  ManyToOne,[m
+[32m+[m[32m  PrimaryGeneratedColumn,[m
+[32m+[m[32m} from "typeorm";[m
+[32m+[m[32mimport { Category } from "./Category.entity";[m
+ [m
+ @Entity()[m
+ export class Product {[m
+[31m-  @PrimaryGeneratedColumn()[m
+[31m-  product_id!: number;[m
+[32m+[m[32m  @PrimaryGeneratedColumn("uuid")[m
+[32m+[m[32m  product_id!: string;[m
+ [m
+   @Column()[m
+   name: string;[m
+[36m@@ -14,9 +21,18 @@[m [mexport class Product {[m
+   @Column()[m
+   image: string;[m
+ [m
+[31m-  @Column()[m
+[32m+[m[32m  @Column({ nullable: true })[m
+   price: number;[m
+ [m
+[31m-  @Column()[m
+[31m-  category: string;[m
+[32m+[m[32m  @Column({[m
+[32m+[m[32m    default: false,[m
+[32m+[m[32m  })[m
+[32m+[m[32m  isFree: boolean;[m
+[32m+[m
+[32m+[m[32m  @Column({ default: false })[m
+[32m+[m[32m  isSold: boolean;[m
+[32m+[m
+[32m+[m[32m  @ManyToOne(() => Category, { onDelete: "CASCADE" })[m
+[32m+[m[32m  @JoinColumn({ name: "category" })[m
+[32m+[m[32m  category: Category;[m
+ }[m
+[1mdiff --git a/backend/src/routes/category.routes.ts b/backend/src/routes/category.routes.ts[m
+[1mindex df65144..e00de1d 100644[m
+[1m--- a/backend/src/routes/category.routes.ts[m
+[1m+++ b/backend/src/routes/category.routes.ts[m
+[36m@@ -6,6 +6,6 @@[m [mimport { UserRole } from "../entities/User.entity";[m
+ const router = Router();[m
+ router.use(authenticate);[m
+ [m
+[31m-router.post('/', authorize(UserRole.ADMIN), addCategoryHandler);[m
+[32m+[m[32mrouter.post("/", addCategoryHandler);[m
+ [m
+[31m-export default router[m
+\ No newline at end of file[m
+[32m+[m[32mexport default router;[m
+[1mdiff --git a/backend/src/services/category.service.ts b/backend/src/services/category.service.ts[m
+[1mindex a10bee0..92c9459 100644[m
+[1m--- a/backend/src/services/category.service.ts[m
+[1m+++ b/backend/src/services/category.service.ts[m
+[36m@@ -1,17 +1,25 @@[m
+[31m-import { AppDataSource } from "../config/data-source"[m
+[31m-import { Category } from "../entities/Category.entity"[m
+[32m+[m[32mimport { AppDataSource } from "../config/data-source";[m
+[32m+[m[32mimport { Category } from "../entities/Category.entity";[m
+ import { ApiError } from "../utils/apiError";[m
+ [m
+ const categoryRepo = AppDataSource.getRepository(Category);[m
+ [m
+ export const createCategory = async (category_name: string) => {[m
+[31m-    const category = await categoryRepo.findOneBy({category_name});[m
+[31m-    if(category){[m
+[31m-        throw new ApiError('Category already exists', 409);[m
+[31m-    }[m
+[32m+[m[32m  const category = await categoryRepo.findOneBy({ category_name });[m
+[32m+[m[32m  if (category) {[m
+[32m+[m[32m    throw new ApiError("Category already exists", 409);[m
+[32m+[m[32m  }[m
+ [m
+[31m-    const newCategory = categoryRepo.create({category_name});[m
+[31m-    await categoryRepo.save(newCategory);[m
+[32m+[m[32m  const newCategory = categoryRepo.create({ category_name });[m
+[32m+[m[32m  await categoryRepo.save(newCategory);[m
+ [m
+[31m-    return newCategory[m
+[31m-}[m
+\ No newline at end of file[m
+[32m+[m[32m  return newCategory;[m
+[32m+[m[32m};[m
+[32m+[m
+[32m+[m[32mexport const getCategoryById = async (category_id: string) => {[m
+[32m+[m[32m  const categoryExists = await categoryRepo.findOneBy({ category_id });[m
+[32m+[m[32m  if (!categoryExists) {[m
+[32m+[m[32m    throw new ApiError("Category doesn't exists", 404);[m
+[32m+[m[32m  }[m
+[32m+[m[32m  return categoryExists;[m
+[32m+[m[32m};[m

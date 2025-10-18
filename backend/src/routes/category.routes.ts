@@ -4,8 +4,8 @@ import { authenticate, authorize } from "../middlewares/auth.middleware";
 import { UserRole } from "../entities/User.entity";
 
 const router = Router();
-router.use(authenticate);
+// router.use(authenticate);
 
-router.post('/', authorize(UserRole.ADMIN), addCategoryHandler);
+router.post('/',  addCategoryHandler);
 
-export default router
+export default router;
