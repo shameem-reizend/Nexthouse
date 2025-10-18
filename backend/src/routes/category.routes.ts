@@ -7,3 +7,5 @@ const router = Router();
 router.use(authenticate);
 
 router.post('/', authorize(UserRole.ADMIN), addCategoryHandler);
+
+export default router
