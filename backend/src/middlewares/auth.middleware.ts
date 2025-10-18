@@ -12,7 +12,7 @@ export interface AuthRequest extends Request{
 
 export const authenticate = (req: Request, res: Response, next: NextFunction) => {
     const authHeader = req.headers.authorization;
-    if(!authHeader.startsWith("Bearer ")){
+    if(!authHeader || !authHeader.startsWith("Bearer " )){
         throw new ApiError('Token missing', 401);
     }
 

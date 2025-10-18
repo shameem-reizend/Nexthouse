@@ -22,3 +22,8 @@ export const getCategoryById = async (category_id: string) => {
   }
   return await categoryRepo.findOneBy({ category_id });
 };
+
+
+export const fetchCategories = async () => {
+    return await categoryRepo.find();
+}
