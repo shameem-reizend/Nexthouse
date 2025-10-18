@@ -1,17 +1,24 @@
-import { AppDataSource } from "../config/data-source"
-import { Category } from "../entities/Category.entity"
+import { AppDataSource } from "../config/data-source";
+import { Category } from "../entities/Category.entity";
 import { ApiError } from "../utils/apiError";
 
 const categoryRepo = AppDataSource.getRepository(Category);
 
 export const createCategory = async (category_name: string) => {
-    const category = await categoryRepo.findOneBy({category_name});
-    if(category){
-        throw new ApiError('Category already exists', 409);
-    }
+  const category = await categoryRepo.findOneBy({ category_name });
+  if (category) {
+    throw new ApiError("Category already exists", 409);
+  }
 
-    const newCategory = categoryRepo.create({category_name});
-    await categoryRepo.save(newCategory);
+  const newCategory = categoryRepo.create({ category_name });
+  await categoryRepo.save(newCategory);
 
-    return newCategory
-}
+  return newCategory;
+};
+
+export const getCategoryById = async (category_id: string) => {
+  if (!category_id) {
+    throw new ApiError("Category id not existed in service", 404);
+  }
+  return await categoryRepo.findOneBy({ category_id });
+};

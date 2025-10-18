@@ -1,0 +1,45 @@
+import { AppDataSource } from "../config/data-source";
+import { Product } from "../entities/Product.entity";
+import { ApiError } from "../utils/apiError";
+
+const productRepo = AppDataSource.getRepository(Product);
+
+export const createProduct = async (
+  category_id,
+  name,
+  description,
+  image,
+  price,
+  freeStatus
+) => {
+  try {
+    const Product = await productRepo.create({
+      name,
+      description,
+      price,
+      image,
+      isFree: freeStatus ? true : false,
+      category: {category_id},
+    });
+    await productRepo.save(Product);
+    return Product;
+  } catch (error) {
+    throw new ApiError("Error in creating Product Service", 500);
+  }
+};
+
+export const getProductById = async (product_id: string) => {
+  if (!product_id) {
+    throw new ApiError("Product id not Existing in Product Service", 500);
+  }
+
+  const Product = await productRepo.findOneBy({ product_id });
+  if (!Product) {
+    throw new ApiError("No Products Found in Product Service", 500);
+  }
+  return Product;
+};
+
+export const deleteProduct = async (product_id: string) => {
+  await productRepo.delete({ product_id });
+};

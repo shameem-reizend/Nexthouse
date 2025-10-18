@@ -1,9 +1,10 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Category } from "./Category.entity";
 
 @Entity()
 export class Product {
-  @PrimaryGeneratedColumn()
-  product_id!: number;
+  @PrimaryGeneratedColumn("uuid")
+  product_id!: string;
 
   @Column()
   name: string;
@@ -14,9 +15,13 @@ export class Product {
   @Column()
   image: string;
 
-  @Column()
+  @Column({ nullable: true })
   price: number;
 
-  @Column()
-  category: string;
+  @Column({ default: false })
+  isFree: boolean;
+
+  @ManyToOne(() => Category,{onDelete:"CASCADE"})
+  @JoinColumn({ name: "category" })
+  category: Category;
 }
