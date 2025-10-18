@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express"
-import { createCategory } from "../services/category.service";
+import { createCategory, fetchCategories } from "../services/category.service";
 
 export const addCategoryHandler = async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -10,7 +10,25 @@ export const addCategoryHandler = async (req: Request, res: Response, next: Next
         res.status(201).json({
             success: true,
             message: "Category successfully created",
-            new_category: category
+            data: {
+                new_category: category
+            }
+        })
+    } catch (error) {
+        next(error)
+    }
+}
+
+export const fetchAllCategoriesHandler = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const categories = await fetchCategories();
+
+        res.status(200).json({
+            success: true,
+            message: 'Categories successfully fetched',
+            data: {
+                categories
+            }
         })
     } catch (error) {
         next(error)
