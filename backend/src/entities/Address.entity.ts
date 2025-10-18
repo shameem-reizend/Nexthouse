@@ -10,16 +10,16 @@ export class Address{
     @JoinColumn({name:"address_id"})
     user:User; 
 
-    @Column()
+    @Column({nullable:true})
     state:string;
 
-    @Column()
+    @Column({nullable:true})
     district:string;
 
-    @Column()
+    @Column({nullable:true})
     city:string;
 
-    @Column({unique:true})
+    @Column({unique:true,nullable:true})
     pincode:number;
 
     @Column({nullable:true})
