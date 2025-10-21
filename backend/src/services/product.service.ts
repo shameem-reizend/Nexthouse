@@ -19,7 +19,7 @@ export const createProduct = async (
       price,
       image,
       isFree: freeStatus ? true : false,
-      category: {category_id},
+      category: { category_id },
     });
     await productRepo.save(Product);
     return Product;
@@ -42,4 +42,10 @@ export const getProductById = async (product_id: string) => {
 
 export const deleteProduct = async (product_id: string) => {
   await productRepo.delete({ product_id });
+};
+
+export const changeSold = async (product_id: string) => {
+  const product = await productRepo.findOneBy({ product_id });
+  product.isSold = true;
+  await productRepo.save(product);
 };

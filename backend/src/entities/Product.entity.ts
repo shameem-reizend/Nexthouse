@@ -1,4 +1,10 @@
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from "typeorm";
 import { Category } from "./Category.entity";
 
 @Entity()
@@ -21,7 +27,10 @@ export class Product {
   @Column({ default: false })
   isFree: boolean;
 
-  @ManyToOne(() => Category,{onDelete:"CASCADE"})
+  @Column({ default: false })
+  isSold: boolean;
+
+  @ManyToOne(() => Category, { onDelete: "CASCADE" })
   @JoinColumn({ name: "category" })
   category: Category;
 }
