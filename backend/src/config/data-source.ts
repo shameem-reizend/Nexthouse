@@ -6,6 +6,7 @@ import { Product } from "../entities/Product.entity";
 import { Category } from "../entities/Category.entity";
 import { LikedProducts } from "../entities/LikedProducts.entity";
 import { Event } from "../entities/Event.entity";
+import { Invite } from "../entities/Invite.entity";
 dotenv.config();
 
 export const AppDataSource = new DataSource({
@@ -18,5 +19,5 @@ export const AppDataSource = new DataSource({
   synchronize: true,
   logging: false,
 
-  entities: [User, Address, Product, Category, Event, LikedProducts],
+  entities: [User, Address, Product, Category, Event, LikedProducts,Invite],
 });
