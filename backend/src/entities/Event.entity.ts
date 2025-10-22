@@ -8,11 +8,11 @@ export enum EventStatus {
 
 @Entity()
 export class Event{
-    @PrimaryGeneratedColumn()
-    id:string;
+    @PrimaryGeneratedColumn("uuid")
+    event_id:string;
 
     @Column()
-    Event_name:string;
+    event_name:string;
 
     @Column()
     event_description:string;
