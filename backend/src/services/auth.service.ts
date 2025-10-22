@@ -39,7 +39,7 @@ export const login = async(email:string,password:string) =>{
     if(!userFound){
         throw new ApiError("Invlaid Credentials",400)
     }
-    const check = compare(password,userFound.password);
+    const check = bcrypt.compare(password,userFound.password);
 
     if(!check){
         throw new ApiError("Invalid credentials",400)
