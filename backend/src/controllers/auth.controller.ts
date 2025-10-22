@@ -1,5 +1,6 @@
 import { NextFunction,Request,Response } from "express";
 import { login, registerUser } from "../services/auth.service";
+import { instanceToPlain } from "class-transformer";
 
 
 export const handleRegister = async(req:Request,res:Response,next:NextFunction) =>{
@@ -13,7 +14,8 @@ export const handleRegister = async(req:Request,res:Response,next:NextFunction) 
         return res.status(201).json({
             success:true,
             message:"User Registered Successfully",
-            user})
+            user:instanceToPlain(user)
+        })
 
     }catch(error){
         next(error);
@@ -40,7 +42,7 @@ export const handleLogin = async(req:Request,res:Response,next:NextFunction) => 
             success:true,
             message:"Login Successful",
             data:{
-                user:loginUser.userFound,
+                user: instanceToPlain(loginUser.userFound),
                 token:loginUser.tokens.accessToken
             }
 
