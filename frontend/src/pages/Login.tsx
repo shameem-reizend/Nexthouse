@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
-import { EyeOff, Eye } from 'lucide-react'
+import { EyeOff, Eye } from 'lucide-react';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+ import { toast } from 'react-toastify';
 
 export const Login: React.FC = () => {
 
@@ -7,12 +10,31 @@ export const Login: React.FC = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
-    const handleSubmit = () => {
-        alert(`email: ${email}, password: ${password}`)
+    const navigate = useNavigate()
+
+    const login = async (email: string, password: string) => {
+        const response = await axios.post('http://localhost:5000/auth/login', {email, password});
+        return response.data;
+    }
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        try {
+            const userData = await login(email, password);
+            if(userData){
+                localStorage.setItem("userData", JSON.stringify(userData.data.user));
+                localStorage.setItem("accessToken", userData.data.token);
+            }
+            toast.success('login successful');
+            navigate('/')
+        } catch (err) {
+            console.log(err);
+            toast.error('login failed');
+        }
     }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-cyan-50 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-linear-to-br from-slate-50 via-blue-50 to-cyan-50 flex items-center justify-center p-4">
         <div className="w-6xl flex">
             <div className="bg-red-500 w-4xl p-4 flex justify-center items-center rounded-tl-2xl rounded-bl-2xl">
                 <div className="">
@@ -24,7 +46,7 @@ export const Login: React.FC = () => {
             <div className="bg-white w-4xl p-5 rounded-tr-2xl rounded-br-2xl">
                 <div className="text-center mb-8">
                     <h2 className="text-3xl font-bold text-gray-800 mb-3">
-                        Sign In to <span className="bg-gradient-to-r from-red-600 to-orange-600 bg-clip-text text-transparent">NextHouse</span>
+                        Sign In to <span className="bg-linear-to-r from-red-600 to-orange-600 bg-clip-text text-transparent">NextHouse</span>
                     </h2>
                     <p className="text-gray-600">Enter your credentials to access your account</p>
                 </div>
@@ -72,12 +94,11 @@ export const Login: React.FC = () => {
 
                     <button
                         type="submit"
-                        className="w-full group relative bg-gradient-to-r from-red-600 to-orange-600 text-white py-4 rounded-xl font-semibold hover:shadow-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed hover:scale-105 disabled:hover:scale-100 border border-red-500/20 overflow-hidden"
+                        className="w-full group relative bg-linear-to-r from-red-600 to-orange-600 text-white py-4 rounded-xl font-semibold hover:shadow-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed hover:scale-105 disabled:hover:scale-100 border border-red-500/20 overflow-hidden"
                     >
                         SignIn
                     </button>
                 </form>
-
             </div>
         </div>
     </div>

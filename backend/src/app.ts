@@ -7,9 +7,12 @@ import likedRoutes from "./routes/liked.routes";
 import eventRoutes from "./routes/event.routes";
 import inviteRoutes from "./routes/invite.routes";
 import addressRoutes from "./routes/address.routes";
+import cors from 'cors';
 
 const app = express();
 app.use(express.json());
+app.use(cors());
+
 app.use("/auth", authRoutes);
 app.use("/category", categoryRoutes);
 app.use("/product", productRoutes);
