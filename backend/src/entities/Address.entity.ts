@@ -19,7 +19,7 @@ export class Address{
     @Column({nullable:true})
     city:string;
 
-    @Column({unique:true,nullable:true})
+    @Column({nullable:true})
     pincode:number;
 
     @Column({nullable:true})
