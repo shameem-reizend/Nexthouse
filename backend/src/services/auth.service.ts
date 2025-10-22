@@ -1,6 +1,6 @@
 import { AppDataSource } from "../config/data-source"
 import { Address } from "../entities/Address.entity";
-import { User } from "../entities/User.entity"
+import { User, UserRole } from "../entities/User.entity"
 import { ApiError } from "../utils/apiError";
 import bcrypt, { compare } from "bcryptjs";
 import { generateAccessToken, generateRefreshToken } from "../utils/token";
@@ -53,3 +53,28 @@ export const login = async(email:string,password:string) =>{
     return {userFound,tokens:{accessToken,refreshToken}};
 
 }
+
+export const getUserById=async(user_id:string)=>{
+
+    if(!user_id){
+        throw new ApiError("User id is not provided",400)
+    }
+    const user=await userRepo.findOneBy({user_id})
+
+    if(!user){
+        throw new ApiError("Invalid credentials",400)
+    }
+    return user
+
+}
+
+
+export const getUserLikedProducts=async(user_id:string)=>{
+
+    if(!user_id){
+        throw new ApiError("User id is not provided",400)
+    }
+    const user=await userRepo.findOne({where:{user_id},relations:{likedProducts:{product:true}}})
+    return user.likedProducts
+}
+
