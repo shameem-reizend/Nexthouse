@@ -1,11 +1,6 @@
-import {
-  Column,
-  Entity,
-  JoinColumn,
-  ManyToOne,
-  PrimaryGeneratedColumn,
-} from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Category } from "./Category.entity";
+import { LikedProducts } from "./LikedProducts.entity";
 
 @Entity()
 export class Product {
@@ -33,4 +28,10 @@ export class Product {
   @ManyToOne(() => Category, { onDelete: "CASCADE" })
   @JoinColumn({ name: "category" })
   category: Category;
+
+  @OneToMany(()=>LikedProducts,(likedProduct)=>likedProduct.product)
+  @JoinColumn()
+  likedBy!:LikedProducts[]
+
+
 }

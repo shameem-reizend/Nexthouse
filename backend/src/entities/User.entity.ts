@@ -1,6 +1,7 @@
-import { Column, Entity, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Address } from "./Address.entity";
 import {Event} from "./Event.entity"
+import { LikedProducts } from "./LikedProducts.entity";
 
 export enum UserRole{
     ADMIN = "admin",
@@ -26,6 +27,11 @@ export class User {
 
     @Column({type: "enum",enum: UserRole,default: UserRole.USER})
     role: UserRole;
+
+
+    @OneToMany(()=>LikedProducts,(likedProduct)=>likedProduct.user)
+    @JoinColumn()
+    likedProducts!:LikedProducts[]
 
     @OneToMany(() => Event, (event) => event.createdBy)
     events:Event
