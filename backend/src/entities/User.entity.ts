@@ -34,7 +34,7 @@ export class User {
     likedProducts!:LikedProducts[]
 
     @OneToMany(() => Event, (event) => event.createdBy)
-    events:Event
+    events:Event[];
 
 
 
