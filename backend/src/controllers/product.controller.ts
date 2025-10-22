@@ -5,19 +5,24 @@ import {
   changeSold,
   createProduct,
   deleteProduct,
+  getAllProducts,
   getProductById,
+  getUserProducts,
 } from "../services/product.service";
+import { AuthRequest } from "../middlewares/auth.middleware";
+import { getUserById } from "../services/auth.service";
 
 export const addProductHandler = async (
-  req: Request,
+  req: AuthRequest,
   res: Response,
   next: NextFunction
 ) => {
   try {
     const { category_id } = req.params;
     const { name, description, image, price, isFree } = req.body;
+    const { id } = req.user;
 
- 
+    const user = await getUserById(id);
 
     let finalPrice: number;
     let freeStatus: boolean;
@@ -46,12 +51,13 @@ export const addProductHandler = async (
       description,
       image,
       finalPrice,
-      freeStatus
+      freeStatus,
+      user.user_id
     );
     return res.status(201).json({
       success: true,
       message: "Product created Successfully",
-      new_product: product,
+      data: product,
     });
   } catch (error) {
     next(error);
@@ -101,8 +107,47 @@ export const updateSoldHandler = async (
     const result = await changeSold(product_id);
     return res.status(201).json({
       success: true,
-      message: "Sold the product successfully",
-      product: result,
+      message: "Product has been sold out",
+      data: result,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const displayProductHandler = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const products = await getAllProducts();
+    return res.status(201).json({
+      success: true,
+      message: "All Products",
+      data: products,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const displayUserProductsHandler = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { id } = req.user;
+    const products = await getUserProducts(id);
+    if (!products) {
+      throw new ApiError("error in fetchinf products");
+    }
+
+    return res.status(201).json({
+      success: true,
+      message: "All products fetched",
+      data: products,
     });
   } catch (error) {
     next(error);

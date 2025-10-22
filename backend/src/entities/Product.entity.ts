@@ -1,6 +1,7 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Category } from "./Category.entity";
 import { LikedProducts } from "./LikedProducts.entity";
+import { User } from "./User.entity";
 
 @Entity()
 export class Product {
@@ -34,4 +35,7 @@ export class Product {
   likedBy!:LikedProducts[]
 
 
+  @ManyToOne(()=>User,{onDelete:'CASCADE'})
+  @JoinColumn({name:"user"})
+  user:User
 }

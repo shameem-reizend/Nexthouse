@@ -4,6 +4,8 @@ import { UserRole } from "../entities/User.entity";
 import {
   addProductHandler,
   deleteProductHandler,
+  displayProductHandler,
+  displayUserProductsHandler,
   updateSoldHandler,
 } from "../controllers/product.controller";
 import { validateBody } from "../middlewares/body.validator.middleware";
@@ -12,10 +14,17 @@ import { productSchema } from "../validations/product.validation";
 const router = Router();
 router.use(authenticate);
 
-router.post("/:category_id",  authorize(UserRole.USER),validateBody(productSchema), addProductHandler);
+// authorize(UserRole.USER),
 
-router.delete("/:product_id",  authorize(UserRole.USER),deleteProductHandler);
+router.post("/:category_id", validateBody(productSchema), addProductHandler);
 
-router.get("/sold/:product_id", authorize(UserRole.USER), updateSoldHandler);
+router.delete("/:product_id", deleteProductHandler);
+
+router.get("/sold/:product_id", updateSoldHandler);
+
+router.get('/',displayUserProductsHandler);
+
+router.get("/all", displayProductHandler); //displaying the sold products also
+
 
 export default router;
