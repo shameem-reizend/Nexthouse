@@ -10,7 +10,8 @@ export const createProduct = async (
   description,
   image,
   price,
-  freeStatus
+  freeStatus,
+  user_id
 ) => {
   try {
     const Product = await productRepo.create({
@@ -20,6 +21,7 @@ export const createProduct = async (
       image,
       isFree: freeStatus ? true : false,
       category: { category_id },
+      user:{user_id}
     });
     await productRepo.save(Product);
     return Product;
@@ -49,3 +51,12 @@ export const changeSold = async (product_id: string) => {
   product.isSold = true;
   await productRepo.save(product);
 };
+
+export const getAllProducts = async () => {
+  return await productRepo.find();
+};
+
+export const getUserProducts=async(user_id:string)=>{
+  const products=await productRepo.find({where:{user:{user_id}},relations:["user","categories"]})
+  return products;
+}

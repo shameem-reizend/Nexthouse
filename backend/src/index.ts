@@ -1,18 +1,17 @@
 import app from "./app";
 import { AppDataSource } from "./config/data-source";
-import dotenv from 'dotenv';
+import dotenv from "dotenv";
 dotenv.config();
 
 const PORT = process.env.PORT;
 
 AppDataSource.initialize()
-.then(() => {
+  .then(() => {
     app.listen(PORT, () => {
-        console.log("**********")
-        console.log("Database connected")
-        console.log(`Server running at http://localhost:${PORT}`);
+      console.log("Database connected");
+      console.log(`Server running at http://localhost:${PORT}`);
     });
-})
-.catch((error) => {
-    console.log(error)
-})
+  })
+  .catch((error) => {
+    console.log(error);
+  });
