@@ -5,8 +5,9 @@ import { verifyAccessToken } from "../utils/token";
 export interface AuthRequest extends Request{
     user?: {
         id: string,
-        name: string,
-        role: string
+        name?: string,
+        role: string,
+        email?:string
     }
 }
 
