@@ -141,12 +141,12 @@ export const displayUserProductsHandler = async (
     const { id } = req.user;
     const products = await getUserProducts(id);
     if (!products) {
-      throw new ApiError("error in fetchinf products");
+      throw new ApiError("error in fetching products");
     }
 
     return res.status(201).json({
       success: true,
-      message: "All products fetched",
+      message: `All products for  ${req.user.name} fetched`,
       data: products,
     });
   } catch (error) {

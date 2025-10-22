@@ -1,37 +1,38 @@
-import { AppDataSource } from "../config/data-source"
+import { AppDataSource } from "../config/data-source";
 import { Address } from "../entities/Address.entity";
-import { User, UserRole } from "../entities/User.entity"
+import { User, UserRole } from "../entities/User.entity";
 import { ApiError } from "../utils/apiError";
 import bcrypt, { compare } from "bcryptjs";
 import { generateAccessToken, generateRefreshToken } from "../utils/token";
 
-
 const userRepo = AppDataSource.getRepository(User);
 const addressRepo = AppDataSource.getRepository(Address);
 
-export const registerUser = async (name:string,email:string,password:string,phone_number:string) => {
+export const registerUser = async (
+  name: string,
+  email: string,
+  password: string,
+  phone_number: string
+) => {
+  const existing = await userRepo.findOneBy({ email });
 
-    const existing = await userRepo.findOneBy({email});
+  if (existing) {
+    throw new ApiError("Email already exists", 401);
+  }
 
-    if(existing){
-        throw new ApiError("Email already exists",401)
-    }
+  const hashPassword = await bcrypt.hash(password, 10);
 
-    const hashPassword = await bcrypt.hash(password,10);
+  const user = userRepo.create({
+    name: name,
+    email: email,
+    password: hashPassword,
+    phone_number: phone_number,
+  });
 
-    const user = userRepo.create({
-        name:name,
-        email:email,
-        password:hashPassword,
-        phone_number:phone_number,
-        
-    });
-
-    await userRepo.save(user);
-    const address = addressRepo.create({user});
-    await addressRepo.save(address);
-    
-}
+  await userRepo.save(user);
+  const address = addressRepo.create({ user });
+  await addressRepo.save(address);
+};
 
 export const login = async(email:string,password:string) =>{
 
@@ -41,40 +42,42 @@ export const login = async(email:string,password:string) =>{
     }
     const check = bcrypt.compare(password,userFound.password);
 
-    if(!check){
-        throw new ApiError("Invalid credentials",400)
-    }
+  if (!check) {
+    throw new ApiError("Invalid credentials", 400);
+  }
 
-    const payload = {id:userFound.user_id,email:userFound.email,role:userFound.role}
+  const payload = {
+    id: userFound.user_id,
+    name: userFound.name,
+    email: userFound.email,
+    role: userFound.role,
+  };
 
-    const accessToken = generateAccessToken(payload);
-    const refreshToken = generateRefreshToken(payload);
+  const accessToken = generateAccessToken(payload);
+  const refreshToken = generateRefreshToken(payload);
 
-    return {userFound,tokens:{accessToken,refreshToken}};
+  return { userFound, tokens: { accessToken, refreshToken } };
+};
 
-}
+export const getUserById = async (user_id: string) => {
+  if (!user_id) {
+    throw new ApiError("User id is not provided", 400);
+  }
+  const user = await userRepo.findOneBy({ user_id });
 
-export const getUserById=async(user_id:string)=>{
+  if (!user) {
+    throw new ApiError("Invalid credentials", 400);
+  }
+  return user;
+};
 
-    if(!user_id){
-        throw new ApiError("User id is not provided",400)
-    }
-    const user=await userRepo.findOneBy({user_id})
-
-    if(!user){
-        throw new ApiError("Invalid credentials",400)
-    }
-    return user
-
-}
-
-
-export const getUserLikedProducts=async(user_id:string)=>{
-
-    if(!user_id){
-        throw new ApiError("User id is not provided",400)
-    }
-    const user=await userRepo.findOne({where:{user_id},relations:{likedProducts:{product:true}}})
-    return user.likedProducts
-}
-
+export const getUserLikedProducts = async (user_id: string) => {
+  if (!user_id) {
+    throw new ApiError("User id is not provided", 400);
+  }
+  const user = await userRepo.findOne({
+    where: { user_id },
+    relations: { likedProducts: { product: true } },
+  });
+  return user.likedProducts;
+};
