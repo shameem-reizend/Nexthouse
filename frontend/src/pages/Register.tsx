@@ -45,7 +45,7 @@ export const Register: React.FC = () => {
   return (
     <div className="min-h-screen bg-linear-to-br from-slate-50 via-blue-50 to-cyan-50 flex items-center justify-center p-4">
       <div className="w-full max-w-6xl flex flex-col md:flex-row">
-        <div className="bg-linear-to-r from-zinc-500 via-stone-600 to-zinc-900 w-full md:w-1/2 p-4 flex justify-center items-center rounded-t-2xl md:rounded-tr-none md:rounded-l-2xl">
+        <div className="bg-zinc-900 w-full md:w-1/2 p-4 flex justify-center items-center rounded-t-2xl md:rounded-tr-none md:rounded-l-2xl">
           <div>
             <h1 className="text-white font-bold text-4xl md:text-5xl">
               NextHouse
@@ -56,7 +56,7 @@ export const Register: React.FC = () => {
             <div className="text-center mb-8">
                 <h2 className="text-3xl font-bold text-gray-800 mb-3">
                 Sign Up to{" "}
-                <span className="bg-linear-to-r from-zinc-500 via-stone-600 to-zinc-900 bg-clip-text text-transparent">
+                <span className="bg-zinc-900 bg-clip-text text-transparent">
                     NextHouse
                 </span>
                 </h2>
@@ -80,7 +80,7 @@ export const Register: React.FC = () => {
                         type="text"
                         value={name}
                         onChange={(e) => setName(e.target.value)}
-                        className="w-full px-4 py-4 bg-white/60 backdrop-blur-sm border rounded-xl focus:ring-2 focus:ring-stone-600 focus:border-transparent transition-all duration-300"
+                        className="w-full px-4 py-4 bg-white/60 backdrop-blur-sm border rounded-xl focus:ring-2 focus:ring-stone-600 focus:border-transparent focus:outline-0 transition-all duration-300"
                         placeholder=""
                         />
                     </div>
@@ -100,7 +100,7 @@ export const Register: React.FC = () => {
                     maxLength={10}
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
-                    className="w-full px-4 py-4 bg-white/60 backdrop-blur-sm border rounded-xl focus:ring-2 focus:ring-stone-600 focus:border-transparent transition-all duration-300"
+                    className="w-full px-4 py-4 bg-white/60 backdrop-blur-sm border rounded-xl focus:ring-2 focus:ring-stone-600 focus:border-transparent focus:outline-0 transition-all duration-300"
                     placeholder="9999999999"
                     />
                 </div>
@@ -119,7 +119,7 @@ export const Register: React.FC = () => {
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="w-full px-4 py-4 bg-white/60 backdrop-blur-sm border rounded-xl focus:ring-2 focus:ring-stone-600 focus:border-transparent transition-all duration-300"
+                    className="w-full px-4 py-4 bg-white/60 backdrop-blur-sm border rounded-xl focus:ring-2 focus:ring-stone-600 focus:border-transparent focus:outline-0 transition-all duration-300"
                     placeholder="you@example.com"
                     />
                 </div>
@@ -138,7 +138,7 @@ export const Register: React.FC = () => {
                     type={showPassword ? "text" : "password"}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="w-full px-4 py-4 bg-white/60 backdrop-blur-sm border rounded-xl focus:ring-2 focus:ring-stone-600 focus:border-transparent transition-all duration-300"
+                    className="w-full px-4 py-4 bg-white/60 backdrop-blur-sm border rounded-xl focus:ring-2 focus:ring-stone-600 focus:border-transparent focus:outline-0 transition-all duration-300"
                     placeholder="Enter your password"
                     />
 
@@ -154,7 +154,7 @@ export const Register: React.FC = () => {
 
                 <button
                 type="submit"
-                className="w-full group relative bg-linear-to-r from-zinc-500 via-stone-600 to-zinc-900 text-white py-4 rounded-xl font-semibold hover:shadow-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed hover:scale-105 disabled:hover:scale-100 border border-stone-600/20 overflow-hidden cursor-pointer"
+                className="w-full group relative bg-zinc-900 text-white py-4 rounded-xl font-semibold hover:shadow-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed hover:scale-105 disabled:hover:scale-100 border border-stone-600/20 overflow-hidden cursor-pointer"
                 >
                 Register
                 </button>
