@@ -18,9 +18,17 @@ export const addProductHandler = async (
   next: NextFunction
 ) => {
   try {
+
+    if (!req.file) {
+      throw new Error("Image file is required");
+    }
+
     const { category_id } = req.params;
-    const { name, description, image, price, isFree } = req.body;
+    const { name, description, price, isFree } = req.body;
     const { id } = req.user;
+
+    const image = (req.file as any).path; 
+    console.log(image)
 
     const user = await getUserById(id);
 
