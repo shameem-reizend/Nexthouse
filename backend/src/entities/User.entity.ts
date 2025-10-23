@@ -6,7 +6,6 @@ import {
   OneToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
-import { Address } from "./Address.entity";
 import { Event } from "./Event.entity";
 import { LikedProducts } from "./LikedProducts.entity";
 import {Exclude} from "class-transformer"
