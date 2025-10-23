@@ -35,7 +35,7 @@ const Sidebar:React.FC<SidebarProps> = ({isOpen,onClose}) => {
 
       {/* Sidebar */}
       <aside
-        className={`fixed md:static inset-y-0 left-0 z-40 w-64 transform transition-transform duration-300 ease-in-out bg-linear-to-b from-gray-950 to-gray-700 
+        className={`fixed md:static inset-y-0 left-0 z-40 w-64 transform transition-transform duration-300 ease-in-out bg-zinc-900
         ${isOpen ? "translate-x-0" : "-translate-x-full"} md:translate-x-0`}
       >
         {/* Header */}
