@@ -5,6 +5,7 @@ import { Home } from './pages/Home';
 import { ToastContainer } from 'react-toastify'
 import { ProtectedRoutes } from './components/ProtectedRoutes';
 import { Register } from './pages/Register';
+import Layout from './layout/Layout';
 
 export const App: React.FC = () => {
   return (
@@ -12,13 +13,17 @@ export const App: React.FC = () => {
       <ToastContainer />
       <Router>
         <Routes>
-          <Route path='/' element={
-            <ProtectedRoutes>
-                <Home />
-            </ProtectedRoutes>
-          }/>
           <Route path='/login' element={<Login />}/>
           <Route path='/register' element={<Register />}/>
+          {/* <Route path='/layout' element={<Layout />}/> */}
+          <Route element={<Layout/>}>
+            <Route path='/' element={
+              <ProtectedRoutes allowedRoles={["user"]}>
+                  <Home />
+              </ProtectedRoutes>
+            }/>
+            </Route>
+
         </Routes>
       </Router>
     </>
