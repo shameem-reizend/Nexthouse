@@ -10,13 +10,14 @@ import {
 } from "../controllers/product.controller";
 import { validateBody } from "../middlewares/body.validator.middleware";
 import { productSchema } from "../validations/product.validation";
+import { upload } from "../config/multer";
 
 const router = Router();
 router.use(authenticate);
 
 // authorize(UserRole.USER),
 
-router.post("/:category_id", validateBody(productSchema), addProductHandler);
+router.post("/:category_id", upload.single("image"), validateBody(productSchema), addProductHandler);
 
 router.delete("/:product_id", deleteProductHandler);
 

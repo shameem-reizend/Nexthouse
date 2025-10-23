@@ -3,7 +3,6 @@ import { login, registerUser } from "../services/auth.service";
 import { instanceToPlain } from "class-transformer";
 import { ApiError } from "../utils/apiError";
 import { generateAccessToken, verifyRefreshToken } from "../utils/token";
-import { data } from "react-router-dom";
 
 export const handleRegister = async (
   req: Request,
