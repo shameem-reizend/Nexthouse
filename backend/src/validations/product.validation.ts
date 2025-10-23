@@ -7,14 +7,9 @@ export const productSchema = Joi.object({
     "any.required": "Name cannot be null",
   }),
   description: Joi.string().trim().min(3).required().messages({
-    "string.min": "Name must be 3 character",
-    "string.empty": "Name cannot be empty",
-    "any.required": "Name cannot be null",
-  }),
-  image: Joi.string().min(3).required().messages({
-    "string.min": "Name must be 3 character",
-    "string.empty": "Name cannot be empty",
-    "any.required": "Name cannot be null",
+    "string.min": "descriptiion must be 3 character",
+    "string.empty": "description cannot be empty",
+    "any.required": "description cannot be null",
   }),
   price: Joi.number().min(0).required().messages({
     "number.base": "Price must be a number",
