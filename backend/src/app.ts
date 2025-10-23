@@ -7,19 +7,27 @@ import likedRoutes from "./routes/liked.routes";
 import eventRoutes from "./routes/event.routes";
 import inviteRoutes from "./routes/invite.routes";
 import addressRoutes from "./routes/address.routes";
-import cors from 'cors';
+import cors from "cors";
 
 const app = express();
 app.use(express.json());
-app.use(cors());
+
+const allowedOrigins = ["http://localhost:5173", "http://localhost:5174"];
+
+app.use(
+  cors({
+    origin: allowedOrigins,
+    credentials: true,
+  })
+);
 
 app.use("/auth", authRoutes);
 app.use("/category", categoryRoutes);
 app.use("/product", productRoutes);
 app.use("/events", eventRoutes);
 app.use("/liked", likedRoutes);
-app.use("/invite", inviteRoutes)
-app.use("/address",addressRoutes);
+app.use("/invite", inviteRoutes);
+app.use("/address", addressRoutes);
 
 app.get("/", (req: Request, res: Response) => {
   res.send("Hello, TypeScript + Express");
