@@ -23,7 +23,7 @@ export const createInviteHandler = async (
     const event = await getEventByEventId(event_id);
 
     if (!event) {
-      throw new ApiError("Event not found", 404);
+      throw new ApiError("Event not found", 409);
     }
     const newInvite = await createInvite(event, sender, reciever);
 

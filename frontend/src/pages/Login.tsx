@@ -1,28 +1,22 @@
 import React, { useState } from "react";
 import { EyeOff, Eye } from "lucide-react";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { loginAPI } from "../api/modules/auth.api";
 
 export const Login: React.FC = () => {
-  const [showPassword, setShowPassword] = useState(false);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
 
-  const navigate = useNavigate();
+    const [showPassword, setShowPassword] = useState(false);
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
 
-  const login = async (email: string, password: string) => {
-    const response = await axios.post("http://localhost:5000/auth/login", {
-      email,
-      password,
-    });
-    return response.data;
-  };
+    const navigate = useNavigate()
+
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const userData = await login(email, password);
+      const userData = await loginAPI({email, password});
       if (userData) {
         localStorage.setItem("userData", JSON.stringify(userData.data.user));
         localStorage.setItem("accessToken", userData.data.token);
