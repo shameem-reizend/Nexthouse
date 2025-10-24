@@ -6,6 +6,7 @@ import { ToastContainer } from 'react-toastify'
 import { ProtectedRoutes } from './components/ProtectedRoutes';
 import { Register } from './pages/Register';
 import Layout from './layout/Layout';
+import Products from './pages/product/Products';
 
 export const App: React.FC = () => {
   return (
@@ -20,6 +21,11 @@ export const App: React.FC = () => {
             <Route path='/' element={
               <ProtectedRoutes allowedRoles={["user"]}>
                   <Home />
+              </ProtectedRoutes>
+            }/>
+            <Route path='/products' element={
+              <ProtectedRoutes allowedRoles={["user"]}>
+                  <Products />
               </ProtectedRoutes>
             }/>
             </Route>
