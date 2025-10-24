@@ -5,7 +5,7 @@ import { Link } from "react-router-dom"
 const menuItems = {
     user:[
         {name:"Products",path:"/products",icon:ShoppingCart},
-        {name:"Events",path:"/events",icon:Calendar},
+        {name:"My Events",path:"/events",icon:Calendar},
         {name:"Favourites",path:"/likedProducts",icon:Heart},
     ],
     admin:[
