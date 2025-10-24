@@ -21,4 +21,5 @@ export const productSchema = Joi.object({
     .messages({
       "alternatives.match": 'isFree must be a boolean or "true"/"false" string',
     }),
+    image:Joi.any(),
 });
