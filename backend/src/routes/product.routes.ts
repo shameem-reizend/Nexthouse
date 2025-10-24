@@ -4,7 +4,8 @@ import { UserRole } from "../entities/User.entity";
 import {
   addProductHandler,
   deleteProductHandler,
-  displayProductHandler,
+  displayAllProductHandler,
+  displayBuyProducts,
   displayUserProductsHandler,
   updateSoldHandler,
 } from "../controllers/product.controller";
@@ -25,7 +26,9 @@ router.get("/sold/:product_id", updateSoldHandler);
 
 router.get('/',displayUserProductsHandler); //displaying logged in user products
 
-router.get("/all", displayProductHandler); //displaying the sold products also
+router.get("/all", displayAllProductHandler); //displaying the sold products also
+
+router.get("/buy", displayBuyProducts); //displaying the buying products also
 
 
 export default router;

@@ -18,6 +18,10 @@ export const addProductHandler = async (
   next: NextFunction
 ) => {
   try {
+    console.log("the file is ", req.file);
+    console.log("req.headers:", req.headers);
+    console.log("req.body:", req.body);
+    console.log("req.file:", req.file);
 
     if (!req.file) {
       throw new Error("Image file is required");
@@ -27,15 +31,15 @@ export const addProductHandler = async (
     const { name, description, price, isFree } = req.body;
     const { id } = req.user;
 
-    const image = (req.file as any).path; 
-    console.log(image)
+    const image = (req.file as any).path;
+    console.log(image);
 
     const user = await getUserById(id);
 
     let finalPrice: number;
     let freeStatus: boolean;
     if (isFree) {
-      freeStatus = isFree == "true" ? true : false;
+      freeStatus = isFree == "true" || true ? true : false;
     }
 
     if (freeStatus) {
@@ -123,7 +127,7 @@ export const updateSoldHandler = async (
   }
 };
 
-export const displayProductHandler = async (
+export const displayAllProductHandler = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -156,6 +160,28 @@ export const displayUserProductsHandler = async (
       success: true,
       message: `All products for  ${req.user.name} fetched`,
       data: products,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const displayBuyProducts = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { id } = req.user;
+    const products = await getAllProducts();
+    const filtered = products.filter((prod) => {
+      return prod.user.user_id !== id;
+    });
+
+    res.status(201).json({
+      message: "Products for buying are fetched",
+      success: true,
+      data: filtered,
     });
   } catch (error) {
     next(error);

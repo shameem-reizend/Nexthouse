@@ -9,6 +9,7 @@ import LikedProducts from './pages/LikedProducts';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import Layout from './layout/Layout';
 import Products from './pages/product/Products';
+import MyProducts from './pages/product/MyProducts';
 import { Event } from './pages/event/Event';
 
 
@@ -24,28 +25,20 @@ export const App: React.FC = () => {
           <Route path='/login' element={<Login />}/>
           <Route path='/register' element={<Register />}/>
           <Route element={<Layout/>}>
-            <Route path='/' element={
-              <ProtectedRoutes allowedRoles={["user"]}>
-                  <Home />
-              </ProtectedRoutes>
-            }/>
-            <Route path='/products' element={
-              <ProtectedRoutes allowedRoles={["user"]}>
-                  <Products />
-              </ProtectedRoutes>
-            }/>
-            <Route path="/likedProducts" element={
-              <ProtectedRoutes allowedRoles={["user"]}>
-                  <LikedProducts />
-              </ProtectedRoutes>
-            }/>
-
-            <Route path='/events' element={
-              <ProtectedRoutes allowedRoles={["user"]}>
-                  <Event />
-              </ProtectedRoutes>
-            }/>
+              <Route path='/' element={
+                <ProtectedRoutes allowedRoles={["user"]}>
+                    <Home />
+                </ProtectedRoutes>
+              }/>
+              <Route path='/products' element={
+                <ProtectedRoutes allowedRoles={["user"]}>
+                    <Products />
+                </ProtectedRoutes>
+              }/>
+              <Route path='/my-product' element={<MyProducts/>}/>
             </Route>
+
+
         </Routes>
       </Router>
       </QueryClientProvider>
