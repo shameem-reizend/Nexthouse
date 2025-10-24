@@ -1,6 +1,5 @@
 import { Calendar, Heart, ShoppingCart,X} from "lucide-react"
-import { useState } from "react";
-import { Link } from "react-router-dom"
+import { Link, useLocation } from "react-router-dom"
 
 
 const menuItems = {
@@ -23,7 +22,8 @@ interface SidebarProps {
 const Sidebar:React.FC<SidebarProps> = ({isOpen,onClose}) => {
     
     const items = menuItems.user;
-    const [active, setActive] = useState("");
+    const location = useLocation();
+
 
   return (
     <>
@@ -54,17 +54,14 @@ const Sidebar:React.FC<SidebarProps> = ({isOpen,onClose}) => {
         <nav className="p-4 space-y-3 mt-5">
           {items.map((item) => {
             const IconComponent = item.icon;
+            
             return (
               <Link
                 key={item.path}
                 to={item.path}
-                onClick={() => {
-                  // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-                  onClose;
-                  setActive(item.name);
-                }}
-                className={`p-2 rounded text-white hover:bg-white hover:text-zinc-900 flex items-center gap-3 
-                  ${active == item.name ? "bg-white text-zinc-900": "text-white"}`}
+                onClick={onClose}
+                className={`p-2 rounded flex items-center gap-3 hover:bg-gray-50 hover:text-black
+                    ${location.pathname === item.path ?"bg-white text-black":"text-white"}`}
               >
                 <IconComponent className="w-5 h-5" />
                 <span className="text-md">{item.name}</span>
@@ -75,7 +72,6 @@ const Sidebar:React.FC<SidebarProps> = ({isOpen,onClose}) => {
       </aside>
     </>
   );
-
 
 }
 

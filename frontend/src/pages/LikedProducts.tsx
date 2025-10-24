@@ -21,6 +21,7 @@ const LikedProducts = () => {
         queryKey:["likedProducts"],
         queryFn:fetchLikedProducts,
         refetchOnWindowFocus:true,
+        
     })
 
 

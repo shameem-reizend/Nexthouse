@@ -5,6 +5,7 @@ import { ApiError } from "../utils/apiError";
 const addressRepo = AppDataSource.getRepository(Address);
 
 export const createOrUpdateAddress = async(
+    address:string,
     state:string,
     district:string,
     city:string,
@@ -14,17 +15,31 @@ export const createOrUpdateAddress = async(
 ) =>{
 
     
-    const address =  await addressRepo.findOne({where:{address_id:userId}})
+    const newaddress =  await addressRepo.findOne({where:{address_id:userId}})
     if(!address){
         throw new ApiError("Address Not found ",400);
     }
 
-    address.state = state
-    address.district = district
-    address.city = city
-    address.pincode = pincode
-    address.landmark = landmark
+    newaddress.address = address
+    newaddress.state = state
+    newaddress.district = district
+    newaddress.city = city
+    newaddress.pincode = pincode
+    newaddress.landmark = landmark
 
-    return await addressRepo.save(address);
+    return await addressRepo.save(newaddress);
+
+}
+
+
+export const getAddress = async(addressId:string) =>{
+
+    const address = await addressRepo.findOne({where:{address_id:addressId}});
+
+    if(!address){
+        throw new ApiError ("Address not found ",400);
+    }
+
+    return address;
 
 }
