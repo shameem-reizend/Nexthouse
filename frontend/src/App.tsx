@@ -9,11 +9,10 @@ import LikedProducts from './pages/LikedProducts';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import Layout from './layout/Layout';
 import Products from './pages/product/Products';
-
+import { Event } from './pages/event/Event';
 
 
 const queryClient=new QueryClient()
-import { Event } from './pages/Event';
 
 export const App: React.FC = () => {
   return (

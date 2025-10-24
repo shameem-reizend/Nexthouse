@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import {PlusCircle} from 'lucide-react'
 import { EventList } from './EventList';
+import { AddEvent } from './Addevent';
 
 type active = "scheduled" | "completed"
 
@@ -15,9 +15,7 @@ export const Event: React.FC = () => {
                 My Events
             </div>
             <div>
-                <button className="bg-zinc-900 hover:bg-zinc-700 active:bg-zinc-500 text-white font-bold py-2 px-4 rounded-full flex items-center gap-2 cursor-pointer">
-                    <span><PlusCircle/></span>Add Event
-                </button>
+                <AddEvent />
             </div>
         </div>
 
