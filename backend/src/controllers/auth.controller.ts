@@ -4,6 +4,7 @@ import { instanceToPlain } from "class-transformer";
 import { ApiError } from "../utils/apiError";
 import { generateAccessToken, verifyRefreshToken } from "../utils/token";
 
+
 export const handleRegister = async (
   req: Request,
   res: Response,
