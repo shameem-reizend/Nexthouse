@@ -6,7 +6,7 @@ const menuItems = {
     user:[
         {name:"Products",path:"/products",icon:ShoppingCart},
         {name:"Events",path:"/events",icon:Calendar},
-        {name:"Favourites",path:"/favourites",icon:Heart},
+        {name:"Favourites",path:"/likedProducts",icon:Heart},
     ],
     admin:[
         {name:"Products",path:"/products",icon:ShoppingCart},
