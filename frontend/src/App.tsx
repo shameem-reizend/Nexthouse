@@ -5,19 +5,25 @@ import { Home } from './pages/Home';
 import { ToastContainer } from 'react-toastify'
 import { ProtectedRoutes } from './components/ProtectedRoutes';
 import { Register } from './pages/Register';
+import LikedProducts from './pages/LikedProducts';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import Layout from './layout/Layout';
 import Products from './pages/product/Products';
 import MyProducts from './pages/product/MyProducts';
+import { Event } from './pages/event/Event';
+
+
+const queryClient=new QueryClient()
 
 export const App: React.FC = () => {
   return (
     <>
+    <QueryClientProvider client={queryClient}>
       <ToastContainer />
       <Router>
         <Routes>
           <Route path='/login' element={<Login />}/>
           <Route path='/register' element={<Register />}/>
-          {/* <Route path='/layout' element={<Layout />}/> */}
           <Route element={<Layout/>}>
               <Route path='/' element={
                 <ProtectedRoutes allowedRoles={["user"]}>
@@ -35,6 +41,7 @@ export const App: React.FC = () => {
 
         </Routes>
       </Router>
+      </QueryClientProvider>
     </>
   )
 }
