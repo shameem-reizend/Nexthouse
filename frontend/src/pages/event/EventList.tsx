@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { fetchEventAPI } from '../api/modules/event.api';
+import { fetchEventAPI } from '../../api/modules/event.api';
 import { MapPin } from 'lucide-react';
 interface ActivePropType{
     active: "scheduled" | "completed";
@@ -41,11 +41,10 @@ export const EventList: React.FC<ActivePropType> = ({active}) => {
         filteredEvents.map((event: Event) => (
             <div 
                 key={event.event_id}
-                className="flex flex-col sm:flex-row justify-between items-center bg-white dark:bg-zinc-900 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 border border-gray-100 p-5 mb-3"
+                className="flex flex-col sm:flex-row items-start justify-between sm:items-center bg-white dark:bg-zinc-900 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 border border-gray-100 p-5 mb-3"
             >
                 <div>
                     <div className="flex items-start space-x-4">
-                    {/* Date Badge */}
                         <div className="shrink-0 text-center bg-zinc-900 rounded-lg p-3 min-w-16">
                             <div className="text-white  font-bold text-lg">
                             {new Date(event.event_date).getDate()}
@@ -55,7 +54,6 @@ export const EventList: React.FC<ActivePropType> = ({active}) => {
                             </div>
                         </div>
                         
-                        {/* Event Info */}
                         <div className="flex-1 min-w-0">
                             <h3 className="text-lg font-semibold text-gray-900 truncate">
                             {event.event_name}
@@ -65,7 +63,7 @@ export const EventList: React.FC<ActivePropType> = ({active}) => {
                             </p>
                             <div className="flex items-center text-gray-500 text-sm mt-2">
                                 <MapPin width={20}/>
-                            <span className="truncate pl-1">{event.event_venue}</span>
+                                <span className="truncate pl-1">{event.event_venue}</span>
                             </div>
                         </div>
                     </div>

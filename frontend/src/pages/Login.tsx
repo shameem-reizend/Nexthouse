@@ -19,8 +19,8 @@ export const Login: React.FC = () => {
       const userData = await loginAPI({email, password});
       console.log(userData)
       if (userData) {
-        localStorage.setItem("userData", JSON.stringify(userData.data.data.user));
-        localStorage.setItem("accessToken", userData.data.data.token);
+        localStorage.setItem("userData", JSON.stringify(userData.data.user));
+        localStorage.setItem("accessToken", userData.data.token);
       }
       toast.success("login successful");
       navigate("/");

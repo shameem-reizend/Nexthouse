@@ -1,4 +1,5 @@
 import { Calendar, Heart, ShoppingCart,X} from "lucide-react"
+import { useState } from "react";
 import { Link } from "react-router-dom"
 
 
@@ -21,7 +22,8 @@ interface SidebarProps {
 }
 const Sidebar:React.FC<SidebarProps> = ({isOpen,onClose}) => {
     
-    const items = menuItems.user
+    const items = menuItems.user;
+    const [active, setActive] = useState("");
 
   return (
     <>
@@ -56,11 +58,16 @@ const Sidebar:React.FC<SidebarProps> = ({isOpen,onClose}) => {
               <Link
                 key={item.path}
                 to={item.path}
-                onClick={onClose}
-                className="p-2 rounded hover:bg-gray-700 flex items-center gap-3"
+                onClick={() => {
+                  // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+                  onClose;
+                  setActive(item.name);
+                }}
+                className={`p-2 rounded text-white hover:bg-white hover:text-zinc-900 flex items-center gap-3 
+                  ${active == item.name ? "bg-white text-zinc-900": "text-white"}`}
               >
-                <IconComponent className="w-5 h-5 text-white" />
-                <span className="text-md text-white">{item.name}</span>
+                <IconComponent className="w-5 h-5" />
+                <span className="text-md">{item.name}</span>
               </Link>
             );
           })}
