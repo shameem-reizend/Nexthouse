@@ -11,6 +11,9 @@ export class Address{
     user:User; 
 
     @Column({nullable:true})
+    address:string;
+
+    @Column({nullable:true})
     state:string;
 
     @Column({nullable:true})

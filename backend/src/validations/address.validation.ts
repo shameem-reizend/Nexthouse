@@ -1,6 +1,11 @@
 import Joi from "joi";
 
 export  const addressSchema = Joi.object({
+    address:Joi.string().min(3).required().messages({
+        "string.empty":"Address cannot be empty",
+        "string.min":"Address must have atleast 3 characters",
+        "any.required":"Address cannot be null",
+    }),
     state:Joi.string().min(3).required().messages({
         "string.empty":"State cannot be empty",
         "string.min":"State must have atleast 3 characters",
