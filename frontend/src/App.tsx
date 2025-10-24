@@ -13,6 +13,7 @@ import Products from './pages/product/Products';
 
 
 const queryClient=new QueryClient()
+import { Event } from './pages/Event';
 
 export const App: React.FC = () => {
   return (
@@ -37,6 +38,12 @@ export const App: React.FC = () => {
             <Route path="/likedProducts" element={
               <ProtectedRoutes allowedRoles={["user"]}>
                   <LikedProducts />
+              </ProtectedRoutes>
+            }/>
+
+            <Route path='/events' element={
+              <ProtectedRoutes allowedRoles={["user"]}>
+                  <Event />
               </ProtectedRoutes>
             }/>
             </Route>
