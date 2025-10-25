@@ -27,8 +27,14 @@ import { addProductApi } from "../../api/modules/product.api";
 
 interface AddProductPropType {
   category: CategoryType[] | null;
+  onProductAdded: () => void;
 }
-const AddProduct: React.FC<AddProductPropType> = ({ category }) => {
+const AddProduct: React.FC<AddProductPropType> = ({
+  category,
+  onProductAdded,
+}) => {
+  const [open, setOpen] = useState(false);
+
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [selectCategory, setSelectCategory] = useState<string | null>(null);
@@ -38,7 +44,6 @@ const AddProduct: React.FC<AddProductPropType> = ({ category }) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("hello");
     if (!name || !description || !selectCategory || (!free && price === "")) {
       alert("Please fill all required fields");
       return;
@@ -51,25 +56,31 @@ const AddProduct: React.FC<AddProductPropType> = ({ category }) => {
     productData.append("image", image!);
 
     try {
-      const response = await addProductApi(selectCategory, productData);
-      console.log(response);
+      await addProductApi(selectCategory, productData);
+      onProductAdded();
     } catch (error) {
       console.log(error);
     } finally {
-      console.log("Submitting Product", productData);
       setName("");
       setDescription("");
       setSelectCategory("null");
       setPrice("");
       setFree(false);
+      setOpen(false);
     }
   };
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <form>
         <DialogTrigger asChild>
-          <Button variant="outline" className="bg-gray-500 text-white">Add Product</Button>
+          <Button
+            onClick={() => setOpen(true)}
+            variant="outline"
+            className="bg-gray-600 text-white hover:bg-gray-700 hover:text-gray-200"
+          >
+            Add Product
+          </Button>
         </DialogTrigger>
         <DialogContent className="sm:max-w-[425px] md:max-w-[700px]">
           <DialogHeader>

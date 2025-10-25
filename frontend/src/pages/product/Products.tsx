@@ -47,24 +47,29 @@ const Products = () => {
   return (
     <div className="min-h-screen w-full py-10 px-5">
       {/* Header Section */}
-      <div className="text-center mb-5">
-        <h2 className="text-3xl font-bold text-slate-800 dark:text-white">
-          🛒 Explore Our Marketplace
-        </h2>
-        <p className="text-gray-500 mt-2 max-w-2xl mx-auto">
-          Discover high-quality products from various categories. Add them to
-          your cart and enjoy seamless shopping!
-        </p>
+      <div className="text-center mb-15 min-w-full  flex flex-col md:flex-row">
+        <div className=" md:flex-1 ">
+          <img src="./shopping.png" alt="shpping_img" width={"50%"} className="w-[30%] md:w-[50%]" />
+        </div>
+        <div className=" flex-2 md:flex-3">
+          <h2 className="text-3xl font-bold text-slate-800 dark:text-white pl-4 mt-6 ">
+            Explore Our Marketplace
+          </h2>
+          <p className="text-gray-500 mt-4 max-w-2xl  mx-auto">
+            Discover high-quality products from various categories. Add them to
+            your cart and enjoy seamless shopping!
+          </p>
+        </div>
       </div>
-      <div className="flex justify-center gap-4 mb-6 border-b border-gray-300 ">
+      <div className="flex justify-center gap-4  mb-6 border-b border-gray-300 ">
         {items.map((tab) => (
           <button
             key={tab}
             onClick={() => handleTabChange(tab)}
-            className={`pb-2 text-sm font-medium ${
+            className={`pb-2 text-lg font-medium ${
               filter == tab
-                ? "text-indigo-600 border-b-2 border-indigo-600"
-                : "text-gray-500 hover:text-indigo-500"
+                ? "text-gray-900 border-b-2 border-gray-900"
+                : "text-gray-500 hover:text-gray-800"
             }`}
           >
             {tab}
@@ -74,7 +79,7 @@ const Products = () => {
       {/* Products Grid */}
       <div
         className="w-full grid gap-8 px-6 py-6 bg-white/70 backdrop-blur-md rounded-2xl shadow-lg 
-        grid-cols-[repeat(auto-fit,minmax(300px,1fr))] dark:bg-gray-900/80"
+       grid-cols-[repeat(auto-fit,minmax(300px,1fr))]  lg:grid-cols-[repeat(auto-fit,minmax(300px,330px))]  dark:bg-gray-900/80"
       >
         {filteredProducts?.length === 0 ? (
           <div className="text-center text-gray-500 col-span-full py-10 text-lg font-medium">

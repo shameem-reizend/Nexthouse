@@ -47,7 +47,7 @@ const ProductDisplay = ({ product }: { product: ProductType }) => {
           <Button 
           // className="bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg shadow-md hover:shadow-lg transition-all duration-200"
           >
-            Add to cart
+            Buy Now
           </Button>
         </div>
       </div>
