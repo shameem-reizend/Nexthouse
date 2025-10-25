@@ -1,12 +1,28 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { EventList } from './EventList';
 import { AddEvent } from './Addevent';
+import { fetchEventAPI } from '../../api/modules/event.api';
 
 type active = "scheduled" | "completed"
 
 export const Event: React.FC = () => {
 
     const [active, setActive] = useState<active>("scheduled")
+    const [events, setEvents] = useState([]);
+
+    const fetchEvents = async () => {
+        try{
+            const eventData = await fetchEventAPI();
+            setEvents(eventData.events);
+            console.log(eventData.events)
+        } catch(err){
+            console.log(err)
+        }
+    }
+
+    useEffect(() => {
+        fetchEvents();
+    }, []);
 
   return (
     <div>
@@ -15,7 +31,7 @@ export const Event: React.FC = () => {
                 My Events
             </div>
             <div>
-                <AddEvent />
+                <AddEvent fetchEvents={fetchEvents}/>
             </div>
         </div>
 
@@ -30,8 +46,8 @@ export const Event: React.FC = () => {
             </div>
         </div>
 
-        <div className="card shadow-2xl p-5 bg-white rounded-xl mt-5">
-            <EventList active={active}/>
+        <div className="card shadow-2xl p-5 bg-white rounded-xl mt-5 min-h-[75vh]">
+            <EventList events={events} active={active}/>
         </div>
     </div>
     

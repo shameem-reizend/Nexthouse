@@ -7,6 +7,7 @@ import likedRoutes from "./routes/liked.routes";
 import eventRoutes from "./routes/event.routes";
 import inviteRoutes from "./routes/invite.routes";
 import addressRoutes from "./routes/address.routes";
+import userRoutes from './routes/user.routes';
 import cors from "cors";
 
 const app = express();
@@ -28,6 +29,7 @@ app.use("/events", eventRoutes);
 app.use("/liked", likedRoutes);
 app.use("/invite", inviteRoutes);
 app.use("/address", addressRoutes);
+app.use('/user', userRoutes);
 
 app.get("/", (req: Request, res: Response) => {
   res.send("Hello, TypeScript + Express");

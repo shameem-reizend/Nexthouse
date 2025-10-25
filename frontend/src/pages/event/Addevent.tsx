@@ -26,14 +26,18 @@ import React, {useState} from "react"
 import { createEventAPI } from "../../api/modules/event.api"
 import { toast } from "react-toastify"
 
-export const AddEvent: React.FC = () => {
+interface AddEventPropType{
+  fetchEvents: () => void;
+}
+
+export const AddEvent: React.FC<AddEventPropType> = ({fetchEvents}) => {
 
   const [isOpen, setIsOpen] = useState(false)
   const [open, setOpen] = useState(false)
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [venue, setVenue] = useState("");
-  const [date, setDate] = useState<Date | undefined>(undefined)
+  const [date, setDate] = useState<Date>(new Date())
 
 
   const handleCreateEvent = async (e:React.FormEvent) => {
@@ -53,8 +57,13 @@ export const AddEvent: React.FC = () => {
       })
 
       if(eventData.success == true){
+        setName("");
+        setDescription("");
+        setDate(new Date())
+        setVenue("");
         setIsOpen(false);
-        toast.success('New Event Created')
+        fetchEvents();
+        toast.success('New Event Created');
       }
     } catch (error) {
         console.log(error);
@@ -72,7 +81,7 @@ export const AddEvent: React.FC = () => {
         </DialogTrigger>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>Edit profile</DialogTitle>
+            <DialogTitle>Add Event</DialogTitle>
             <DialogDescription>
               Enter your event details here. Click save when you&apos;re
               done.
@@ -81,17 +90,17 @@ export const AddEvent: React.FC = () => {
           <div className="grid gap-4">
             <div className="grid gap-3">
               <Label htmlFor="event_name">Event Name</Label>
-              <Input id="event_name" name="name" value={name} onChange={(e) => setName(e.target.value)}/>
+              <Input id="event_name" name="name" value={name} onChange={(e) => setName(e.target.value)} required/>
             </div>
 
             <div className="grid gap-3">
               <Label htmlFor="event_description">Event Description</Label>
-              <Textarea placeholder="Type your description here." value={description} onChange={(e) => setDescription(e.target.value)}/>
+              <Textarea id="event_description" placeholder="Type your description here." value={description} onChange={(e) => setDescription(e.target.value)} required/>
             </div>
 
             <div className="grid gap-3">
               <Label htmlFor="event_venue">Event Venue</Label>
-              <Input id="event_venue" name="venue" value={venue} onChange={(e) => setVenue(e.target.value)}/>
+              <Input id="event_venue" name="venue" value={venue} onChange={(e) => setVenue(e.target.value)} required/>
             </div>
 
             <div className="flex flex-col gap-3">
@@ -112,6 +121,7 @@ export const AddEvent: React.FC = () => {
                 <PopoverContent className="w-auto overflow-hidden p-0" align="start">
                   <Calendar
                     mode="single"
+                    required
                     selected={date}
                     captionLayout="dropdown"
                     onSelect={(date:Date) => {

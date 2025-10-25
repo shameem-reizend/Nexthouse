@@ -93,9 +93,9 @@ const AddProduct: React.FC<AddProductPropType> = ({
 
           <div className="grid gap-4">
             <div className="grid gap-3">
-              <Label htmlFor="name-1">Name</Label>
+              <Label htmlFor="name">Name</Label>
               <Input
-                id="name-1"
+                id="name"
                 name="name"
                 placeholder="Enter Product name "
                 value={name}
@@ -103,9 +103,9 @@ const AddProduct: React.FC<AddProductPropType> = ({
               />
             </div>
             <div className="grid gap-3">
-              <Label htmlFor="username-1">Description</Label>
+              <Label htmlFor="username">Description</Label>
               <Input
-                id="username-1"
+                id="username"
                 name="description"
                 placeholder="Add description about your product"
                 value={description}
