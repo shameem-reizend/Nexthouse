@@ -61,7 +61,9 @@ export const getEventByCreatorId = async(userId:string) => {
 export const getEventByEventId = async(event_id:string) => {
 
     const event = await eventRepo.findOne({where:{event_id:event_id}})
-
+    if(!event){
+        throw new ApiError("The event cannot be found",404)
+    }
     return event
 }
 

@@ -4,7 +4,6 @@ import { ApiError } from "../utils/apiError";
 
 const inviteRepo = AppDataSource.getRepository(Invite);
 export const createInvite = async (event, sender, reciever) => {
-
   // checking whether reciever is already invited for event
   const existinginvite = await inviteRepo.findOne({
     where: {
@@ -15,10 +14,10 @@ export const createInvite = async (event, sender, reciever) => {
   });
 
   if (existinginvite) {
-    throw new ApiError("This Receiver has already invited for this event",409);
+    throw new ApiError("This Receiver has already invited for this event", 409);
   }
 
-  const invite =  inviteRepo.create({
+  const invite = inviteRepo.create({
     event,
     sender,
     reciever,
@@ -37,5 +36,20 @@ export const getAllInvitesByEvent = async (event_id: string) => {
       event: { event_id },
     },
   });
+  return invites;
+};
+
+export const getUserInvites = async (user_id: string) => {
+  if (!user_id) {
+    throw new ApiError("the user id cannot be empty ");
+  }
+  const invites = await inviteRepo
+    .createQueryBuilder("invite")
+    .leftJoinAndSelect("invite.event", "event")
+    .leftJoin("invite.sender", "sender")
+    .leftJoin("invite.reciever","reciever")
+    .addSelect(["sender.user_id", "sender.name"])
+    .where("reciever.user_id=:user_id", { user_id })
+    .getMany();
   return invites;
 };
