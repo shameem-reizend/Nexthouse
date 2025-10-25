@@ -62,7 +62,7 @@ const Sidebar:React.FC<SidebarProps> = ({isOpen,onClose}) => {
                 key={item.path}
                 to={item.path}
                 onClick={onClose}
-                className={`p-2 rounded flex items-center gap-3 hover:bg-gray-50 hover:text-black
+                className={`p-2 rounded text-lg flex items-center gap-3 hover:bg-gray-50 hover:text-black
                     ${location.pathname === item.path ?"bg-white text-black":"text-white"}`}
               >
                 <IconComponent className="w-5 h-5" />
