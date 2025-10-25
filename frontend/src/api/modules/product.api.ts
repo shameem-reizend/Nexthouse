@@ -13,3 +13,8 @@ const response=await axiosInstance.post(`/product/${category_id}`,formData,{
 });
 return response;
 }
+
+export const fetchUserProductsApi=async()=>{
+  const response= await axiosInstance.get('/product/user')
+  return response;
+}

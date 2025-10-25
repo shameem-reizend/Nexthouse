@@ -1,4 +1,4 @@
-import { Bell, Calendar, Heart, ShoppingCart,X} from "lucide-react"
+import { Bell, Calendar, Handbag, Heart, ShoppingCart,X} from "lucide-react"
 import { Link, useLocation } from "react-router-dom"
 
 
@@ -7,7 +7,8 @@ const menuItems = {
         {name:"Products",path:"/products",icon:ShoppingCart},
         {name:"My Events",path:"/events",icon:Calendar},
         {name:"Favourites",path:"/likedProducts",icon:Heart},
-        {name:"Invitation",path:"/invitations",icon:Bell}
+        {name:"Invitation",path:"/invitations",icon:Bell},
+        {name:"My Products",path:"/my-product",icon:Handbag },
     ],
     admin:[
         {name:"Products",path:"/products",icon:ShoppingCart},

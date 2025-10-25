@@ -24,11 +24,11 @@ router.delete("/:product_id", deleteProductHandler);
 
 router.get("/sold/:product_id", updateSoldHandler);
 
-router.get('/',displayUserProductsHandler); //displaying logged in user products
+router.get('/user',displayUserProductsHandler); //displaying logged in user products
 
-router.get("/all", displayAllProductHandler); //displaying the sold products also
+router.get("/all", displayAllProductHandler); //displaying the all products also
 
-router.get("/buy", displayBuyProducts); //displaying the buying products also
+router.get("/buy", displayBuyProducts); //displaying the buying products of a user 
 
 
 export default router;
