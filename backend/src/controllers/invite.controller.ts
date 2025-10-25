@@ -3,7 +3,7 @@ import { AuthRequest } from "../middlewares/auth.middleware";
 import { ApiError } from "../utils/apiError";
 import { getUserById } from "../services/auth.service";
 import { getEventByEventId } from "../services/event.service";
-import { createInvite } from "../services/invite.service";
+import { createInvite, getUserInvites } from "../services/invite.service";
 
 export const createInviteHandler = async (
   req: AuthRequest,
@@ -18,7 +18,7 @@ export const createInviteHandler = async (
       throw new ApiError("Bad Request", 400);
     }
 
-    const reciever = await getUserById(reciever_id);
+    const reciever = await getUserById(reciever_id  );
     const sender = await getUserById(id);
     const event = await getEventByEventId(event_id);
 
@@ -36,3 +36,19 @@ export const createInviteHandler = async (
     next(error);
   }
 };
+
+
+
+export const getAllInvitationOfUserHandler=async(req:AuthRequest,res:Response,next:NextFunction)=>{
+
+  try {
+    const userId=req.user.id;
+  
+    const invites=await getUserInvites(userId)
+    return res.status(200).json({message:"Invites received",sucess:true,data:invites})
+    
+  } catch (error) {
+    next(error)
+  }
+
+}

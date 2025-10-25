@@ -11,6 +11,7 @@ import Layout from './layout/Layout';
 import Products from './pages/product/Products';
 import { Event } from './pages/event/Event';
 import Profile from './pages/Profile';
+import MyInvitations from './pages/invitations/MyInvitations';
 
 
 const queryClient=new QueryClient()
@@ -44,6 +45,11 @@ export const App: React.FC = () => {
             <Route path="/likedProducts" element={
               <ProtectedRoutes allowedRoles={["user"]}>
                   <LikedProducts />
+              </ProtectedRoutes>
+            }/>
+             <Route path="/invitations" element={
+              <ProtectedRoutes allowedRoles={["user"]}>
+                  <MyInvitations />
               </ProtectedRoutes>
             }/>
 

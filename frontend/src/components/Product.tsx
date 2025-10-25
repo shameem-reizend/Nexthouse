@@ -78,12 +78,12 @@ const Product = ({ product }: { product: ProductProps }) => {
       </div>
 
       {/* Details Section */}
-      <div className="p-3 sm:p-5 md:p-6 flex flex-col justify-between flex-1">
+      <div className="p-3 sm:p-5 md:p-6 flex flex-col justify-between flex-1 bg-linear-to-br from-zinc-300 to-zinc-700 ">
         <div>
           <h3 className="text-base sm:text-lg md:text-xl font-bold text-gray-900 mb-1 sm:mb-2 line-clamp-2 group-hover:text-slate-600 transition-colors">
             {name}
           </h3>
-          <p className="text-gray-600 text-xs sm:text-sm md:text-base mb-2 sm:mb-3 line-clamp-3 leading-relaxed">
+          <p className="text-white text-xs sm:text-sm md:text-base mb-2 sm:mb-3 line-clamp-3 leading-relaxed">
             {description}
           </p>
         </div>
