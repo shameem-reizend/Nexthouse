@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import { fetchEventAPI } from '../../api/modules/event.api';
+import React from 'react';
 import { MapPin } from 'lucide-react';
+import { NoResults } from '../NoResults';
 interface ActivePropType{
     active: "scheduled" | "completed";
+    events: Event[],
 }
 
 interface Event{
@@ -14,26 +15,9 @@ interface Event{
     event_date: Date,
 }
 
-export const EventList: React.FC<ActivePropType> = ({active}) => {
+export const EventList: React.FC<ActivePropType> = ({active, events}) => {
     console.log(active)
-    const[events, setEvents] = useState([]);
-
-    const fetchEvents = async () => {
-        try{
-            const eventData = await fetchEventAPI();
-            setEvents(eventData.events);
-            console.log(eventData.events)
-        } catch(err){
-            console.log(err)
-        }
-    }
-
-    useEffect(() => {
-        fetchEvents();
-    }, []);
-
-    const filteredEvents = events?.filter((event: Event) => event.event_status == active )
-
+    const filteredEvents = events.filter((event: Event) => event.event_status == active )
 
   return (
     <div>
@@ -76,7 +60,7 @@ export const EventList: React.FC<ActivePropType> = ({active}) => {
                 </div>
             </div>
         ))
-        : <div>No results found</div>
+        : <NoResults />
         }
     </div>
   )
