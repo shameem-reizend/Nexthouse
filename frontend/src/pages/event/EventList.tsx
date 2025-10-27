@@ -1,6 +1,8 @@
 import React from 'react';
 import { MapPin } from 'lucide-react';
 import { NoResults } from '../NoResults';
+import { InviteUser } from '../invitations/InviteUser'
+
 interface ActivePropType{
     active: "scheduled" | "completed";
     events: Event[],
@@ -16,7 +18,7 @@ interface Event{
 }
 
 export const EventList: React.FC<ActivePropType> = ({active, events}) => {
-    console.log(active)
+
     const filteredEvents = events.filter((event: Event) => event.event_status == active )
 
   return (
@@ -54,9 +56,7 @@ export const EventList: React.FC<ActivePropType> = ({active, events}) => {
                 </div>
 
                 <div>
-                    <button className="bg-zinc-900 hover:bg-zinc-700 active:bg-zinc-500 text-white font-bold py-2 px-4 rounded-full flex items-center gap-2 cursor-pointer">
-                        Invite
-                    </button>
+                    <InviteUser event_id = {event.event_id}/>
                 </div>
             </div>
         ))
