@@ -56,7 +56,7 @@ export const EventList: React.FC<ActivePropType> = ({active, events}) => {
                 </div>
 
                 <div>
-                    <InviteUser event_id = {event.event_id}/>
+                    {active == "scheduled" ? <InviteUser event_id = {event.event_id}/> : <span className="inline-flex items-center rounded-md bg-green-400/10 px-2 py-1 text-xs font-medium text-green-400 inset-ring inset-ring-green-500/20">Completed</span> }
                 </div>
             </div>
         ))
