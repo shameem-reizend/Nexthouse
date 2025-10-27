@@ -14,7 +14,6 @@ export const Event: React.FC = () => {
         try{
             const eventData = await fetchEventAPI();
             setEvents(eventData.events);
-            console.log(eventData.events)
         } catch(err){
             console.log(err)
         }
