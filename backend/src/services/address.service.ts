@@ -11,11 +11,14 @@ export const createOrUpdateAddress = async(
     city:string,
     pincode:number,
     landmark:string,
+    longitude:string,
+    latitude:string,
     userId:string,
 ) =>{
 
     
     const newaddress =  await addressRepo.findOne({where:{address_id:userId}})
+    
     if(!address){
         throw new ApiError("Address Not found ",400);
     }
@@ -26,6 +29,8 @@ export const createOrUpdateAddress = async(
     newaddress.city = city
     newaddress.pincode = pincode
     newaddress.landmark = landmark
+    newaddress.longitude = longitude
+    newaddress.latitude = latitude
 
     return await addressRepo.save(newaddress);
 

@@ -11,14 +11,14 @@ const productRepo = AppDataSource.getRepository(Product);
 export const createOrder  = async(userId:string, product_id:string) => {
 
     const user =  await userRepo.findOne({where:{user_id:userId}});
+    if(!user){
+        throw new ApiError("User not Found to create order", 400);
+    }
+
     const product = await productRepo.findOne({
         where:{product_id:product_id},
         relations:["user"]
     });
-
-    if(!user){
-        throw new ApiError("User not Found to create order", 400);
-    }
 
     if(user?.user_id == product?.user?.user_id){
         throw new ApiError("You cannot buy the product added by you.",400);
@@ -26,6 +26,14 @@ export const createOrder  = async(userId:string, product_id:string) => {
 
     if(!product){
         throw new ApiError("Product not found",400);
+    }
+
+    const existingOrder =   await orderRepo.findOne({
+        where:{user:{user_id:userId},product:{product_id:product_id}}
+    })
+
+    if(existingOrder){
+        throw new ApiError("You already placed an order for this product",400);
     }
 
     const newOrder = orderRepo.create({
@@ -41,7 +49,7 @@ export const createOrder  = async(userId:string, product_id:string) => {
 export const getOrders = async(ownerId:string) => {
 
     const orders = await orderRepo.find({
-        relations:{product:{user:true}},
+        relations:['product', 'product.user'],
         where:{product:{user:{user_id:ownerId}}}
     })
 

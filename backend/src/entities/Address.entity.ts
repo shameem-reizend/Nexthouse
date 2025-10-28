@@ -28,4 +28,10 @@ export class Address{
     @Column({nullable:true})
     landmark:string;
 
+    @Column({nullable:true})
+    longitude:string;
+
+    @Column({nullable:true})
+    latitude:string;
+    
 }

@@ -28,5 +28,11 @@ export  const addressSchema = Joi.object({
     }),
     landmark:Joi.string().min(3).optional().allow("").messages({
         "string.min":"Landmark must be atleast 3 characters "
-    })
+    }),
+    longitude:Joi.string().required().messages({
+        "any.required":"longitude is required"
+    }),
+    latitude:Joi.string().required().messages({
+        "any.required":"longitude is required"
+    }),
 })

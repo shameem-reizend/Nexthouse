@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import axios from "axios";
 import {
   createAddressApi,
   getAddressAPI,
@@ -11,65 +12,150 @@ interface Address {
   state: string;
   district: string;
   city: string;
-  pincode: number | null;
+  pincode: number | undefined;
   landmark: string;
+}
+
+interface State{
+  name: string
 }
 
 const Profile = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [isAddressPresent, setIsAddressPresent] = useState(false);
+  const [stateList ,setStateList] = useState <any[]>([]);
+  const [cityList, setcityList] = useState <any[]>([]);
   const [addressData, setAddressData] = useState<Address>({
     address: "",
     state: "",
     district: "",
     city: "",
-    pincode: null,
+    pincode: undefined,
     landmark: "",
   });
 
+  const [selectedState, setSelectedState] = useState("");
+  const [selectedcity, setSelectedCity] = useState("");
+  const [selectedStateName, setSelectedStateName] = useState("");
+  const [longitude,setLongitude] = useState("");
+  const [latitude,setLatitude] = useState("");
+
   const userData = JSON.parse(localStorage.getItem("userData") || "null");
   const userId = userData.user_id;
+ 
+  // const API_KEY = 
+  const stateOptions = {
+  method: 'GET',
+  url: 'https://country-state-city-search-rest-api.p.rapidapi.com/states-by-countrycode',
+  params: {countrycode: 'in'},
+  headers: {
+    'x-rapidapi-key': '3bacb4ba8fmsh46cb26a20906562p15539bjsn8a242baca16f',
+    'x-rapidapi-host': 'country-state-city-search-rest-api.p.rapidapi.com'
+  }
+};
 
+const cityoptions = {
+  method: 'GET',
+  url: 'https://country-state-city-search-rest-api.p.rapidapi.com/cities-by-countrycode-and-statecode',
+  params: {
+    countrycode: 'in',
+    statecode: `${selectedState}`
+  },
+  headers: {
+    'x-rapidapi-key': '3bacb4ba8fmsh46cb26a20906562p15539bjsn8a242baca16f',
+    'x-rapidapi-host': 'country-state-city-search-rest-api.p.rapidapi.com'
+  }
+};
+
+async function fetchStateData() {
+	try {
+		const response = await axios.request(stateOptions);
+    console.log(response.data)
+    setStateList(response.data);
+
+	} catch (error) {
+		console.error(error);
+	}
+}
+
+async function fetchCityData() {
+	try {
+		const response = await axios.request(cityoptions);
+		console.log(response.data);
+    setcityList(response.data)
+	} catch (error) {
+		console.error(error);
+	}
+}
+
+
+
+
+const fetchAddress = async () => {
+  try {
+    const res = await getAddressAPI();
+    // console.log(res.data.address);
+    setAddressData(res.data.address);
+    if (res.data.address.address) {
+      setIsAddressPresent(true);
+    } else {
+      setIsAddressPresent(false);
+    }
+  } catch (error) {
+    console.log("No address found error");
+    toast.error("Error in fetching Address")
+  }
+};
   useEffect(() => {
-    const fetchAddress = async () => {
-      try {
-        const res = await getAddressAPI();
-        console.log(res.data.address);
-        setAddressData(res.data.address);
-        if (res.data.address.address) {
-          setIsAddressPresent(true);
-        } else {
-          setIsAddressPresent(false);
-        }
-      } catch (error) {
-        console.log("No address found error");
-      }
-    };
     fetchAddress();
   }, []);
+
+  useEffect(()=>{
+      fetchStateData();
+      fetchCityData();
+  },[selectedState]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setAddressData({ ...addressData, [e.target.name]: e.target.value });
   };
 
+  const handleSelectStateChange = (e:React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedState(e.target.value);
+    const state = stateList.filter((state) => state.isoCode == e.target.value);
+    setSelectedStateName(state[0].name);
+  };
+
+  const handleSelectCityChange = (e:React.ChangeEvent<HTMLSelectElement>) => {
+    setAddressData({...addressData, [e.target.name]:e.target.value});
+    const c = cityList.filter((city) => city.name == e.target.value)
+    setLongitude(c[0].longitude);
+    setLatitude(c[0].latitude);
+    setSelectedCity(e.target.value);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
     const payload = {
       address: addressData.address,
-      state: addressData.state,
+      state: selectedStateName,
       district: addressData.district,
-      city: addressData.city,
+      city: selectedcity,
       landmark: addressData.landmark,
       pincode: addressData.pincode,
+      longitude:longitude,
+      latitude:latitude,
     };
 
     try {
       if (isAddressPresent) {
         const res = await createAddressApi(payload);
         toast.success(res.data.message);
+        fetchAddress();
       } else {
         const res = await updateAddressApi(payload);
         toast.success(res.data.message);
+        fetchAddress();
         setIsAddressPresent(true);
       }
       setIsEditing(false);
@@ -171,29 +257,101 @@ const Profile = () => {
               </div>
             ) : (
               <form onSubmit={handleSubmit}>
-                {[
-                  "address",
-                  "state",
-                  "district",
-                  "city",
-                  "pincode",
-                  "landmark",
-                ].map((field) => (
+
                   <div className="mb-2">
                     <label className="block text-gray-950 font-semibold capitalize mb-1">
-                      {field}
+                      address
                     </label>
                     <input
                       type="text"
-                      name={field}
-                      value={(addressData as any)[field]}
+                      name="address"
+                      value={addressData.address==null? "":addressData.address}
                       onChange={handleChange}
                       className="w-full border rounded-lg p-2 focus:ring-2 focus:ring-gray-400 outline-none "
                       required
                     />
                   </div>
-                ))}
-
+                   <div className="mb-2">
+                    <label className="block text-gray-950 font-semibold capitalize mb-1">
+                      state
+                    </label>
+                    <select
+                      name="state"
+                      value={selectedState}
+                      onChange={handleSelectStateChange}
+                      className="w-full border rounded-lg p-2 focus:ring-2 focus:ring-gray-400 outline-none "
+                      required
+                    >
+                      <option value ="">{addressData.state !== null? addressData.state:"select a state"}</option>
+                      {
+                        stateList?.map((state:any) => (
+                          <option  className="text-black" key ={state.name} value={state.isoCode}>
+                            {state.name}
+                          </option>
+                        ))
+                      }
+                      </select>
+                  </div>
+                  <div className="mb-2">
+                    <label className="block text-gray-950 font-semibold capitalize mb-1">
+                      district
+                    </label>
+                    <input
+                      type="text"
+                      name="district"
+                      value={addressData.district}
+                      onChange={handleChange}
+                      className="w-full border rounded-lg p-2 focus:ring-2 focus:ring-gray-400 outline-none "
+                      required
+                    />
+                  </div>
+                  <div className="mb-2">
+                    <label className="block text-gray-950 font-semibold capitalize mb-1">
+                      city
+                    </label>
+                    <select
+                      name="city"
+                      value={selectedcity}
+                      onChange={handleSelectCityChange}
+                      className="w-full border rounded-lg p-2 focus:ring-2 focus:ring-gray-400 outline-none "
+                      required
+                    >
+                      <option value ="">{addressData.city != null? addressData.city:"Select city"}</option>
+                      {
+                        cityList.map((city) => (
+                          <option key ={city.name} value={city.name}>
+                            {city.name}
+                          </option>
+                        ))
+                      }
+                      </select>
+                  </div>
+                   <div className="mb-2">
+                    <label className="block text-gray-950 font-semibold capitalize mb-1">
+                      pincode
+                    </label>
+                    <input
+                      type="text"
+                      name="pincode"
+                      value={addressData.pincode}
+                      onChange={handleChange}
+                      className="w-full border rounded-lg p-2 focus:ring-2 focus:ring-gray-400 outline-none "
+                      required
+                    />
+                  </div>
+                   <div className="mb-2">
+                    <label className="block text-gray-950 font-semibold capitalize mb-1">
+                      landmark
+                    </label>
+                    <input
+                      type="text"
+                      name="landmark"
+                      value={addressData.landmark}
+                      onChange={handleChange}
+                      className="w-full border rounded-lg p-2 focus:ring-2 focus:ring-gray-400 outline-none "
+                      
+                    />
+                  </div>
                 <div className="flex justify-between mt-6">
                   <button
                     className="px-4 py-2 text-black  font-semibold outline rounded-lg hover:bg-gray-100"
