@@ -8,7 +8,6 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "../../components/ui/dialog"
 import {
   Select,
@@ -37,9 +36,9 @@ interface InviteUserPropType {
 export const InviteUser: React.FC<InviteUserPropType> = ({event_id}) => {
 
   const [isOpen, setIsOpen] = useState(false)
-  const [users, setUsers] = useState([]);
-  const [selectedUser, setSelectedUser] = useState("");
-  const [currentUser, setCurrentUser] = useState<User>()
+  const [users, setUsers] = useState<User[]>([]);
+  const [selectedUser, setSelectedUser] = useState<string>("");
+  const [currentUser, setCurrentUser] = useState<User | null>(null)
 
   const handleClick = async () => {
     try {
@@ -49,6 +48,7 @@ export const InviteUser: React.FC<InviteUserPropType> = ({event_id}) => {
       const currentUserData = JSON.parse(localStorage.getItem("userData")!);
       setCurrentUser(currentUserData);
     } catch (error) {
+      toast.error('Failed to load Users')
       console.log(error);
     }
   }
@@ -59,8 +59,12 @@ export const InviteUser: React.FC<InviteUserPropType> = ({event_id}) => {
 
   const handleInviteUser = async () => {
     try {
+      if (!selectedUser) {
+        toast.warn("Please select a user first.");
+        return;
+      }
       const inviteData = await createInviteAPI({event_id, reciever_id: selectedUser});
-      if(inviteData.success == true){
+      if(inviteData.success === true){
         setSelectedUser("");
         setIsOpen(false);
         toast.success("Invite sent");
@@ -70,15 +74,13 @@ export const InviteUser: React.FC<InviteUserPropType> = ({event_id}) => {
       console.log(error);
     }
   }
-  const filteredUsers = users.filter((user: User) => user.user_id != currentUser?.user_id);
+  const filteredUsers = users.filter((user: User) => user.user_id !== currentUser?.user_id);
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogTrigger asChild>
         <button onClick={handleClick} className="bg-zinc-900 hover:bg-zinc-700 active:bg-zinc-500 text-white font-bold py-2 px-4 rounded-full flex items-center gap-2 cursor-pointer">
             Invite
         </button>
-      </DialogTrigger>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle>Invite Member</DialogTitle>
