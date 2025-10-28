@@ -1,7 +1,40 @@
-import type { ProductType } from "../../pages/product/Products";
+import { useEffect, useState } from "react";
+import type { LikedByType, ProductType } from "../../pages/product/Products";
 import { Button } from "../ui/button";
+import { CiHeart } from "react-icons/ci";
+import { FaHeart } from "react-icons/fa";
+import { likedApi } from "../../api/modules/liked.api";
+import { toast } from "sonner";
 
 const ProductDisplay = ({ product }: { product: ProductType }) => {
+  const { user_id } = JSON.parse(localStorage.getItem("userData") || "{}");
+
+  const [isLiked, setIsLiked] = useState(false);
+
+  useEffect(() => {
+    const liked = product.likedBy.find(
+      (item: LikedByType) => item.user.user_id === user_id
+    );
+    setIsLiked(!!liked);
+  }, [product.likedBy, user_id]);
+
+  const handleLike = async () => {
+    try {
+      const response = await likedApi(product.product_id);
+      console.log(response.data);
+      if (response.message == "Deleted from Liked") {
+        setIsLiked(false);
+        toast.error("Removed from Favourites");
+      } else {
+        setIsLiked(true);
+        toast.success("Added to Favourites");
+      }
+    } catch (error) {
+      toast.error("Error occured");
+      console.log(error);
+    }
+  };
+
   return (
     <div
       key={product.product_id}
@@ -30,9 +63,12 @@ const ProductDisplay = ({ product }: { product: ProductType }) => {
               alt="User avatar"
               className="w-8 h-8 rounded-full"
             />
-            <p className="text-gray-500 dark:text-gray-400 text-sm font-medium">
-              John Doe
-            </p>
+            <div>
+              <p className="text-gray-800 dark:text-gray-400 text-[14px] font-medium">
+                {product.user.name}
+              </p>
+              <p className="text-gray-500 dark:text-gray-400 text-sm font-semibold">{product.user.email}</p>
+            </div>
           </div>
         </div>
 
@@ -44,11 +80,23 @@ const ProductDisplay = ({ product }: { product: ProductType }) => {
           ) : (
             <span className="text-orange-500 font-bold text-lg">Free</span>
           )}
-          <Button 
-          // className="bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg shadow-md hover:shadow-lg transition-all duration-200"
-          >
-            Buy Now
-          </Button>
+          <div className="flex gap-2">
+            <Button
+              onClick={handleLike}
+              className="bg-gray-200 hover:bg-gray-300 text-white rounded-lg shadow-md hover:shadow-lg   transition-all duration-200"
+            >
+              {isLiked ? (
+                <FaHeart className=" text-red-600 transition-transform duration-200 group-hover:scale-125" />
+              ) : (
+                <CiHeart className="text-red-700 transition-transform duration-200 group-hover:scale-125" />
+              )}
+            </Button>
+            <Button
+            // className="bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg shadow-md hover:shadow-lg transition-all duration-200"
+            >
+              {product?.price ? "Buy Now" : "Get Now"}
+            </Button>
+          </div>
         </div>
       </div>
     </div>
@@ -56,7 +104,3 @@ const ProductDisplay = ({ product }: { product: ProductType }) => {
 };
 
 export default ProductDisplay;
-
-// background: "#0f172a",
-// backgroundImage:
-// "radial-gradient(circle at 10% 20%, rgba(199, 92, 244, 0.1) 0%, transparent 20%)",
