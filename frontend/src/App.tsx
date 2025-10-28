@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Login } from "./pages/Login";
 import { Home } from "./pages/Home";
 import { ToastContainer } from "react-toastify";
+import { Toaster } from "./components/ui/sonner"
 import { ProtectedRoutes } from "./components/ProtectedRoutes";
 import { Register } from "./pages/Register";
 import LikedProducts from "./pages/LikedProducts";
@@ -21,6 +22,7 @@ export const App: React.FC = () => {
     <>
       <QueryClientProvider client={queryClient}>
         <ToastContainer />
+        <Toaster />
         <Router>
           <Routes>
             <Route path="/login" element={<Login />} />

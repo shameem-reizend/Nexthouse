@@ -14,7 +14,21 @@ export interface ProductType {
     category_id: string;
     category_name: string;
   };
+  user:UserType
+  likedBy:LikedByType[];
 }
+export interface LikedByType{
+  id:string,
+  user:UserType,
+  product:ProductType
+}
+export interface UserType{
+   user_id: string;
+    name: string;
+    email: string;
+    phone_number: string;
+}
+
 
 const Products = () => {
   const [products, setProducts] = useState<null | ProductType[]>(null);
@@ -34,7 +48,6 @@ const Products = () => {
       ? products?.filter((p) => !p.isFree)
       : products;
 
-  console.log("the filtered ", filteredProducts);
 
   const fetching = async () => {
     const response = await fetchProductsApi();
@@ -44,12 +57,20 @@ const Products = () => {
   useEffect(() => {
     fetching();
   }, []);
+
+
+    
   return (
     <div className="min-h-screen w-full py-10 px-5">
       {/* Header Section */}
       <div className="text-center mb-15 min-w-full  flex flex-col md:flex-row">
         <div className=" md:flex-1 ">
-          <img src="./shopping.png" alt="shpping_img" width={"50%"} className="w-[30%] md:w-[50%]" />
+          <img
+            src="./shopping.png"
+            alt="shpping_img"
+            width={"50%"}
+            className="w-[30%] md:w-[50%]"
+          />
         </div>
         <div className=" flex-2 md:flex-3">
           <h2 className="text-3xl font-bold text-slate-800 dark:text-white pl-4 mt-6 ">
@@ -86,9 +107,15 @@ const Products = () => {
             Nothing to show
           </div>
         ) : (
-          filteredProducts?.map((prod: ProductType) => (
-            <ProductDisplay key={prod.product_id} product={prod} />
-          ))
+          filteredProducts?.map((prod: ProductType) => {
+
+                
+            
+            return(
+            <ProductDisplay key={prod.product_id} product={prod}
+            //  handleLike={()=>handleLike(prod.product_id)} 
+             />
+          )})
         )}
       </div>
     </div>

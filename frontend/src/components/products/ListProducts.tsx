@@ -1,52 +1,75 @@
 import { useState } from "react";
 import type { ProductType } from "../../pages/product/Products";
+import { FilterCategory } from "./FilterCategory";
+import type { CategoryType } from "../../pages/product/MyProducts";
 
-const ListProducts = ({ products }: { products: ProductType[] }) => {
+const ListProducts = ({
+  products,
+  category,
+}: {
+  products: ProductType[];
+  category: CategoryType[] | null;
+}) => {
   const items = ["On Sale", "Sold Out"];
   const [filter, setFilter] = useState<string>("On Sale");
+  const [selectCategory, setSelectCategory] = useState("All");
 
   const filteredProducts =
     filter == "On Sale"
-      ? products?.filter((p) => !p.isSold)
+      ? products?.filter((p) => !p?.isSold)
       : filter == "Sold Out"
-      ? products?.filter((p) => p.isSold)
+      ? products?.filter((p) => p?.isSold)
       : products;
 
   const handleTabChange = (tab: string) => {
     setFilter(tab);
   };
+
+  const againfilter =
+    selectCategory == "All"
+      ? filteredProducts
+      : filteredProducts.filter(
+          (prod) => prod?.category.category_name == selectCategory
+        );
   return (
     <div>
-      <div className="flex justify-end gap-4 mt-6 mb-6 ">
-        {products.length !==0 && items.map((tab) => (
-          <button
-            key={tab}
-            onClick={() => handleTabChange(tab)}
-            className={`pb-2 text-lg font-medium ${
-              filter == tab
-                ? "text-gray-900 border-b-2 border-gray-900"
-                : "text-gray-500 hover:text-gray-800"
-            }`}
-          >
-            {tab}
-          </button>
-        ))}
+      <div className="flex justify-end  gap-4 mt-6 mb-6 ">
+        {products?.length !== 0 &&
+          items.map((tab) => (
+            <button
+              key={tab}
+              onClick={() => handleTabChange(tab)}
+              className={`pb-2 text-lg font-medium ${
+                filter == tab
+                  ? "text-gray-900 border-b-2 border-gray-900"
+                  : "text-gray-500 hover:text-gray-800"
+              }`}
+            >
+              {tab}
+            </button>
+          ))}
+      </div>
+      <div className="ml-14">
+        <FilterCategory
+          category={category}
+          setSelectCategory={setSelectCategory}
+        />
       </div>
       <div className="min-w-full grid  grid-cols-[repeat(auto-fit,minmax(450px,1fr))] gap-0  py-6">
-        {filteredProducts.length == 0 ? (
+        {againfilter.length == 0 ? (
           <div className="text-center font-bold text-1xl">
             No Products Available
           </div>
         ) : (
-          filteredProducts?.map((product: ProductType) => (
+          againfilter?.map((product: ProductType) => (
             <div
-              key={product.product_id}
+              key={product?.product_id}
               className="flex  h-[200px]  border-b-2 bg-gray-100 overflow-hidden"
             >
               <div className="flex flex-col items-center justify-center  w-2/5 mx-auto">
                 <img
                   className="h-[140px] w-[150px] object-cover rounded"
-                  src={product.image}
+                  src={product?.image}
                   alt="product image"
                 />
                 <p className="text-gray-800 font-medium text-[14px] uppercase mt-2">
@@ -57,10 +80,10 @@ const ListProducts = ({ products }: { products: ProductType[] }) => {
               <div className="flex flex-col items-start justify-evenly flex-1 px-4 py-3">
                 <div>
                   <h5 className="text-lg font-semibold mt-1 text-gray-700 dark:text-white  capitalize line-clamp-1">
-                    {product.name}
+                    {product?.name}
                   </h5>
                   <p className="text-gray-500 text-md line-clamp-2">
-                    {product.description.slice(0, 35)}
+                    {product?.description.slice(0, 35)}
                   </p>
                 </div>
                 <div>

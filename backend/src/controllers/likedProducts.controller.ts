@@ -4,7 +4,6 @@ import { getProductById } from "../services/product.service";
 import { getUserById, getUserLikedProducts } from "../services/auth.service";
 import { LikedProducts } from "../entities/LikedProducts.entity";
 import { addToLikeProduct, deleteFromLikedProduct, findLikedProductOfUser } from "../services/likedProduct.service";
-import { ApiError } from "../utils/apiError";
 
 export const addToLikeHandler=async(req:AuthRequest,res:Response,next:NextFunction)=>{
 
@@ -16,7 +15,8 @@ export const addToLikeHandler=async(req:AuthRequest,res:Response,next:NextFuncti
         const user=await getUserById(user_id)
         const existing=await findLikedProductOfUser(user_id,product_id)
         if(existing){
-            throw new ApiError("The product is already in liked list",400)
+            const deleted=  await deleteFromLikedProduct(user.user_id,product.product_id)
+            return res.status(201).json({success:true,message:"Deleted from Liked",data:deleted})
         }
        const likedProduct=await addToLikeProduct(user,product)
         return res.status(201).json({success:true,message:"Added to Liked",data:likedProduct})

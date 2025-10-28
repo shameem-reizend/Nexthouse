@@ -44,7 +44,7 @@ const MyProducts = () => {
         </div>
       </div>
       <div className="mx-auto max-w-[85%] mt-2  min-h-[400px]">
-        <ListProducts products={products} />
+        <ListProducts products={products} category={category} />
       </div>
     </div>
   );
