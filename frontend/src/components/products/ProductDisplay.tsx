@@ -39,15 +39,21 @@ const ProductDisplay = ({ product }: { product: ProductType }) => {
     <div
       key={product.product_id}
       className="mx-auto flex flex-col w-full sm:w-full md:w-[300px] lg:w-[350px] h-[400px] bg-white border border-gray-200 rounded-lg shadow-md
-       dark:bg-gray-800 dark:border-gray-700m 
+       dark:bg-gray-800 dark:border-gray-700m relative
        overflow-hidden"
-      style={{}}
+      style={{
+      }}
     >
       <img
         className="w-full h-[230px] object-cover hover:scale-105 transition-transform duration-300"
         src={product.image}
         alt="product image"
       />
+      {product.isSold && (
+        <div className="absolute inset-0 bg-black/60 flex items-center justify-center text-white text-xl font-semibold backdrop-blur-1xl">
+          SOLD
+        </div>
+      )}
       <div className="flex flex-col justify-between flex-1 px-4 py-3">
         <div>
           <h5 className="text-lg font-semibold mt-1 text-slate-800 dark:text-white  capitalize line-clamp-1">
@@ -67,7 +73,9 @@ const ProductDisplay = ({ product }: { product: ProductType }) => {
               <p className="text-gray-800 dark:text-gray-400 text-[14px] font-medium">
                 {product.user.name}
               </p>
-              <p className="text-gray-500 dark:text-gray-400 text-sm font-semibold">{product.user.email}</p>
+              <p className="text-gray-500 dark:text-gray-400 text-sm font-semibold">
+                {product.user.email}
+              </p>
             </div>
           </div>
         </div>
@@ -91,11 +99,21 @@ const ProductDisplay = ({ product }: { product: ProductType }) => {
                 <CiHeart className="text-red-700 transition-transform duration-200 group-hover:scale-125" />
               )}
             </Button>
-            <Button
-            // className="bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg shadow-md hover:shadow-lg transition-all duration-200"
-            >
-              {product?.price ? "Buy Now" : "Get Now"}
-            </Button>
+
+            {!product.isSold ? (
+              <Button
+              // className="bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg shadow-md hover:shadow-lg transition-all duration-200"
+              >
+                {product?.price ? "Buy Now" : "Get Now"}
+              </Button>
+            ) : (
+              <Button
+                disabled
+                className="bg-red-600 hover:bg-red-700 text-white rounded-lg shadow-md hover:shadow-lg transition-all duration-200"
+              >
+                Sold out
+              </Button>
+            )}
           </div>
         </div>
       </div>

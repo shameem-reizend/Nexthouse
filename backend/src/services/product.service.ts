@@ -54,7 +54,8 @@ export const changeSold = async (product_id: string) => {
 
 export const getAllProducts = async () => {
   // excluded the password of user.
-  return await productRepo.find({  relations: {
+  return await productRepo.find({
+    relations: {
       category: true,
       user: true,
       likedBy: {
@@ -62,42 +63,44 @@ export const getAllProducts = async () => {
         product: true,
       },
     },
-    select:{
-      name:true,
-      description:true,
-      image:true,
-      isFree:true,
-      isSold:true,
-      price:true,
-      product_id:true,
-      
-      user:{
-        user_id:true,
-        name:true,
-        email:true,
-        phone_number:true
-      },
-      category:{
-        category_id:true,
-        category_name:true
-      },
-      likedBy:{
-        id:true,
-        product:{
-          product_id:true,
-          name:true,
-          description:true,
-          price:true,
-        },
-        user:{
-          user_id:true,
-          name:true,
-          email:true
-        },
-      }
-    }
+    select: {
+      name: true,
+      description: true,
+      image: true,
+      isFree: true,
+      isSold: true,
+      price: true,
+      product_id: true,
 
-   });
+      user: {
+        user_id: true,
+        name: true,
+        email: true,
+        phone_number: true,
+      },
+      category: {
+        category_id: true,
+        category_name: true,
+      },
+      likedBy: {
+        id: true,
+        product: {
+          product_id: true,
+          name: true,
+          description: true,
+          price: true,
+        },
+        user: {
+          user_id: true,
+          name: true,
+          email: true,
+        },
+      },
+    },
+    order: {
+      isSold: "ASC", // false (unsold) first, true (sold) last
+    },
+  });
 };
 
 export const getUserProducts = async (user_id: string) => {
