@@ -6,8 +6,8 @@ import {  createOrUpdateAddress, getAddress } from "../services/address.service"
 export const handleCreateAddress = async(req:AuthRequest,res:Response,next:NextFunction) => {
     try{
         const userId = req.user.id;
-        const {address,state,district,city,pincode,landmark} = req.body;
-        const result =await  createOrUpdateAddress(address ,state,district,city,pincode,landmark,userId);
+        const {address,state,district,city,pincode,landmark,latitude,longitude} = req.body;
+        const result =await  createOrUpdateAddress(address ,state,district,city,pincode,landmark,latitude,longitude,userId);
 
         res.status(200).json({
             success:true,
@@ -22,10 +22,10 @@ export const handleCreateAddress = async(req:AuthRequest,res:Response,next:NextF
 
 export const handleAddressUpdate = async(req:AuthRequest,res:Response,next:NextFunction) =>{
     try {
-        const {address,state,district,city,pincode,landmark} = req.body;
+        const {address,state,district,city,pincode,landmark,longitude,latitude} = req.body;
         const userId = req.user.id;
 
-        const result = await createOrUpdateAddress(address,state,district,city,pincode,landmark,userId);
+        const result = await createOrUpdateAddress(address,state,district,city,pincode,landmark,longitude,latitude,userId);
 
         res.status(200).json({
             success:true,
