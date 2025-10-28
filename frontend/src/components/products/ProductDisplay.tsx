@@ -4,7 +4,8 @@ import { Button } from "../ui/button";
 import { CiHeart } from "react-icons/ci";
 import { FaHeart } from "react-icons/fa";
 import { likedApi } from "../../api/modules/liked.api";
-import { toast } from "sonner";
+import { toast as toastSooner } from "sonner";
+import { OrderAlert } from "../../pages/order/OrderAlert";
 
 const ProductDisplay = ({ product }: { product: ProductType }) => {
   const { user_id } = JSON.parse(localStorage.getItem("userData") || "{}");
@@ -24,13 +25,13 @@ const ProductDisplay = ({ product }: { product: ProductType }) => {
       console.log(response.data);
       if (response.message == "Deleted from Liked") {
         setIsLiked(false);
-        toast.error("Removed from Favourites");
+        toastSooner.error("Removed from Favourites");
       } else {
         setIsLiked(true);
-        toast.success("Added to Favourites");
+        toastSooner.success("Added to Favourites");
       }
     } catch (error) {
-      toast.error("Error occured");
+      toastSooner.error("Error occured");
       console.log(error);
     }
   };
@@ -100,8 +101,11 @@ const ProductDisplay = ({ product }: { product: ProductType }) => {
               )}
             </Button>
 
-            {!product.isSold ? (
+            <OrderAlert isSold = {product.isSold} product_id ={product.product_id} price = {product.price} />
+
+            {/* {!product.isSold ? (
               <Button
+              onClick={() => handleCreateOrder(product.product_id)}
               // className="bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg shadow-md hover:shadow-lg transition-all duration-200"
               >
                 {product?.price ? "Buy Now" : "Get Now"}
@@ -113,7 +117,7 @@ const ProductDisplay = ({ product }: { product: ProductType }) => {
               >
                 Sold out
               </Button>
-            )}
+            )} */}
           </div>
         </div>
       </div>
