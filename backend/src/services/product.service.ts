@@ -11,7 +11,8 @@ export const createProduct = async (
   image,
   price,
   freeStatus,
-  user_id
+  user_id,
+  Exchangeable
 ) => {
   try {
     const Product = await productRepo.create({
@@ -22,6 +23,7 @@ export const createProduct = async (
       isFree: freeStatus ? true : false,
       category: { category_id },
       user: { user_id },
+      isExchangeEnabled: Exchangeable,
     });
     await productRepo.save(Product);
     return Product;

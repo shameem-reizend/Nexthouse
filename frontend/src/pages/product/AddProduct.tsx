@@ -24,6 +24,7 @@ import type { CategoryType } from "./MyProducts";
 import { Switch } from "../../components/ui/switch";
 import React, { useState } from "react";
 import { addProductApi } from "../../api/modules/product.api";
+import ExchangePolicy from "../../components/products/ExchangePolicy";
 
 interface AddProductPropType {
   category: CategoryType[] | null;
@@ -41,10 +42,23 @@ const AddProduct: React.FC<AddProductPropType> = ({
   const [price, setPrice] = useState<number | "">("");
   const [free, setFree] = useState(false);
   const [image, setImage] = useState<File | null>(null);
+  const [isExchangeEnabled, setExchangeEnabled] = useState(false);
+  const [showPolicyDialog, setShowPolicyDialog] = useState(false);
 
+  const handleExchangeToggle=(checked:boolean)=>{
+    if(checked){
+      setShowPolicyDialog(true);
+    }else{
+      setExchangeEnabled(false);
+    }
+  }
+   const confirmExchangePolicy = () => {
+    setExchangeEnabled(true);
+    setShowPolicyDialog(false);
+  };
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!name || !description || !selectCategory || (!free && price === "")) {
+    if (!name || !description || !selectCategory || (!free &&( price === ""|| Number(price)<=0))) {
       alert("Please fill all required fields");
       return;
     }
@@ -54,6 +68,8 @@ const AddProduct: React.FC<AddProductPropType> = ({
     productData.append("price", free ? "0" : price.toString());
     productData.append("isFree", free.toString());
     productData.append("image", image!);
+    productData.append("isExchangeEnabled", isExchangeEnabled.toString());
+
 
     try {
       await addProductApi(selectCategory, productData);
@@ -131,8 +147,8 @@ const AddProduct: React.FC<AddProductPropType> = ({
             </div>
 
             <div className="grid gap-3">
-              <Label>Are you giving it for Free..!</Label>
               <div className="flex items-center space-x-2">
+                <Label>Are you giving it for Free..!</Label>
                 <Switch
                   id="isFree"
                   checked={free}
@@ -140,39 +156,48 @@ const AddProduct: React.FC<AddProductPropType> = ({
                 />
                 <Label htmlFor="isFree">Yes</Label>
               </div>
-
-              <div className="grid gap-3">
-                <Label htmlFor="price">Price</Label>
-
-                <Input
-                  disabled={free}
-                  id="price"
-                  name="price"
-                  type="number"
-                  placeholder={
-                    !free ? "Add Price" : "Thankyou for giving it free"
-                  }
-                  value={price}
-                  onChange={(e) =>
-                    setPrice(
-                      e.target.value === "" ? "" : Number(e.target.value)
-                    )
-                  }
+              <div className="flex items-center space-x-2">
+                <Label>Do you want to enable Exchange?</Label>
+                <Switch
+                  id="isExchangeEnabled"
+                  checked={isExchangeEnabled}
+                  onCheckedChange={handleExchangeToggle}
                 />
+                <Label htmlFor="isExchangeEnabled">
+                  {isExchangeEnabled ? "Enabled" : "No"}
+                </Label>
               </div>
-              <div className="grid gap-3">
-                <Input
-                  id="image"
-                  name="image"
-                  type="file"
-                  accept="image/*"
-                  onChange={(e) => {
-                    if (e.target.files && e.target.files[0]) {
-                      setImage(e.target.files[0]);
-                    }
-                  }}
-                />
-              </div>
+            </div>
+
+            <div className="grid gap-3">
+              <Label htmlFor="price">Price</Label>
+
+              <Input
+                disabled={free}
+                id="price"
+                name="price"
+                type="number"
+                placeholder={
+                  !free ? "Add Price" : "Thankyou for giving it free"
+                }
+                value={price}
+                onChange={(e) =>
+                  setPrice(e.target.value === "" ? "" : Number(e.target.value))
+                }
+              />
+            </div>
+            <div className="grid gap-3">
+              <Input
+                id="image"
+                name="image"
+                type="file"
+                accept="image/*"
+                onChange={(e) => {
+                  if (e.target.files && e.target.files[0]) {
+                    setImage(e.target.files[0]);
+                  }
+                }}
+              />
             </div>
           </div>
           <DialogFooter>
@@ -185,6 +210,8 @@ const AddProduct: React.FC<AddProductPropType> = ({
           </DialogFooter>
         </DialogContent>
       </form>
+      <ExchangePolicy showPolicyDialog={showPolicyDialog} setShowPolicyDialog={setShowPolicyDialog}
+      confirmExchangePolicy={confirmExchangePolicy}/>
     </Dialog>
   );
 };

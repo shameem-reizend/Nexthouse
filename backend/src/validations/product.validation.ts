@@ -16,6 +16,11 @@ export const productSchema = Joi.object({
     "number.min": "Price cannot be less than 0",
     "any.required": "Price is required",
   }),
+  isExchangeEnabled:Joi.alternatives()
+    .try(Joi.boolean(), Joi.string().valid("true", "false"))
+    .messages({
+      "alternatives.match": 'isExchange must be a boolean or "true"/"false" string',
+    }),
   isFree: Joi.alternatives()
     .try(Joi.boolean(), Joi.string().valid("true", "false"))
     .messages({

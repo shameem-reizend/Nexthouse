@@ -18,31 +18,29 @@ export const addProductHandler = async (
   next: NextFunction
 ) => {
   try {
-    console.log("the file is ", req.file);
-    console.log("req.headers:", req.headers);
-    console.log("req.body:", req.body);
-    console.log("req.file:", req.file);
-
     if (!req.file) {
       throw new Error("Image file is required");
     }
 
     const { category_id } = req.params;
-    const { name, description, price, isFree } = req.body;
+    const { name, description, price, isFree, isExchangeEnabled } = req.body;
     const { id } = req.user;
 
     const image = (req.file as any).path;
-    console.log(image);
 
     const user = await getUserById(id);
 
     let finalPrice: number;
-    let freeStatus
-    if (isFree) {
-      freeStatus = isFree == "true";
-    }
+    let freeStatus;
+    let Exchangeable;
+    // if (isFree) {
+    //   freeStatus = isFree == "true";
+    // }
+    // if(isExchangeEnabled){
+    //   Exchangeable = isExchangeEnabled == "true";
+    // }
 
-    if (freeStatus) {
+    if (isFree) {
       finalPrice = null;
     } else {
       if (price == undefined || price == null) {
@@ -63,8 +61,11 @@ export const addProductHandler = async (
       description,
       image,
       finalPrice,
-      freeStatus,
-      user.user_id
+      // freeStatus,
+      isFree,
+      user.user_id,
+      // Exchangeable
+      isExchangeEnabled
     );
     return res.status(201).json({
       success: true,

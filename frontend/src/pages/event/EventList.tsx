@@ -8,7 +8,7 @@ interface ActivePropType{
     events: Event[],
 }
 
-interface Event{
+export interface Event{
     event_id: string,
     event_name: string,
     event_description: string,

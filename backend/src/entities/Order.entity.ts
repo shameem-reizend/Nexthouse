@@ -1,4 +1,4 @@
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { User } from "./User.entity";
 import { Product } from "./Product.entity";
 
@@ -28,4 +28,7 @@ export class Order {
     @CreateDateColumn()
     createdAt:Date;
 
+    @ManyToOne(()=>Product,(product)=>product.orders,{onDelete:"CASCADE",nullable:true})
+    @JoinColumn({ name: "exchange_product" })
+    exchangeProduct: Product ;
 }

@@ -34,6 +34,9 @@ export class Product {
   @Column({ default: false })
   isSold: boolean;
 
+  @Column({ type: "boolean", default: false })
+  isExchangeEnabled: boolean;
+
   @ManyToOne(() => Category, { onDelete: "CASCADE" })
   @JoinColumn({ name: "category" })
   category: Category;

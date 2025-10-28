@@ -17,7 +17,7 @@ const ProductDisplay = ({ product }: { product: ProductType }) => {
       (item: LikedByType) => item.user.user_id === user_id
     );
     setIsLiked(!!liked);
-  }, [product.likedBy, user_id]);
+  }, []);
 
   const handleLike = async () => {
     try {
