@@ -9,6 +9,7 @@ import inviteRoutes from "./routes/invite.routes";
 import addressRoutes from "./routes/address.routes";
 import userRoutes from './routes/user.routes';
 import cors from "cors";
+import orderRoutes from "./routes/order.routes";
 
 const app = express();
 app.use(express.json());
@@ -30,6 +31,7 @@ app.use("/liked", likedRoutes);
 app.use("/invite", inviteRoutes);
 app.use("/address", addressRoutes);
 app.use('/user', userRoutes);
+app.use("/order",orderRoutes);
 
 app.get("/", (req: Request, res: Response) => {
   res.send("Hello, TypeScript + Express");

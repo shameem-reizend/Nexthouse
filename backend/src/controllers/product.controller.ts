@@ -17,7 +17,6 @@ export const addProductHandler = async (
   res: Response,
   next: NextFunction
 ) => {
-  console.log("hitttttt")
   try {
     console.log("the file is ", req.file);
     console.log("req.headers:", req.headers);
@@ -39,11 +38,9 @@ export const addProductHandler = async (
 
     let finalPrice: number;
     let freeStatus
-    console.log(typeof(isFree))
     if (isFree) {
       freeStatus = isFree == "true";
     }
-    console.log(freeStatus)
 
     if (freeStatus) {
       finalPrice = null;

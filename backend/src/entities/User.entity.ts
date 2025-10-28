@@ -8,7 +8,8 @@ import {
 } from "typeorm";
 import { Event } from "./Event.entity";
 import { LikedProducts } from "./LikedProducts.entity";
-import {Exclude} from "class-transformer"
+import { Exclude } from "class-transformer";
+import { Order } from "./Order.entity";
 
 export enum UserRole {
   ADMIN = "admin",
@@ -42,4 +43,7 @@ export class User {
 
   @OneToMany(() => Event, (event) => event.createdBy)
   events: Event[];
+
+  @OneToMany(() => Order, (order) => order.user)
+  orders: Order[];
 }

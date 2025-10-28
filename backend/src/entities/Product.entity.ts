@@ -1,7 +1,15 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from "typeorm";
 import { Category } from "./Category.entity";
 import { LikedProducts } from "./LikedProducts.entity";
 import { User } from "./User.entity";
+import { Order } from "./Order.entity";
 
 @Entity()
 export class Product {
@@ -30,12 +38,14 @@ export class Product {
   @JoinColumn({ name: "category" })
   category: Category;
 
-  @OneToMany(()=>LikedProducts,(likedProduct)=>likedProduct.product)
+  @OneToMany(() => LikedProducts, (likedProduct) => likedProduct.product)
   @JoinColumn()
-  likedBy!:LikedProducts[]
+  likedBy!: LikedProducts[];
 
+  @ManyToOne(() => User, { onDelete: "CASCADE" })
+  @JoinColumn({ name: "user" })
+  user: User;
 
-  @ManyToOne(()=>User,{onDelete:'CASCADE'})
-  @JoinColumn({name:"user"})
-  user:User
+  @OneToMany(() => Order, (order) => order.product)
+  orders: Order[];
 }
