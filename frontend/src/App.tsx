@@ -15,6 +15,7 @@ import Profile from "./pages/profile/Profile";
 import MyInvitations from "./pages/invitations/MyInvitations";
 import MyProducts from "./pages/product/MyProducts";
 import { Order } from "./pages/order/Order";
+import { OrderListing } from "./pages/order/OrderListing";
 
 const queryClient = new QueryClient();
 
@@ -88,11 +89,20 @@ export const App: React.FC = () => {
                 }
               />
 
-               <Route
+              <Route
                 path="/order"
                 element={
                   <ProtectedRoutes allowedRoles={["user"]}>
                     <Order />
+                  </ProtectedRoutes>
+                }
+              />
+
+              <Route
+                path="/order-listing"
+                element={
+                  <ProtectedRoutes allowedRoles={["user"]}>
+                    <OrderListing />
                   </ProtectedRoutes>
                 }
               />
