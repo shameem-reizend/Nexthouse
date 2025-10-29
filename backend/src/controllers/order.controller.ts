@@ -6,9 +6,9 @@ import { completeOrder, createOrder, getOrderOfBuyer, getOrders } from "../servi
 export const handleCreateOrder = async(req:AuthRequest,res:Response,next:NextFunction) => {
     try{
         const userId = req.user?.id;
-        const {product_id} = req.body;
+        const {product_id,exchange_product_id} = req.body;
 
-        const result = await createOrder(userId,product_id);
+        const result = await createOrder(userId,product_id,exchange_product_id);
 
         res.status(200).json({
             success:true,

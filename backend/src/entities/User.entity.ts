@@ -10,6 +10,7 @@ import { Event } from "./Event.entity";
 import { LikedProducts } from "./LikedProducts.entity";
 import { Exclude } from "class-transformer";
 import { Order } from "./Order.entity";
+import { Invite } from "./Invite.entity";
 
 export enum UserRole {
   ADMIN = "admin",
@@ -46,4 +47,7 @@ export class User {
 
   @OneToMany(() => Order, (order) => order.user)
   orders: Order[];
+
+  @OneToMany(()=>Invite,(invt)=>invt.reciever)
+  invites:Invite[];
 }

@@ -1,31 +1,44 @@
-import { AppDataSource } from "../config/data-source"
+import { AppDataSource } from "../config/data-source";
 import { Order, OrderStatus } from "../entities/Order.entity";
 import { Product } from "../entities/Product.entity";
-import { User } from "../entities/User.entity"
+import { User } from "../entities/User.entity";
 import { ApiError } from "../utils/apiError";
 
-const userRepo = AppDataSource.getRepository(User) ;
+const userRepo = AppDataSource.getRepository(User);
 const orderRepo = AppDataSource.getRepository(Order);
 const productRepo = AppDataSource.getRepository(Product);
 
-export const createOrder  = async(userId:string, product_id:string) => {
+export const createOrder = async (
+  userId: string,
+  product_id: string,
+  exchange_product_id?: string
+) => {
+  const user = await userRepo.findOne({ where: { user_id: userId } });
+  const product = await productRepo.findOne({
+    where: { product_id: product_id },
+    relations: ["user"],
+  });
 
-    const user =  await userRepo.findOne({where:{user_id:userId}});
-    if(!user){
-        throw new ApiError("User not Found to create order", 400);
-    }
+  if (!user) {
+    throw new ApiError("User not Found to create order", 400);
+  }
 
-    const product = await productRepo.findOne({
-        where:{product_id:product_id},
-        relations:["user"]
+  if (user?.user_id == product?.user?.user_id) {
+    throw new ApiError("You cannot buy the product added by you.", 400);
+  }
+
+  if (!product) {
+    throw new ApiError("Product not found", 400);
+  }
+
+  if (exchange_product_id) {
+    const exchangeProduct = await productRepo.findOne({
+      where: { product_id: exchange_product_id },
+      relations: ["user"],
     });
 
-    if(user?.user_id == product?.user?.user_id){
-        throw new ApiError("You cannot buy the product added by you.",400);
-    }
-
-    if(!product){
-        throw new ApiError("Product not found",400);
+    if (!exchangeProduct) {
+      throw new ApiError("Product not found", 400);
     }
 
     const existingOrder =   await orderRepo.findOne({
@@ -35,15 +48,21 @@ export const createOrder  = async(userId:string, product_id:string) => {
     if(existingOrder){
         throw new ApiError("You already placed an order for this product",400);
     }
-
     const newOrder = orderRepo.create({
-        user:user,
-        product:product      
+      user: user,
+      product: product,
+      exchangeProduct: exchangeProduct,
     });
-
     return await orderRepo.save(newOrder);
+  }
 
-}
+  const newOrder = orderRepo.create({
+    user: user,
+    product: product,
+  });
+
+  return await orderRepo.save(newOrder);
+};
 
 // for the owners to get the orders 
 export const getOrders = async(ownerId:string) => {
@@ -53,8 +72,8 @@ export const getOrders = async(ownerId:string) => {
         where:{product:{user:{user_id:ownerId}}}
     })
 
-    return orders;
-}
+  return orders;
+};
 
 
 export const getOrderOfBuyer = async(buyerId:string) => {
@@ -64,20 +83,16 @@ export const getOrderOfBuyer = async(buyerId:string) => {
         where:{user:{user_id:buyerId}}
     })
 
-    return order;
+  return order;
+};
 
-}
+export const completeOrder = async (orderId: string) => {
+  const order = await orderRepo.findOne({
+    where: { order_id: orderId },
+    relations: ["product"],
+  });
+  order.status = OrderStatus.COMPLETED;
+  order.product.isSold = true;
 
-export const completeOrder = async(orderId:string) => {
-
-    const order = await orderRepo.findOne({
-        where:{order_id:orderId},
-        relations:["product"]
-    });
-    order.status = OrderStatus.COMPLETED;
-    order.product.isSold = true;
-
-    return await orderRepo.save(order);
-
-}
-
+  return await orderRepo.save(order);
+};
