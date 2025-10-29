@@ -60,7 +60,7 @@ export const getOrders = async(ownerId:string) => {
 export const getOrderOfBuyer = async(buyerId:string) => {
 
     const order = await orderRepo.find({
-        relations:["user"],
+        relations:["product", "product.user"],
         where:{user:{user_id:buyerId}}
     })
 
