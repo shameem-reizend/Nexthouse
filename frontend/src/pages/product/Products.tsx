@@ -23,10 +23,10 @@ export interface LikedByType{
   product:ProductType
 }
 export interface UserType{
-   user_id: string;
-    name: string;
-    email: string;
-    phone_number: string;
+  user_id: string;
+  name: string;
+  email: string;
+  phone_number: string;
 }
 
 
