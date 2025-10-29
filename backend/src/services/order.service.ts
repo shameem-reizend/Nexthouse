@@ -86,13 +86,38 @@ export const getOrderOfBuyer = async(buyerId:string) => {
   return order;
 };
 
-export const completeOrder = async (orderId: string) => {
-  const order = await orderRepo.findOne({
-    where: { order_id: orderId },
-    relations: ["product"],
-  });
-  order.status = OrderStatus.COMPLETED;
-  order.product.isSold = true;
 
-  return await orderRepo.save(order);
-};
+
+export const completeOrder = async(orderId:string,userId:string) => {
+
+    const order = await orderRepo.findOne({
+        where:{order_id:orderId},
+        relations:["product","product.user"]
+    });
+
+    if(userId != order.product.user.user_id){
+        throw new ApiError("Only owner can approve the order!")
+    }
+
+    order.status = OrderStatus.COMPLETED;
+    order.product.isSold = true;
+
+    return await orderRepo.save(order);
+
+}
+
+export const rejectOrder = async(userId:string,orderId:string) => {
+    const order = await orderRepo.findOne({
+        where:{order_id:orderId},
+        relations:["product","product.user"]
+    });
+
+    if(userId != order.product.user.user_id){
+        throw new ApiError("Only owner can reject the order")
+    }
+
+    order.status = OrderStatus.REJECTED;
+
+    return await orderRepo.save(order);
+}
+
