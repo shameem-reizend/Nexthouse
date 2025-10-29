@@ -1,7 +1,9 @@
 
 import { Request, Response, NextFunction } from "express";
 import { AuthRequest } from "../middlewares/auth.middleware";
-import { completeOrder, createOrder, getOrderOfBuyer, getOrders } from "../services/order.service";
+import { completeOrder, createOrder, getOrderOfBuyer, getOrders, rejectOrder } from "../services/order.service";
+import { Auth } from "typeorm";
+import { truncate } from "fs";
 
 export const handleCreateOrder = async(req:AuthRequest,res:Response,next:NextFunction) => {
     try{
@@ -61,18 +63,37 @@ export const handleGetOrderOfBuyer = async(req:AuthRequest,res:Response,next:Nex
 }
 
 
-export const handleCompleteOrder = async(req:Request,res:Response,next:NextFunction) => {
+export const handleCompleteOrder = async(req:AuthRequest,res:Response,next:NextFunction) => {
     try{
         const {orderId} = req.body;
+        const userId = req.user.id;
         console.log(orderId)
 
-        const result = await completeOrder(orderId);
+        const result = await completeOrder(orderId,userId);
 
         res.status(200).json({
             success:true,
             message:"Order Soldout successfully",
             result:result
 
+        })
+
+    }catch(error){
+        next(error);
+    }
+}
+
+
+export const handleRejectOrder = async(req:AuthRequest,res:Response,next:NextFunction) => {
+    try{
+        const {orderId} = req.body;
+        const userId  = req.user.id;
+
+        const result = await rejectOrder(userId,orderId);
+        res.status(200).json({
+            success:true,
+            message:"Order rejected",
+            result:result
         })
 
     }catch(error){
