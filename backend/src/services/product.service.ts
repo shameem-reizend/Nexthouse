@@ -73,6 +73,8 @@ export const getAllProducts = async () => {
       isSold: true,
       price: true,
       product_id: true,
+      isExchangeEnabled: true,
+      orders: true,
 
       user: {
         user_id: true,

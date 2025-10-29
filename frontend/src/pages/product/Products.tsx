@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { fetchProductsApi } from "../../api/modules/product.api";
 import ProductDisplay from "../../components/products/ProductDisplay";
+import { useProducts } from "../../components/products/ProductProvider";
 
 export interface ProductType {
   product_id: string;
@@ -10,6 +11,7 @@ export interface ProductType {
   price: number;
   isFree: boolean;
   isSold: boolean;
+  isExchangeEnabled:boolean,
   category: {
     category_id: string;
     category_name: string;
@@ -31,8 +33,9 @@ export interface UserType{
 
 
 const Products = () => {
-  const [products, setProducts] = useState<null | ProductType[]>(null);
+  // const [products, setProducts] = useState<null | ProductType[]>(null);
 
+  const {buyProducts,setBuyProducts}=useProducts();
   const items = ["All", "Free", "Paid"];
 
   const [filter, setFilter] = useState<string>("All");
@@ -43,15 +46,15 @@ const Products = () => {
 
   const filteredProducts =
     filter === "Free"
-      ? products?.filter((p) => p.isFree)
+      ? buyProducts?.filter((p) => p.isFree)
       : filter == "Paid"
-      ? products?.filter((p) => !p.isFree)
-      : products;
+      ? buyProducts?.filter((p) => !p.isFree)
+      : buyProducts;
 
 
   const fetching = async () => {
     const response = await fetchProductsApi();
-    setProducts(response.data.data);
+    setBuyProducts(response.data.data);
   };
 
   useEffect(() => {
@@ -99,7 +102,7 @@ const Products = () => {
       </div>
       {/* Products Grid */}
       <div
-        className="w-full grid gap-8 px-6 py-6 bg-white/70 backdrop-blur-md rounded-2xl shadow-lg 
+        className="w-full grid  gap-y-5 px-6 py-6 bg-white/70 backdrop-blur-md rounded-2xl shadow-lg 
        grid-cols-[repeat(auto-fit,minmax(300px,1fr))]  lg:grid-cols-[repeat(auto-fit,minmax(300px,330px))]  dark:bg-gray-900/80"
       >
         {filteredProducts?.length === 0 ? (
@@ -113,7 +116,6 @@ const Products = () => {
             
             return(
             <ProductDisplay key={prod.product_id} product={prod}
-            //  handleLike={()=>handleLike(prod.product_id)} 
              />
           )})
         )}
