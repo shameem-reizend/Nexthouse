@@ -66,12 +66,16 @@ const Navbar:React.FC<NavbarProps> = ({onMenuClick}) => {
 
                 </div>
               </div>
+              {userData.role !="admin" &&
 
               <div className="text-center  border-b border-gray-300 m-0  ">
                 <button className="text-black w-full  p-2 h-12 font-semibold cursor-pointer hover:bg-gray-200" onClick={handleProfileNavigate}>
                   Profile
                 </button>
               </div>
+              
+              }
+
 
               <div className="text-center ">
                 <button className=" text-black w-full h-12 font-semibold hover:text-red-500 hover:bg-gray-200 cursor-pointer" onClick={handleLogout} >Logout</button>

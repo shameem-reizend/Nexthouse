@@ -23,7 +23,11 @@ export const Login: React.FC = () => {
         localStorage.setItem("accessToken", userData.data.token);
       }
       toast.success("login successful");
-      navigate("/");
+      if(userData.data.user.role == "admin"){
+        navigate("/admin/dashboard")
+      }else{
+        navigate("/products");
+      }
     } catch (err) {
       console.log(err);
       toast.error("login failed");

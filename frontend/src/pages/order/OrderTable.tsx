@@ -160,7 +160,7 @@ export const OrderTable: React.FC <OrderTableProptype> = ({orderData, activeTab,
                         </td>   
                         <td className="hidden lg:table-cell p-4 border-b border-blue-gray-50">
                             <p className="block font-sans text-sm antialiased font-normal leading-normal text-blue-gray-900">
-                                {order.product.price}
+                                {order.product.price ?`${  order.product.price}`:"---"}
                             </p>
                         </td>   
                         <td className="hidden lg:table-cell p-4 border-b border-blue-gray-50">

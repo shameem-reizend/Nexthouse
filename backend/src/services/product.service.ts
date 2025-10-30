@@ -66,7 +66,7 @@ export const getAllProducts = async () => {
         product: true,
       },
       orders: {
-        user: true,
+        buyer: true,
       },
     },
     select: {
@@ -121,7 +121,7 @@ export const getUserProducts = async (user_id: string) => {
 
 export const getBuyerProducts = async (user_id: string) => {
   const products = await productRepo.find({
-    relations: ["orders","orders.user","category","likedBy","user","likedBy.user","likedBy.product"],
+    relations: ["orders","orders.buyer","category","likedBy","user","likedBy.user","likedBy.product"],
     where: {
       user: { user_id: Not(user_id) },
       isSold: false,
