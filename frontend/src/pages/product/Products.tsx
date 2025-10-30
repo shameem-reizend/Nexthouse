@@ -11,38 +11,45 @@ export interface ProductType {
   price: number;
   isFree: boolean;
   isSold: boolean;
-  isExchangeEnabled:boolean,
+  isExchangeEnabled: boolean;
   category: {
     category_id: string;
     category_name: string;
   };
-  user:UserType
-  likedBy:LikedByType[];
+  user: UserType;
+  likedBy: LikedByType[];
 }
-export interface LikedByType{
-  id:string,
-  user:UserType,
-  product:ProductType
+export interface LikedByType {
+  id: string;
+  user: UserType;
+  product: ProductType;
 }
-export interface UserType{
+export interface UserType {
   user_id: string;
   name: string;
   email: string;
   phone_number: string;
 }
 
-
 const Products = () => {
   // const [products, setProducts] = useState<null | ProductType[]>(null);
+  const { user_id } = JSON.parse(localStorage.getItem("userData") || "{}");
 
-  const {buyProducts,setBuyProducts}=useProducts();
+  const { buyProducts, setBuyProducts } = useProducts();
   const items = ["All", "Free", "Paid"];
 
   const [filter, setFilter] = useState<string>("All");
+  const [likedProducts, setLikedProducts] = useState<string[]>([]);
 
   const handleTabChange = useCallback((newFilter: string) => {
     setFilter(newFilter);
   }, []);
+
+  const handleLike = (id: string) => {
+    setLikedProducts((prev) =>
+      prev.includes(id) ? prev.filter((pid) => pid !== id) : [...prev, id]
+    );
+  };
 
   const filteredProducts =
     filter === "Free"
@@ -51,18 +58,22 @@ const Products = () => {
       ? buyProducts?.filter((p) => !p.isFree)
       : buyProducts;
 
-
   const fetching = async () => {
     const response = await fetchProductsApi();
     setBuyProducts(response.data.data);
+    const likedIds = response.data.data
+      ?.filter((prod: ProductType) =>
+        prod.likedBy.some((like: LikedByType) => like.user.user_id === user_id)
+      )
+      .map((prod: ProductType) => prod.product_id);
+    if (likedIds) {
+      setLikedProducts(likedIds);
+    }
   };
 
   useEffect(() => {
     fetching();
   }, []);
-
-
-    
   return (
     <div className="min-h-screen w-full py-10 px-5">
       {/* Header Section */}
@@ -103,21 +114,23 @@ const Products = () => {
       {/* Products Grid */}
       <div
         className="w-full grid  gap-y-5 px-6 py-6 bg-white/70 backdrop-blur-md rounded-2xl shadow-lg 
-       grid-cols-[repeat(auto-fit,minmax(300px,1fr))]  lg:grid-cols-[repeat(auto-fit,minmax(300px,330px))]  dark:bg-gray-900/80"
+       grid-cols-[repeat(auto-fit,minmax(300px,1fr))]  lg:grid-cols-[repeat(auto-fit,minmax(300px,330px))]  dark:bg-gray-900/80 fade-in "
       >
         {filteredProducts?.length === 0 ? (
           <div className="text-center text-gray-500 col-span-full py-10 text-lg font-medium">
-            Nothing to show
+            No Products Available
           </div>
         ) : (
           filteredProducts?.map((prod: ProductType) => {
-
-                
-            
-            return(
-            <ProductDisplay key={prod.product_id} product={prod}
-             />
-          )})
+            return (
+              <ProductDisplay
+                key={prod.product_id}
+                product={prod}
+                liked={likedProducts}
+                onLike={handleLike}
+              />
+            );
+          })
         )}
       </div>
     </div>

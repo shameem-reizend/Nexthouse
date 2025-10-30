@@ -1,3 +1,4 @@
+import { Not } from "typeorm";
 import { AppDataSource } from "../config/data-source";
 import { Product } from "../entities/Product.entity";
 import { ApiError } from "../utils/apiError";
@@ -64,6 +65,9 @@ export const getAllProducts = async () => {
         user: true,
         product: true,
       },
+      orders: {
+        user: true,
+      },
     },
     select: {
       name: true,
@@ -111,6 +115,17 @@ export const getUserProducts = async (user_id: string) => {
   const products = await productRepo.find({
     where: { user: { user_id } },
     relations: ["category"],
+  });
+  return products;
+};
+
+export const getBuyerProducts = async (user_id: string) => {
+  const products = await productRepo.find({
+    relations: ["orders","orders.user","category","likedBy","user","likedBy.user","likedBy.product"],
+    where: {
+      user: { user_id: Not(user_id) },
+      isSold: false,
+    },
   });
   return products;
 };
