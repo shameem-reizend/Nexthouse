@@ -177,7 +177,7 @@ export const displayBuyProducts = async (
     const { id } = req.user;
     const products = await getBuyerProducts(id);
     const filtered = products.filter((prod) => {
-      return !prod.orders.some((o) => o.user.user_id === id);
+      return !prod.orders.some((o) => o.buyer.user_id === id);
     });
     res.status(201).json({
       message: "Products for buying are fetched",
