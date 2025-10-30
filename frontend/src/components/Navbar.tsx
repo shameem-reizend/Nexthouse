@@ -1,4 +1,4 @@
-import { SearchIcon , MenuIcon,UserRound} from "lucide-react";
+import { MenuIcon,UserRound} from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -35,7 +35,7 @@ const Navbar:React.FC<NavbarProps> = ({onMenuClick}) => {
       <MenuIcon/>
       </button>
 
-      <h1 className="text-lg font-semibold hidden md:block">{`Hi,${userData.name}`}</h1>
+      <h1 className="text-lg font-semibold hidden md:block">Hi <span className="capitalize">{userData.name}</span></h1>
       {/* <div className="rounded-2xl bg-white text-black w-50 sm:w-sm lg:w-md xl:w-xl p-2 flex gap-2 items-center" >
           <span className="text-black"><SearchIcon width={20} height={20}/></span>
           <input className="w-full border-white outline-0 text-lg" type="text" />
