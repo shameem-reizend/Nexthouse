@@ -1,5 +1,4 @@
 import { Not } from "typeorm";
-import { Not } from "typeorm";
 import { AppDataSource } from "../config/data-source";
 import { Product } from "../entities/Product.entity";
 import { ApiError } from "../utils/apiError";
