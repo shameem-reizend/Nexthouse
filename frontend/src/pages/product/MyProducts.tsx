@@ -43,7 +43,7 @@ const MyProducts = () => {
           <AddProduct category={category} onProductAdded={fetchingUserProducts}/>
         </div>
       </div>
-      <div className="mx-auto max-w-[85%] mt-2  min-h-[400px]">
+      <div className="mx-auto max-w-[85%] mt-2  min-h-[400px] fade-in ">
         <ListProducts products={products} category={category} />
       </div>
     </div>

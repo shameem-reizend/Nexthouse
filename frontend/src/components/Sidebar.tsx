@@ -20,7 +20,7 @@ const menuItems:Record<Role,MenuItem[]> = {
         {name:"Favourites",path:"/likedProducts",icon:Heart},
         {name:"Invitation",path:"/invitations",icon:Bell},
         {name:"My Products",path:"/my-product",icon:Handbag },
-        {name:"Orders",path:"/order-listing",icon: ListOrdered},
+        {name:"Orders",path:"/order",icon: ListOrdered},
     ],
     admin:[
         {name:"Products",path:"/products",icon:ShoppingCart},

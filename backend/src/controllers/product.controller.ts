@@ -6,6 +6,7 @@ import {
   createProduct,
   deleteProduct,
   getAllProducts,
+  getBuyerProducts,
   getProductById,
   getUserProducts,
 } from "../services/product.service";
@@ -174,11 +175,10 @@ export const displayBuyProducts = async (
 ) => {
   try {
     const { id } = req.user;
-    const products = await getAllProducts();
+    const products = await getBuyerProducts(id);
     const filtered = products.filter((prod) => {
-      return prod.user?.user_id !== id;
+      return !prod.orders.some((o) => o.user.user_id === id);
     });
-
     res.status(201).json({
       message: "Products for buying are fetched",
       success: true,
