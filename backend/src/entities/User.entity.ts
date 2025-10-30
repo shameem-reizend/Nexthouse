@@ -45,7 +45,7 @@ export class User {
   @OneToMany(() => Event, (event) => event.createdBy)
   events: Event[];
 
-  @OneToMany(() => Order, (order) => order.user)
+  @OneToMany(() => Order, (order) => order.buyer)
   orders: Order[];
 
   @OneToMany(()=>Invite,(invt)=>invt.reciever)
