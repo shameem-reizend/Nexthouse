@@ -1,8 +1,19 @@
+import type { UndefinedInitialDataInfiniteOptions } from "@tanstack/react-query"
 import { Bell, Calendar, Handbag, Heart, ListOrdered, ShoppingCart,X} from "lucide-react"
 import { Link, useLocation } from "react-router-dom"
 
 
-const menuItems = {
+
+
+interface MenuItem {
+    name:string,
+    path:string,
+    icon:any
+}
+
+type Role = "user" |"admin"
+
+const menuItems:Record<Role,MenuItem[]> = {
     user:[
         {name:"Products",path:"/products",icon:ShoppingCart},
         {name:"My Events",path:"/events",icon:Calendar},
@@ -23,8 +34,12 @@ interface SidebarProps {
     onClose:()=> void;
 }
 const Sidebar:React.FC<SidebarProps> = ({isOpen,onClose}) => {
+
+    const userData = JSON.parse(localStorage.getItem("userData") || "null ");
+    const userRole:Role = userData.role
+    console.log(userRole,"role  from the sidebar");
     
-    const items = menuItems.user;
+    const items = menuItems[userRole]
     const location = useLocation();
 
 

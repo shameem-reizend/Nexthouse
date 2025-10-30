@@ -11,7 +11,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import Layout from "./layout/Layout";
 import Products from "./pages/product/Products";
 import { Event } from "./pages/event/Event";
-import Profile from "./pages/profile/Profile";
+import Profile from "./pages/profile/ProfilePage";
 import MyInvitations from "./pages/invitations/MyInvitations";
 import MyProducts from "./pages/product/MyProducts";
 import { Order } from "./pages/order/Order";

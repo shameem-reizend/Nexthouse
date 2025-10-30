@@ -42,14 +42,14 @@ export const createOrder = async (
     }
 
     const existingOrder =   await orderRepo.findOne({
-        where:{user:{user_id:userId},product:{product_id:product_id}}
+        where:{buyer:{user_id:userId},product:{product_id:product_id}}
     })
 
     if(existingOrder){
         throw new ApiError("You already placed an order for this product",400);
     }
     const newOrder = orderRepo.create({
-      user: user,
+      buyer: user,
       product: product,
       exchangeProduct: exchangeProduct,
     });
@@ -57,7 +57,7 @@ export const createOrder = async (
   }
 
   const newOrder = orderRepo.create({
-    user: user,
+    buyer: user,
     product: product,
   });
 
@@ -68,7 +68,7 @@ export const createOrder = async (
 export const getOrders = async(ownerId:string) => {
 
     const orders = await orderRepo.find({
-        relations:['product', 'product.user'],
+        relations:['product', 'product.user','buyer'],
         where:{product:{user:{user_id:ownerId}}}
     })
 
@@ -80,7 +80,7 @@ export const getOrderOfBuyer = async(buyerId:string) => {
 
     const order = await orderRepo.find({
         relations:["product", "product.user"],
-        where:{user:{user_id:buyerId}}
+        where:{buyer:{user_id:buyerId}}
     })
 
   return order;

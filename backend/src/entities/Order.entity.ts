@@ -20,7 +20,7 @@ export class Order {
 
     @ManyToOne(() => User, (user) => user.orders , {onDelete:"CASCADE"})
     @JoinColumn({name:"ordered_by"})
-    user:User;
+    buyer:User;
 
     @ManyToOne(() => Product, (product) => product.orders, {onDelete:"CASCADE"})
     @JoinColumn({name:"ordered_product"})
