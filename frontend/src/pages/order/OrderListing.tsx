@@ -10,7 +10,7 @@ export interface Order {
   createdAt: string,
   order_id: string,
   status: string,
-  user: UserType
+  buyer: UserType
   product: ProductType
 }
 

@@ -27,10 +27,12 @@ export const OrderTable: React.FC <OrderTableProptype> = ({orderData, activeTab,
             if(orderResponse.success === true) {
                 toast.success("Order Approved");
                 fetchReceivedOrders();
+            } else{
+                toast.error("Failed to Approve");
             }
         } catch (error) {
             console.log(error);
-            toast.error("Failed to Approve")
+            toast.error("Failed to Approve");
         }
     }
 
@@ -40,6 +42,8 @@ export const OrderTable: React.FC <OrderTableProptype> = ({orderData, activeTab,
             if(orderResponse.success === true) {
                 toast.success("Order Rejected");
                 fetchReceivedOrders();
+            } else {
+                toast.error("Failed to Reject")
             }
         } catch (error) {
             console.log(error);
@@ -66,7 +70,7 @@ export const OrderTable: React.FC <OrderTableProptype> = ({orderData, activeTab,
                         <p className="block font-sans text-sm antialiased font-normal leading-none text-blue-gray-900 opacity-70">Price</p>
                     </th>
                     <th className="p-4 border-b border-blue-gray-100 bg-blue-gray-50">
-                        <p className="block font-sans text-sm antialiased font-normal leading-none text-blue-gray-900 opacity-70">Seller</p>
+                        <p className="block font-sans text-sm antialiased font-normal leading-none text-blue-gray-900 opacity-70">{activeTab === 'receivedOrders' ? "Buyer" : "Seller"}</p>
                     </th>
                     <th className="p-4 border-b border-blue-gray-100 bg-blue-gray-50">
                         <p className="block font-sans text-sm antialiased font-normal leading-none text-blue-gray-900 opacity-70">Order Date</p>
@@ -87,7 +91,7 @@ export const OrderTable: React.FC <OrderTableProptype> = ({orderData, activeTab,
             <tbody>
                 {orderData.length !== 0 ? 
                 orderData.map((order, index) => (
-                    <tr key={order.order_id} className="block md:table-row border-b border-blue-gray-100 last:border-b-0">
+                    <tr key={order.order_id} className="block lg:table-row border-b border-blue-gray-100 last:border-b-0">
                        
                         <td className="lg:hidden p-4 flex flex-col gap-2">
                             <div className="flex justify-between items-start">
@@ -110,8 +114,16 @@ export const OrderTable: React.FC <OrderTableProptype> = ({orderData, activeTab,
                             
                             <div className="grid grid-cols-2 gap-2 mt-2">
                                 <div>
-                                    <p className="font-sans text-xs antialiased font-normal text-blue-gray-700 opacity-70">Seller</p>
-                                    <p className="font-sans text-sm antialiased font-normal text-blue-gray-900">{order.product.user.name}</p>
+                                    { activeTab === 'receivedOrders' ? 
+                                    <div>
+                                        <p className="font-sans text-xs antialiased font-normal text-blue-gray-700 opacity-70">Buyer</p>
+                                        <p className="font-sans text-sm antialiased font-normal text-blue-gray-900 capitalize">{order.buyer.name}</p>
+                                    </div> : 
+                                    <div>
+                                        <p className="font-sans text-xs antialiased font-normal text-blue-gray-700 opacity-70">Seller</p>
+                                        <p className="font-sans text-sm antialiased font-normal text-blue-gray-900 capitalize">{order.product.user.name}</p>
+                                    </div>
+                                    }
                                 </div>
                                 <div>
                                     <p className="font-sans text-xs antialiased font-normal text-blue-gray-700 opacity-70">Order Date</p>
@@ -126,13 +138,7 @@ export const OrderTable: React.FC <OrderTableProptype> = ({orderData, activeTab,
                                         <div onClick={() => handleApproveOrder(order.order_id)} className="cursor-pointer inline-flex items-center rounded-md bg-green-400/10 px-3 py-1.5 text-xs font-medium text-green-400 ring-1 ring-inset ring-green-500/20">Approve</div>
                                         <div onClick={() => handleRejectOrder(order.order_id)} className="cursor-pointer inline-flex items-center rounded-md bg-red-400/10 px-3 py-1.5 text-xs font-medium text-red-400 ring-1 ring-inset ring-red-400/20">Reject</div>
                                     </>
-                                ) : (
-                                    <div className="w-full text-center">
-                                        {order.status === 'completed' ?
-                                        <span className="inline-flex items-center rounded-md bg-green-400/10 px-3 py-1.5 text-xs font-medium text-green-400 ring-1 ring-inset ring-green-500/20">Approved</span> :
-                                        <span className="inline-flex items-center rounded-md bg-red-400/10 px-3 py-1.5 text-xs font-medium text-red-400 ring-1 ring-inset ring-red-400/20">Rejected</span>}
-                                    </div>
-                                )}
+                                ) : null}
                             </div>
                             }
                         </td>
@@ -158,9 +164,14 @@ export const OrderTable: React.FC <OrderTableProptype> = ({orderData, activeTab,
                             </p>
                         </td>   
                         <td className="hidden lg:table-cell p-4 border-b border-blue-gray-50">
-                            <p className="block font-sans text-sm antialiased font-normal leading-normal text-blue-gray-900">
-                                {order.product.user.name}
-                            </p>
+                            { activeTab === 'receivedOrders' ?
+                                <p className="block font-sans text-sm antialiased font-normal leading-normal text-blue-gray-900 capitalize">
+                                    {order.buyer.name}
+                                </p> :
+                                <p className="block font-sans text-sm antialiased font-normal leading-normal text-blue-gray-900 capitalize">
+                                    {order.product.user.name}
+                                </p>
+                            }
                         </td> 
                         <td className="hidden lg:table-cell p-4 border-b border-blue-gray-50">
                             <p className="block font-sans text-sm antialiased font-normal leading-normal text-blue-gray-900">
@@ -197,7 +208,7 @@ export const OrderTable: React.FC <OrderTableProptype> = ({orderData, activeTab,
                     </tr>
                 )):
                 <tr>
-                    <td colSpan={activeTab === 'receivedOrders' ? 8 : 7} className="p-4 border-b border-blue-gray-50">
+                    <td colSpan={activeTab === 'receivedOrders' ? 8 : 7} className="p-4 border-b border-blue-gray-50 w-1">
                         <NoResults />
                     </td>
                 </tr>
