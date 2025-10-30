@@ -92,7 +92,7 @@ export const App: React.FC = () => {
                   </ProtectedRoutes>
                 }
               />
-
+{/* 
               <Route
                 path="/order"
                 element={
@@ -100,10 +100,10 @@ export const App: React.FC = () => {
                     <Order />
                   </ProtectedRoutes>
                 }
-              />
+              /> */}
 
               <Route
-                path="/order-listing"
+                path="/order"
                 element={
                   <ProtectedRoutes allowedRoles={["user"]}>
                     <OrderListing />

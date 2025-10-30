@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import type { LikedByType, ProductType } from "../../pages/product/Products";
+import type { ProductType } from "../../pages/product/Products";
 import { Button } from "../ui/button";
 import { CiHeart } from "react-icons/ci";
 import { FaHeart } from "react-icons/fa";
@@ -7,28 +7,31 @@ import { likedApi } from "../../api/modules/liked.api";
 import { toast as toastSooner } from "sonner";
 import { OrderAlert } from "../../pages/order/OrderAlert";
 
-const ProductDisplay = ({ product }: { product: ProductType }) => {
-  const { user_id } = JSON.parse(localStorage.getItem("userData") || "{}");
+interface ProductDisplayProps {
+  product: ProductType;
+  liked: string[];
+  onLike: (id: string) => void;
+}
+const ProductDisplay = ({ product, liked, onLike }: ProductDisplayProps) => {
+  // const { user_id } = JSON.parse(localStorage.getItem("userData") || "{}");
 
-  const [isLiked, setIsLiked] = useState<boolean |null>(null);
+  const [isLiked, setIsLiked] = useState<boolean>(false);
 
   useEffect(() => {
-    const liked = product.likedBy.find(
-      (item: LikedByType) => item.user.user_id === user_id
-    );
-    setIsLiked(!!liked);
-  }, []);
+    setIsLiked(liked.includes(product.product_id));
+  }, [liked, product.product_id]);
 
   const handleLike = async () => {
     try {
       const response = await likedApi(product.product_id);
       console.log(response.data);
       if (response.message == "Deleted from Liked") {
-        
         setIsLiked(false);
+        onLike(product.product_id);
         toastSooner.error("Removed from Favourites");
       } else {
         setIsLiked(true);
+        onLike(product.product_id);
         toastSooner.success("Added to Favourites");
       }
     } catch (error) {
@@ -42,7 +45,7 @@ const ProductDisplay = ({ product }: { product: ProductType }) => {
       key={product.product_id}
       className="mx-auto flex flex-col w-full sm:w-full md:w-[300px] lg:w-[300px] h-[410px] bg-white border border-gray-200 rounded-lg shadow-md
        dark:bg-gray-800 dark:border-gray-700m relative
-       overflow-hidden"
+       overflow-hidden fadeIn"
       style={{}}
     >
       <img
@@ -50,11 +53,11 @@ const ProductDisplay = ({ product }: { product: ProductType }) => {
         src={product.image}
         alt="product image"
       />
-      {product.isSold && (
+      {/* {product.isSold && (
         <div className="absolute inset-0 bg-black/60 flex items-center justify-center text-white text-xl font-semibold backdrop-blur-1xl">
           SOLD
         </div>
-      )}
+      )} */}
       <div className="flex flex-col justify-between flex-1 px-4 py-3">
         <div className="">
           <h5 className="text-lg font-semibold text-slate-800 dark:text-white capitalize truncate">
@@ -85,10 +88,10 @@ const ProductDisplay = ({ product }: { product: ProductType }) => {
             />
             <div>
               <p className="text-gray-800 dark:text-gray-200 text-[14px] font-medium">
-                {product.user.name}
+                {product?.user.name}
               </p>
               <p className="text-gray-500 dark:text-gray-400 text-[11px] font-semibold">
-                {product.user.email}
+                {product?.user.email}
               </p>
             </div>
           </div>
