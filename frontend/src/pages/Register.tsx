@@ -10,7 +10,7 @@ export const Register: React.FC = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [name, setName] = useState("");
-    const [phone, setPhone] = useState("");
+    const [phone_number, setPhone] = useState("");
 
     const navigate = useNavigate()
 
@@ -18,7 +18,7 @@ export const Register: React.FC = () => {
         e.preventDefault();
         
         try {
-            const registerData = await registerAPI({email, password, name, phone});
+            const registerData = await registerAPI({email, password, name, phone_number});
             if (registerData.success == true) {
                 navigate('/');
                 toast.success("Register Successful")
@@ -85,7 +85,7 @@ export const Register: React.FC = () => {
                     id="phone"
                     type="tel"
                     maxLength={10}
-                    value={phone}
+                    value={phone_number}
                     onChange={(e) => setPhone(e.target.value)}
                     className="w-full px-4 py-4 bg-white/60 backdrop-blur-sm border rounded-xl focus:ring-2 focus:ring-stone-600 focus:border-transparent focus:outline-0 transition-all duration-300"
                     placeholder="9999999999"

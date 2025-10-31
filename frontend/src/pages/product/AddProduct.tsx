@@ -46,6 +46,7 @@ const AddProduct: React.FC<AddProductPropType> = ({
   const [price, setPrice] = useState<number | "">("");
   const [free, setFree] = useState(false);
   const [image, setImage] = useState<File | null>(null);
+  const[loading,setLoading]=useState(false)
   const [isExchangeEnabled, setExchangeEnabled] = useState(false);
   const [showPolicyDialog, setShowPolicyDialog] = useState(false);
 
@@ -80,10 +81,12 @@ const AddProduct: React.FC<AddProductPropType> = ({
     productData.append("isExchangeEnabled", isExchangeEnabled.toString());
 
     try {
+      setLoading(true)
       await addProductApi(selectCategory, productData);
       onProductAdded();
     } catch (error) {
       console.log(error);
+      
     } finally {
       setName("");
       setDescription("");
@@ -91,6 +94,7 @@ const AddProduct: React.FC<AddProductPropType> = ({
       setPrice("");
       setFree(false);
       setOpen(false);
+      setLoading(false)
     }
   };
 
@@ -233,8 +237,8 @@ const AddProduct: React.FC<AddProductPropType> = ({
               <DialogClose asChild>
                 <Button variant="outline">Cancel</Button>
               </DialogClose>
-              <Button type="submit" onClick={handleSubmit}>
-                Submit
+              <Button type="submit" onClick={handleSubmit} disabled={loading}>
+                {loading?"Submitting":"Submit"}
               </Button>
             </DialogFooter>
           </DialogContent>

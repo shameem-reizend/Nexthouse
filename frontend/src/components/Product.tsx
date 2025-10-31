@@ -24,7 +24,7 @@ const removeLike = async (product_id: string) => {
 const Product = ({ product }: { product: ProductProps }) => {
   const queryClient = useQueryClient();
 
-  const { name, description, price, isFree, isSold } = product;
+  const { name, description, price, isFree, isSold,image } = product;
   const { mutate } = useMutation({
     mutationFn: (product_id: string) => removeLike(product_id),
     onSuccess: () => {
@@ -40,10 +40,10 @@ const Product = ({ product }: { product: ProductProps }) => {
         <div className="overflow-hidden h-48 sm:h-52 md:h-full">
           <img
             src={
-              "https://cdn.pixabay.com/photo/2015/01/09/02/45/laptop-593673_960_720.jpg"
+              image
             }
             alt={name}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+            className="aspect-square object-cover group-hover:scale-105 transition-transform duration-300"
           />
 
           {/* Heart Button */}
@@ -78,12 +78,12 @@ const Product = ({ product }: { product: ProductProps }) => {
       </div>
 
       {/* Details Section */}
-      <div className="p-3 sm:p-5 md:p-6 flex flex-col justify-between flex-1 bg-linear-to-br from-zinc-300 to-zinc-700 ">
+      <div className="p-3 sm:p-5 md:p-6 flex flex-col justify-between flex-1 bg-linear-to-br from-zinc-50 to-zinc-100 ">
         <div>
           <h3 className="text-base sm:text-lg md:text-xl font-bold text-gray-900 mb-1 sm:mb-2 line-clamp-2 group-hover:text-slate-600 transition-colors">
             {name}
           </h3>
-          <p className="text-white text-xs sm:text-sm md:text-base mb-2 sm:mb-3 line-clamp-3 leading-relaxed">
+          <p className="text-gray-600 text-xs sm:text-sm md:text-base mb-2 sm:mb-3 line-clamp-3 leading-relaxed">
             {description}
           </p>
         </div>
@@ -95,8 +95,8 @@ const Product = ({ product }: { product: ProductProps }) => {
                 Free
               </span>
             ) : (
-              <span className="text-base sm:text-lg md:text-xl font-bold text-zinc-700">
-                ${price.toFixed(2)}
+              <span className="text-base sm:text-lg md:text-xl font-bold text-emerald-500">
+                Rs.{price.toFixed(2)}
               </span>
             )}
           </div>

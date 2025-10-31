@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query"
 import { fetchInvitationsApi } from "../../api/modules/invite.api"
 import InviteCard from "../../components/InviteCard"
+import { NoResults } from "../NoResults"
 
 
 
@@ -38,8 +39,8 @@ const MyInvitations = () => {
     if(data) console.log(data)
   return (
     <div className="px-4 sm:px-6 lg:px-8 py-4">
-        <div className="mb-4 font-semibold text-2xl text-center ">My Invitation</div>
-
+        <div className="mb-4 font-semibold text-2xl md:text-left sm:text-center ">My Invitation</div>
+        {data.data.length===0?<div className="bg-white rounded-2xl"><NoResults/></div>:
         <div className="grid gap-6 sm:gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {data.data.map((invite:inviteProp)=>{
             return (
@@ -47,6 +48,7 @@ const MyInvitations = () => {
             )
         })}
         </div>
+}
     </div>
   )
 }

@@ -1,7 +1,10 @@
 import { useCallback, useEffect, useState } from "react";
-import { fetchProductsApi } from "../../api/modules/product.api";
+import { fetchProductByLocation, fetchProductsApi } from "../../api/modules/product.api";
 import ProductDisplay from "../../components/products/ProductDisplay";
 import { useProducts } from "../../components/products/ProductProvider";
+import { useMutation } from "@tanstack/react-query";
+import { toast } from "react-toastify";
+import { FilterDistance } from "../../components/products/FilterByDistance";
 
 export interface ProductType {
   product_id: string;
@@ -37,6 +40,9 @@ const Products = () => {
 
   const { buyProducts, setBuyProducts } = useProducts();
   const items = ["All", "Free", "Paid"];
+  const radius=[2,5,10,25,50,100]
+  
+  const [position, setPosition] = useState<string>("All");
 
   const [filter, setFilter] = useState<string>("All");
   const [likedProducts, setLikedProducts] = useState<string[]>([]);
@@ -61,7 +67,7 @@ const Products = () => {
   const fetching = async () => {
     const response = await fetchProductsApi();
     setBuyProducts(response.data.data);
-    const likedIds = response.data.data
+     const likedIds = response.data.data
       ?.filter((prod: ProductType) =>
         prod.likedBy.some((like: LikedByType) => like.user.user_id === user_id)
       )
@@ -71,12 +77,32 @@ const Products = () => {
     }
   };
 
+  const{isPending,mutate}=useMutation({
+    mutationFn:(radius:number)=>fetchProductByLocation(radius),
+    onSuccess:(response)=>{setBuyProducts(response.data)
+      toast.success("Fetched successfully")
+    }
+  })
+
+
   useEffect(() => {
     fetching();
   }, []);
+
+  const handleClickForLocation=async(radius:number)=>{
+    if(radius===0){
+      setPosition("All")
+      fetching()
+    }else{
+      setPosition(String(radius))
+      mutate(radius)
+    }
+  }
+  if(isPending) return (<div>Loading...</div>) 
   return (
     <div className="min-h-screen w-full">
       {/* Header Section */}
+     
       <div className="text-center mb-15 min-w-full  flex flex-col md:flex-row">
         <div className=" md:flex-1 ">
           <img
@@ -111,6 +137,9 @@ const Products = () => {
           </button>
         ))}
       </div>
+      <div className="ml-4 mb-5">
+      <FilterDistance item={radius} handleClickForLocation={handleClickForLocation} position={position}/>
+     </div>
       {/* Products Grid */}
         <div className="flex items-center bg-gray-100 dark:bg-gray-900">
           <div className="container max-w-full mx-auto">
@@ -134,6 +163,7 @@ const Products = () => {
         </div>
       </div>
       </div>
+      
     </div>
   );
 };
