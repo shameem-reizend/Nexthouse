@@ -28,7 +28,7 @@ export const App: React.FC = () => {
         <Toaster />
         <Router>
           <Routes>
-            <Route path="/login" element={<Login />} />
+            <Route path="/" element={<Login />} />
             <Route path="/register" element={<Register />} />
           {/* Routes for user  */}
             <Route
