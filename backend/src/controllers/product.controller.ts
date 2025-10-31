@@ -8,10 +8,14 @@ import {
   getAllProducts,
   getBuyerProducts,
   getProductById,
+  getProductsFromLocation,
   getUserProducts,
 } from "../services/product.service";
 import { AuthRequest } from "../middlewares/auth.middleware";
 import { getUserById } from "../services/auth.service";
+import { getAddress } from "../services/address.service";
+import { getAddressOfUser } from "../services/user.service";
+import { instanceToPlain } from "class-transformer";
 
 export const addProductHandler = async (
   req: AuthRequest,
@@ -188,3 +192,28 @@ export const displayBuyProducts = async (
     next(error);
   }
 };
+
+
+export const displayProductsFromLocation=async(req:AuthRequest,res:Response,next:NextFunction)=>{
+
+  try{
+
+    const {radius}=req.body
+    const{id} =req.user
+    
+    const user=await getAddressOfUser(id)
+    const products=await getProductsFromLocation(user.address.latitude,user.address.longitude,radius)
+    // console.log(products)
+    const filtered=products.filter((p)=>{
+      return p.user.user_id!==id
+    })
+    // console.log(filtered)
+    
+  
+    return res.status(200).json({message:"Products fetched within specified distance",success:true,data:filtered})
+  }
+  catch(error){
+    console.log(error)
+    next(error)
+  }
+}

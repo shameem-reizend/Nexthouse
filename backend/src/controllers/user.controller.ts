@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
-import { getAllUsers, getAllUsersForAdmin } from "../services/user.service";
+import { getAddressOfUser, getAllUsers, getAllUsersForAdmin } from "../services/user.service";
 import { instanceToPlain } from "class-transformer";
+import { AuthRequest } from "../middlewares/auth.middleware";
 
 export const getAllUsersHandler = async (req: Request, res: Response, next: NextFunction) => {
 
@@ -31,5 +32,23 @@ export const handleGetAllUsersForAdmin = async(req:Request,res:Response,next:Nex
   }catch(error){
     next(error)
 
+  }
+}
+
+
+export const getUserAddress = async (req: AuthRequest, res: Response, next: NextFunction) => {
+
+  try {
+    const {id}=req.user
+    const users = await getAddressOfUser(id);
+    
+    res.status(200).json({
+      success: true,
+      message: 'User address fetched successfully',
+      user: instanceToPlain(users)
+    })
+
+  } catch (error) {
+    next(error)
   }
 }

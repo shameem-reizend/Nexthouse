@@ -12,3 +12,9 @@ export const getAllUsersForAdmin = async() =>{
   return user;
 
 }
+
+
+export const getAddressOfUser=async(user_id:string)=>{
+ const user= await userRepo.createQueryBuilder("user").leftJoin("user.address","address").addSelect(["address.latitude","address.longitude"]).where("user.user_id=:user_id",{user_id}).getOne();
+ return user
+}

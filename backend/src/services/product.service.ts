@@ -129,3 +129,44 @@ export const getBuyerProducts = async (user_id: string) => {
   });
   return products;
 };
+
+
+
+export const getProductsFromLocation = async (
+  latitude: string,
+  longitude: string,
+  radius: number
+) => {
+  const lat = parseFloat(latitude);
+  const lon = parseFloat(longitude);
+
+  const products = await productRepo
+    .createQueryBuilder("product")
+    .leftJoin("product.user", "user")
+    .leftJoin("product.category","category")
+    .leftJoin("user.address", "address")
+    .leftJoin("product.likedBy","likedBy")
+    .leftJoin("likedBy.user","likedUser")
+    .leftJoin("likedBy.product","likedProduct")
+    .addSelect(["user.name","user.user_id","user.email","user.phone_number"])
+    .addSelect(["category.category_id","category.category_name","likedBy.id",
+      "likedUser.user_id",
+      "likedUser.name",
+      "likedUser.email","likedProduct.product_id","likedProduct.name","likedProduct.description","likedProduct.price"])
+    
+    .where(
+      `
+      6371 * acos(
+        cos(radians(:lat)) *
+        cos(radians(address.latitude::float)) *
+        cos(radians(address.longitude::float) - radians(:lon)) +
+        sin(radians(:lat)) *
+        sin(radians(address.latitude::float))
+      ) < :radius
+      `,
+      { lat, lon, radius }
+    )
+    .getMany();
+
+  return products;
+};

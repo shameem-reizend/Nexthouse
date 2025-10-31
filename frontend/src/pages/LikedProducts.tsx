@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query"
 import axios from "axios"
 import Product, { type ProductProps } from "../components/Product"
+import { NoResults } from "./NoResults"
 
 interface itemProp{
     id:string,
@@ -29,10 +30,12 @@ const LikedProducts = () => {
     if(isLoading) return <div>Loading...</div>
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-slate-50 via-blue-50 to-cyan-50 p-8 space-y-7">
+    <div className="min-h-screen p-8 space-y-7">
         <div className="text-3xl font-semibold ">
             Favorite Products
         </div>
+        {
+        data.data.length===0?<div className="bg-white rounded-2xl"><NoResults/></div>:
         <div className="grid md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-5">
 
         {data.data.map((item:itemProp)=>{
@@ -41,6 +44,7 @@ const LikedProducts = () => {
             )
         })}
         </div>
+}
     </div>
   )
 }

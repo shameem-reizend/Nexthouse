@@ -6,6 +6,7 @@ import {
   deleteProductHandler,
   displayAllProductHandler,
   displayBuyProducts,
+  displayProductsFromLocation,
   displayUserProductsHandler,
   updateSoldHandler,
 } from "../controllers/product.controller";
@@ -18,6 +19,7 @@ router.use(authenticate);
 
 // authorize(UserRole.USER),
 
+router.post("/fromLocation",displayProductsFromLocation);
 router.post("/:category_id", upload.single("image"), validateBody(productSchema), addProductHandler);
 
 router.delete("/:product_id", deleteProductHandler);
@@ -28,7 +30,8 @@ router.get('/user',displayUserProductsHandler); //displaying logged in user prod
 
 router.get("/all", displayAllProductHandler); //displaying the all products also
 
-router.get("/buy", displayBuyProducts); //displaying the buying products of a user 
+router.get("/buy", displayBuyProducts); //displaying the buying products of a user
+
 
 
 export default router;

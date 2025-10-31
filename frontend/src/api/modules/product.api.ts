@@ -18,3 +18,11 @@ export const fetchUserProductsApi=async()=>{
   const response= await axiosInstance.get('/product/user')
   return response;
 }
+
+
+export const fetchProductByLocation=async(radius:number)=>{
+  console.log(radius)
+  const response=await axiosInstance.post('/product/fromLocation',{radius})
+  
+  return response.data;
+}
