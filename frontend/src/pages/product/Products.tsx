@@ -75,7 +75,7 @@ const Products = () => {
     fetching();
   }, []);
   return (
-    <div className="min-h-screen w-full py-10 px-5">
+    <div className="min-h-screen w-full">
       {/* Header Section */}
       <div className="text-center mb-15 min-w-full  flex flex-col md:flex-row">
         <div className=" md:flex-1 ">
@@ -112,10 +112,9 @@ const Products = () => {
         ))}
       </div>
       {/* Products Grid */}
-      <div
-        className="w-full grid  gap-y-5 px-6 py-6 bg-white/70 backdrop-blur-md rounded-2xl shadow-lg 
-       grid-cols-[repeat(auto-fit,minmax(300px,1fr))]  lg:grid-cols-[repeat(auto-fit,minmax(300px,330px))]  dark:bg-gray-900/80 fade-in "
-      >
+        <div className="flex items-center bg-gray-100 dark:bg-gray-900">
+          <div className="container max-w-full mx-auto">
+              <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-5">
         {filteredProducts?.length === 0 ? (
           <div className="text-center text-gray-500 col-span-full py-10 text-lg font-medium">
             No Products Available
@@ -132,6 +131,8 @@ const Products = () => {
             );
           })
         )}
+        </div>
+      </div>
       </div>
     </div>
   );

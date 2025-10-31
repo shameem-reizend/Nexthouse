@@ -14,7 +14,7 @@ const Layout = () => {
       {/* Main content */}
       <div className="flex flex-col flex-1">
         <Navbar onMenuClick={() => setSidebarOpen(!sidebarOpen)} />
-        <main className="flex-1 p-5 bg-gray-100 overflow-y-auto">
+        <main className="flex-1 p-8 bg-gray-100 overflow-y-auto">
           <Outlet />
         </main>
       </div>
