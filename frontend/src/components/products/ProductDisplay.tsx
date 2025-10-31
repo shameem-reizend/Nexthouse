@@ -43,7 +43,7 @@ const ProductDisplay = ({ product, liked, onLike }: ProductDisplayProps) => {
   return (
     <div
       key={product.product_id}
-      className="mx-auto flex flex-col w-full sm:w-full md:w-[300px] lg:w-[300px] h-[410px] bg-white border border-gray-200 rounded-lg shadow-md
+      className="mx-auto flex flex-col w-full h-[410px] bg-white border border-gray-200 rounded-lg shadow-md
        dark:bg-gray-800 dark:border-gray-700m relative
        overflow-hidden fadeIn"
       style={{}}

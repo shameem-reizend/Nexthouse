@@ -19,7 +19,7 @@ export interface Event{
 
 export const EventList: React.FC<ActivePropType> = ({active, events}) => {
 
-    const filteredEvents = events.filter((event: Event) => event.event_status == active )
+    const filteredEvents = events.filter((event: Event) => event.event_status == active );
 
   return (
     <div>

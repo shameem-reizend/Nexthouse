@@ -29,12 +29,12 @@ const MyProducts = () => {
   }, []);
   return (
     <div>
-      <div className="mx-auto mt-10 max-w-[85%] border border-gray-400 min-h-[350px] flex flex-col items-center justify-center">
+      <div className="mx-auto max-w-full min-h-[350px] flex flex-col items-center justify-center">
         <HandshakeIcon size={"75px"} className="mb-8" />
-        <p className="text-md font-bold md:text-xl  text-gray-800 dark:text-gray-100 mb-2">
+        <p className="text-md text-center font-bold md:text-xl  text-gray-800 dark:text-gray-100 mb-2">
           Start selling today — your product deserves to be seen!
         </p>
-        <p className="text-sm font-medium text-slate-500 dark:text-gray-400">
+        <p className="text-sm text-center font-medium text-slate-500 dark:text-gray-400">
           List your product for free or set your own price and reach buyers
           quickly.
         </p>
@@ -43,7 +43,7 @@ const MyProducts = () => {
           <AddProduct category={category} onProductAdded={fetchingUserProducts}/>
         </div>
       </div>
-      <div className="mx-auto max-w-[85%] mt-2  min-h-[400px] fade-in ">
+      <div className="max-w-full mt-2  min-h-[400px] fade-in ">
         <ListProducts products={products} category={category} />
       </div>
     </div>
