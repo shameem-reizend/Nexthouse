@@ -10,6 +10,7 @@ import addressRoutes from "./routes/address.routes";
 import userRoutes from './routes/user.routes';
 import cors from "cors";
 import orderRoutes from "./routes/order.routes";
+import adminRoutes from "./routes/admin.routes";
 
 const app = express();
 app.use(express.json());
@@ -22,7 +23,7 @@ app.use(
     credentials: true,
   })
 );
-
+app.use("/admin",adminRoutes);
 app.use("/auth", authRoutes);
 app.use("/category", categoryRoutes);
 app.use("/product", productRoutes);

@@ -32,7 +32,7 @@ export class User {
   @Exclude()
   password: string;
 
-  @Column()
+  @Column({unique:true})
   phone_number: string;
 
   @Column({ type: "enum", enum: UserRole, default: UserRole.USER })

@@ -20,7 +20,7 @@ export const Register: React.FC = () => {
         try {
             const registerData = await registerAPI({email, password, name, phone});
             if (registerData.success == true) {
-                navigate('/login');
+                navigate('/');
                 toast.success("Register Successful")
             }
         } catch (err) {

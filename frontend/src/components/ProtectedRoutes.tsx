@@ -14,13 +14,13 @@ export const ProtectedRoutes: React.FC <ProtectedRouteProps> = ({children,allowe
    
 
     if(!token){
-        return <Navigate to="/login" replace />;
+        return <Navigate to="/" replace />;
     }
 
     if(
       allowedRoles && ! allowedRoles.includes(role as "admin" | "user" )
     ){
-      return <Navigate to="/login" replace/>;
+      return <Navigate to="/" replace/>;
     }
 
     return <>{children}</>;
