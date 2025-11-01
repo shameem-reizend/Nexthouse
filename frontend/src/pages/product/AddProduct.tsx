@@ -79,6 +79,7 @@ const AddProduct: React.FC<AddProductPropType> = ({
     productData.append("isFree", free.toString());
     productData.append("image", image!);
     productData.append("isExchangeEnabled", isExchangeEnabled.toString());
+    console.log("productData",productData)
 
     try {
       setLoading(true)

@@ -17,6 +17,7 @@ import { OrderListing } from "./pages/order/OrderListing";
 import ProductProvider from "./components/products/ProductProvider";
 import AdminDashboard from "./pages/admin/dashborad/AdminDashboard";
 import NotFound from "./pages/NotFound";
+import CategoryPage from "./pages/admin/category/CategoryPage";
 
 const queryClient = new QueryClient();
 
@@ -58,6 +59,7 @@ export const App: React.FC = () => {
             }
             >
               <Route path="admin/dashboard" element={<AdminDashboard/>}/>
+              <Route path="admin/category" element={<CategoryPage/>}/>
               
 
             </Route>

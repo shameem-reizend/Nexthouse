@@ -13,7 +13,7 @@ const Navbar:React.FC<NavbarProps> = ({onMenuClick}) => {
     const navigate = useNavigate();
     const handleLogout =() =>{
         localStorage.clear()
-        navigate("/login");       
+        navigate("/");       
     }
 
     const handleProfileNavigate = () => {
