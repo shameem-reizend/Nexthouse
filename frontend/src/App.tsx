@@ -17,6 +17,7 @@ import { OrderListing } from "./pages/order/OrderListing";
 import ProductProvider from "./components/products/ProductProvider";
 import AdminDashboard from "./pages/admin/dashborad/AdminDashboard";
 import NotFound from "./pages/NotFound";
+import AdminEvents from "./pages/admin/events/AdminEvents";
 import ProductListing from "./pages/admin/dashborad/ProductListing";
 import CategoryPage from "./pages/admin/category/CategoryPage";
 
@@ -60,6 +61,7 @@ export const App: React.FC = () => {
             }
             >
               <Route path="admin/dashboard" element={<AdminDashboard/>}/>
+              <Route path="admin/events" element={<AdminEvents/>}/>
               <Route path="admin/products" element={<ProductListing/>}/>
               <Route path="admin/category" element={<CategoryPage/>}/>
               
