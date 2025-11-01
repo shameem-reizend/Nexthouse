@@ -11,7 +11,7 @@ eventRoutes.use(authenticate);
 
 eventRoutes.post("/",authorize(UserRole.USER),validateBody(eventSchema),handleCreateEvent);
 eventRoutes.get("/",authorize(UserRole.USER),handleGetEventByCreatorId);
-eventRoutes.delete("/:event_id",authorize(UserRole.USER),handleDeleteEvent);
+eventRoutes.delete("/:event_id",authorize(UserRole.USER,UserRole.ADMIN),handleDeleteEvent);
 eventRoutes.get("/allEvents",authorize(UserRole.ADMIN),handleGetAllEvents);
 eventRoutes.get("/event/:event_id",authorize(UserRole.USER),handleGetEventByEventId);
 

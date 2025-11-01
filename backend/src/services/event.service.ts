@@ -35,7 +35,7 @@ export const deleteEvent = async(event_id:string)=> {
         throw new ApiError("Event not found",400);
     }
 
-    // await eventRepo.delete(event.event_id)
+    await eventRepo.delete(event.event_id)
 
     return event;
 }
@@ -69,6 +69,13 @@ export const getEventByEventId = async(event_id:string) => {
 
 
 export const getAllEvents = async() => {
-    const events = await eventRepo.find();
+    const events = await eventRepo.find({relations:['createdBy'],select:{
+        createdBy:{
+            user_id:true,
+            name:true,
+            email:true
+        }
+        
+    }});
     return events;
 }

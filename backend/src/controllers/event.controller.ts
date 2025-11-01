@@ -45,6 +45,7 @@ export const handleDeleteEvent = async (
 
     const result = await deleteEvent(event_id);
 
+    
     res.status(200).json({
       success: true,
       message: "Event deleted Successfully",
