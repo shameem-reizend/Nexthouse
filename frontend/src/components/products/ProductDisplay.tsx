@@ -13,7 +13,6 @@ interface ProductDisplayProps {
   onLike: (id: string) => void;
 }
 const ProductDisplay = ({ product, liked, onLike }: ProductDisplayProps) => {
-  // const { user_id } = JSON.parse(localStorage.getItem("userData") || "{}");
 
   const [isLiked, setIsLiked] = useState<boolean>(false);
 

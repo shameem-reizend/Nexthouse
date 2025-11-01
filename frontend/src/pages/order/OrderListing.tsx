@@ -11,7 +11,8 @@ export interface Order {
   order_id: string,
   status: string,
   buyer: UserType
-  product: ProductType
+  product: ProductType,
+  exchangeProduct:ProductType
 }
 
 export type ActiveTabType = "myOrders" | "receivedOrders"
