@@ -1,8 +1,10 @@
-import React from 'react'
+import React, { useState } from 'react'
 import type { ActiveTabType, Order } from './OrderListing'
 import { NoResults } from '../NoResults';
 import { toast } from 'react-toastify';
 import { makeOrderCompleteAPI, makeOrderRejectAPI } from '../../api/modules/order.api';
+import ExchangeProduct from './ExchangeProduct';
+import type { ProductType } from '../product/Products';
 
 interface OrderTableProptype {
     orderData: Order[]
@@ -11,6 +13,9 @@ interface OrderTableProptype {
 }
 
 export const OrderTable: React.FC <OrderTableProptype> = ({orderData, activeTab, fetchReceivedOrders}) => {
+
+    const[showExchangeProductDialog,setShowExchangeProductDialog]=useState(false);
+    const[exchangeProduct,setExchangeProduct]=useState<ProductType|null>(null)
 
     const formatDate = (dateString: string)  => {
         const date = new Date(dateString);
@@ -50,7 +55,12 @@ export const OrderTable: React.FC <OrderTableProptype> = ({orderData, activeTab,
             toast.error("Failed to Reject")
         }
     }
-
+    const handleExchangeProdDialog=(product:ProductType)=>{
+        setShowExchangeProductDialog(true);
+        if(product){
+            setExchangeProduct(product)
+        }
+    }
 
   return (
     <div className="relative w-full overflow-x-auto rounded-xl shadow-md">
@@ -65,6 +75,9 @@ export const OrderTable: React.FC <OrderTableProptype> = ({orderData, activeTab,
                     </th>
                     <th className="p-4 border-b border-blue-gray-100 bg-blue-gray-50">
                         <p className="block font-sans text-sm antialiased font-normal leading-none text-blue-gray-900 opacity-70">Product Name</p>
+                    </th>
+                    <th className="p-4 border-b border-blue-gray-100 bg-blue-gray-50">
+                        <p className="block font-sans text-sm antialiased font-normal leading-none text-blue-gray-900 opacity-70">Exchangeable</p>
                     </th>
                     <th className="p-4 border-b border-blue-gray-100 bg-blue-gray-50">
                         <p className="block font-sans text-sm antialiased font-normal leading-none text-blue-gray-900 opacity-70">Price</p>
@@ -158,6 +171,20 @@ export const OrderTable: React.FC <OrderTableProptype> = ({orderData, activeTab,
                                 {order.product.name}
                             </p>
                         </td>   
+                       <td className="hidden lg:table-cell p-4 border-b border-blue-gray-50 text-left">
+                            {order.product.isExchangeEnabled?
+                            <span
+                            onClick={()=>handleExchangeProdDialog(order.exchangeProduct)}
+                                className="inline-block px-2 py-1 text-xs font-medium border border-green-400 rounded-md hover:bg-green-200
+                                    bg-green-100 text-green-600 cursor-pointer"
+                            >
+                                {order.product.isExchangeEnabled && "View Product"}
+                            </span>:
+                            <span className="inline-block w-[50%]  text-xs text-center font-medium">
+                               ---
+                            </span>}
+                        </td>
+  
                         <td className="hidden lg:table-cell p-4 border-b border-blue-gray-50">
                             <p className="block font-sans text-sm antialiased font-normal leading-normal text-blue-gray-900">
                                 {order.product.price ?`${  order.product.price}`:"---"}
@@ -213,6 +240,7 @@ export const OrderTable: React.FC <OrderTableProptype> = ({orderData, activeTab,
                     </td>
                 </tr>
                 }
+                <ExchangeProduct setShowExchangeProductDialog={setShowExchangeProductDialog} showExchangeProductDialog={showExchangeProductDialog} product={exchangeProduct}/>
             </tbody>
         </table>
     </div>

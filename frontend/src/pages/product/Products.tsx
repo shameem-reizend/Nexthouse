@@ -144,7 +144,7 @@ const Products = () => {
         <div className="flex items-center bg-gray-100 dark:bg-gray-900">
           <div className="container max-w-full mx-auto">
               <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-5">
-        {filteredProducts?.length === 0 ? (
+        {filteredProducts?.length === 0 || !filteredProducts ? (
           <div className="text-center text-gray-500 col-span-full py-10 text-lg font-medium">
             No Products Available
           </div>

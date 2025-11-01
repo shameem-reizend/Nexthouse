@@ -68,7 +68,7 @@ export const createOrder = async (
 export const getOrders = async(ownerId:string) => {
 
     const orders = await orderRepo.find({
-        relations:['product', 'product.user','buyer'],
+        relations:['product', 'product.user','buyer','exchangeProduct','exchangeProduct.user'],
         where:{product:{user:{user_id:ownerId}}}
     })
 
@@ -79,7 +79,7 @@ export const getOrders = async(ownerId:string) => {
 export const getOrderOfBuyer = async(buyerId:string) => {
 
     const order = await orderRepo.find({
-        relations:["product", "product.user"],
+        relations:["product", "product.user","exchangeProduct","exchangeProduct.category"],
         where:{buyer:{user_id:buyerId}}
     })
 
