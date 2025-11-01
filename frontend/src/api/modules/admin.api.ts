@@ -20,3 +20,13 @@ export const fetchAdminProductDashoard=async()=>{
     const response=await axiosInstance.get("/admin/product-dashboard")
     return response.data
 }
+
+export const fetchAlleventsForAdminAPI = async () => {
+    const response = await axiosInstance.get('/admin/events');
+    return response;
+}
+
+export const fetchAllOrdersForAdminAPI = async () => {
+    const response = await axiosInstance.get('/admin/orders');
+    return response;
+}

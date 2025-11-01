@@ -1,5 +1,5 @@
 import { NextFunction,Response,Request } from "express"
-import { deleteByProductId, getAdminDasboardResult, getAllProductsForAdmin } from "../services/admin.service";
+import { deleteByProductId, getAdminDasboardResult, getAllEventsForAdmin, getAllOrdersForAdmin, getAllProductsForAdmin } from "../services/admin.service";
 import { error } from "console";
 import { getProductById } from "../services/product.service";
 import { date } from "joi";
@@ -19,6 +19,35 @@ export const handleGetAllProductsForAdmin = async(req:Request,res:Response,next:
     }
 }
 
+export const handleGetAllEventsForAdmin = async(req:Request,res:Response,next:NextFunction) => {
+    try{
+        const result = await getAllEventsForAdmin();
+
+        res.status(200).json({
+            success:true,
+            message:"Events fetched ",
+            events:result
+        })
+
+    }catch(error){
+        next(error)
+    }
+}
+
+export const handleGetAllOrdersForAdmin = async(req:Request,res:Response,next:NextFunction) => {
+    try{
+        const result = await getAllOrdersForAdmin();
+
+        res.status(200).json({
+            success:true,
+            message:"Orders fetched ",
+            orders:result
+        })
+
+    }catch(error){
+        next(error)
+    }
+}
 
 
 export const handleDeleteProduct=async(req:Request,res:Response,next:NextFunction)=>{
