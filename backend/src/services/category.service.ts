@@ -2,7 +2,7 @@ import { AppDataSource } from "../config/data-source";
 import { Category } from "../entities/Category.entity";
 import { ApiError } from "../utils/apiError";
 
-const categoryRepo = AppDataSource.getRepository(Category);
+export const categoryRepo = AppDataSource.getRepository(Category);
 
 export const getCategoryByName = async (category_name: string) => {
   return await categoryRepo.findOneBy({category_name})
