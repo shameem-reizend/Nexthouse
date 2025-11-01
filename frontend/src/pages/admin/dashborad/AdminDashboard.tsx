@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { MetricsCard } from "../../../components/MetricsCard";
 import UserList from "./UserList";
-import { fetchAllProductsForAdminAPI, fetchAllUsersForAdminAPI } from "../../../api/modules/admin.api";
+import { fetchAlleventsForAdminAPI, fetchAllOrdersForAdminAPI, fetchAllProductsForAdminAPI, fetchAllUsersForAdminAPI } from "../../../api/modules/admin.api";
 
 
 export interface User {
@@ -10,28 +10,53 @@ export interface User {
         phone_number: string;
 }
 
+type Order = {
+    order_id:string,
+    createdAt:string,
+    status:"pending"|"completed"|"rejected"
+}
+
 const AdminDashboard = () => {
 
   const [users, setUsers] = useState<User[]>([]);
   const [products,setProducts] = useState([]);
+  const [events, setEvents] = useState([]);
+  const [orders,setOrders] = useState([]);
+
 
   const getAllUsers = async () => {
     const res = await fetchAllUsersForAdminAPI();
-    console.log(res.users);
     setUsers(res.users);
   };
 
   const getAllProducts = async () => {
     const res  = await fetchAllProductsForAdminAPI();
     setProducts(res.products);
-
   }
 
+  const getAllEvents = async() => {
+    const res = await fetchAlleventsForAdminAPI();
+    console.log(res.data.events)
+    setEvents(res.data.events);
+  }
+
+  const getAllOrders = async() => {
+    const res = await fetchAllOrdersForAdminAPI();
+    console.log(res.data.orders)
+
+    setOrders(res.data.orders);
+  }
+
+  const pendingOrders = orders?.filter((o:Order) => o.status === "pending")
 
 
   useEffect(() => {
     getAllUsers();
     getAllProducts();
+    getAllEvents();
+    getAllOrders();
+
+
   }, []);
 
   return (
@@ -45,9 +70,9 @@ const AdminDashboard = () => {
             <div className="grid gap-7 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5">
               <MetricsCard heading="Total users" value={users.length} />
               <MetricsCard heading="Total Products" value={products.length} />
-              <MetricsCard heading="Total events" value={1} />
-              <MetricsCard heading="Total Orders" value={1} />
-              <MetricsCard heading="Pending orders" value={1} />
+              <MetricsCard heading="Total events" value={events.length} />
+              <MetricsCard heading="Total Orders" value={orders.length} />
+              <MetricsCard heading="Pending orders" value={pendingOrders.length} />
             </div>
           </div>
         </div>
@@ -57,7 +82,6 @@ const AdminDashboard = () => {
             All Users
           </h1>
         </div>
-
         <UserList users={users} />
       </div>
     </>

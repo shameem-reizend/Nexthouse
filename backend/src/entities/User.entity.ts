@@ -33,6 +33,9 @@ export class User {
   @Exclude()
   password: string;
 
+  @Column({nullable:true})
+  profile_pic:string;
+
   @Column({unique:true})
   phone_number: string;
 
