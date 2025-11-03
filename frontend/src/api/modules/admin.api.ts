@@ -10,6 +10,10 @@ export const fetchAllProductsForAdminAPI = async () => {
     const response = await axiosInstance.get('/admin/products');
     return response.data;
 }
+export const fetchAllProductsForAdminAPI1 = async () => {
+    const response = await axiosInstance.get('/admin/productss');
+    return response.data;
+}
 
 export const deleteProductForAdminAPI=async(product_id:string)=>{
     const response=await axiosInstance.delete(`/admin/delete/${product_id}`)
