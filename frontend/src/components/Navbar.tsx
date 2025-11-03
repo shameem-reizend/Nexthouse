@@ -1,6 +1,7 @@
 import { MenuIcon,UserRound} from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { disconnectSocket } from "../utility/socket";
 
 interface NavbarProps {
     onMenuClick:() => void;
@@ -12,8 +13,9 @@ const Navbar:React.FC<NavbarProps> = ({onMenuClick}) => {
   const [isProfileOpen,setIsProfileOpen] = useState(false);
     const navigate = useNavigate();
     const handleLogout =() =>{
-        localStorage.clear()
-        navigate("/");       
+        localStorage.clear();
+        disconnectSocket();
+        navigate("/login");       
     }
 
     const handleProfileNavigate = () => {
