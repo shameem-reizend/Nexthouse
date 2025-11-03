@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query"
-import { fetchAdminProductDashoard, fetchAllProductsForAdminAPI } from "../../../api/modules/admin.api"
+import { fetchAdminProductDashoard, fetchAllProductsForAdminAPI1 } from "../../../api/modules/admin.api"
 
 
 import { NoResults } from "../../NoResults"
@@ -8,8 +8,7 @@ import FilterProduct from "../../../components/products/FilterProduct"
 import { useEffect, useState } from "react"
 import { MetricsCard } from "../../../components/MetricsCard"
 import { Button } from "../../../components/ui/button"
-import { ChartNoAxesCombined, IndianRupee } from "lucide-react"
-
+import {  IndianRupee } from "lucide-react"
 
 interface responseProps{
   message:string,
@@ -34,7 +33,7 @@ const ProductListing = () => {
 
     const {data,isPending,error}=useQuery<responseProps>({
         queryKey:["allProducts"],
-        queryFn:fetchAllProductsForAdminAPI,
+        queryFn:fetchAllProductsForAdminAPI1,
         
     })
 
@@ -46,7 +45,7 @@ const ProductListing = () => {
 
     const[filter,setFilter]=useState("All")
     const[products,setProducts]=useState<ProductProp[]>([])
-
+    // const [showInput,setShowInput]=useState<boolean>(false)
 
     useEffect(() => {
     if (!data?.products) return;
@@ -94,6 +93,8 @@ const ProductListing = () => {
           </div>
           <div className="flex justify-between items-center">
           <FilterProduct filter={filter} setFilter={setFilter} />
+          <div className="flex space-x-4 items-center">
+          
           <Button className="bg-white rounded-lg shadow-sm hover:shadow-md hover:bg-gray-100 transition-all duration-200 w-[300px] py-2 flex text-black justify-between items-center">
             <span className="text-gray-400">Total Product Price: </span>
             <div className="flex items-center justify-center">
@@ -101,6 +102,7 @@ const ProductListing = () => {
             <span className="text-xl tracking-wider">{data1.data.totalprice}</span>
             </div>
           </Button>
+          </div>
           </div>
         </div>
         <div>

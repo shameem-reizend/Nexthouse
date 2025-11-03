@@ -1,5 +1,5 @@
 import { NextFunction,Response,Request } from "express"
-import { deleteByProductId, getAdminDasboardResult, getAllEventsForAdmin, getAllOrdersForAdmin, getAllProductsForAdmin } from "../services/admin.service";
+import { deleteByProductId, getAdminDasboardResult, getAllEventsForAdmin, getAllOrdersForAdmin, getAllProductsForAdmin, getAllProductsForAdmin1 } from "../services/admin.service";
 import { error } from "console";
 import { getProductById } from "../services/product.service";
 import { date } from "joi";
@@ -8,6 +8,19 @@ import { ApiError } from "../utils/apiError";
 export const handleGetAllProductsForAdmin = async(req:Request,res:Response,next:NextFunction) =>{
     try{
         const result =  await getAllProductsForAdmin();
+        res.status(200).json({
+            success:true,
+            message:"Products fetched",
+            products:result
+        })
+
+    }catch(error){
+        next(error)
+    }
+}
+export const handleGetAllProductsForAdmin1= async(req:Request,res:Response,next:NextFunction) =>{
+    try{
+        const result =  await getAllProductsForAdmin1();
         res.status(200).json({
             success:true,
             message:"Products fetched",

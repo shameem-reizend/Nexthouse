@@ -13,6 +13,13 @@ const entityManager=AppDataSource.manager;
 
 export const getAllProductsForAdmin = async() =>{
 
+    const res =  await productRepo.find()
+    return res
+
+}
+
+export const getAllProductsForAdmin1 = async() =>{
+
     const res =  await productRepo.createQueryBuilder("product").leftJoin("product.user","user").leftJoin("product.category","category").addSelect(["user.user_id","user.name","user.email","category.category_name"]).getMany()
     return res;
 
