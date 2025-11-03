@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { loginAPI } from "../api/modules/auth.api";
 import { connectSocket } from "../utility/socket";
+import { generateToken } from "../pushNotification/firebase";
 
 export const Login: React.FC = () => {
 
@@ -23,6 +24,7 @@ export const Login: React.FC = () => {
         localStorage.setItem("userData", JSON.stringify(userData.data.user));
         localStorage.setItem("accessToken", userData.data.token);
         connectSocket(userData.data.user.user_id);
+        generateToken();
       }
       toast.success("login successful");
       if(userData.data.user.role == "admin"){
