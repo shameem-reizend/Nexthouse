@@ -20,6 +20,7 @@ import NotFound from "./pages/NotFound";
 import AdminEvents from "./pages/admin/events/AdminEvents";
 import ProductListing from "./pages/admin/dashborad/ProductListing";
 import CategoryPage from "./pages/admin/category/CategoryPage";
+import { SampleSocket } from "./pages/messages/Messages";
 
 const queryClient = new QueryClient();
 
@@ -50,6 +51,7 @@ export const App: React.FC = () => {
               <Route path="/invitations" element={<MyInvitations/>} />
               <Route path="/events" element={<Event/>} />
               <Route path="/order" element={<OrderListing/>} />
+              <Route path="/message" element={<SampleSocket/>} />
 
             </Route>
             {/* ROutes for admin  */}
