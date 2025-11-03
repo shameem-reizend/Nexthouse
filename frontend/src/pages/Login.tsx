@@ -3,6 +3,7 @@ import { EyeOff, Eye } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { loginAPI } from "../api/modules/auth.api";
+import { connectSocket } from "../utility/socket";
 
 export const Login: React.FC = () => {
 
@@ -10,7 +11,7 @@ export const Login: React.FC = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
-    const navigate = useNavigate()
+    const navigate = useNavigate();
 
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -21,6 +22,7 @@ export const Login: React.FC = () => {
       if (userData) {
         localStorage.setItem("userData", JSON.stringify(userData.data.user));
         localStorage.setItem("accessToken", userData.data.token);
+        connectSocket(userData.data.user.user_id);
       }
       toast.success("login successful");
       if(userData.data.user.role == "admin"){

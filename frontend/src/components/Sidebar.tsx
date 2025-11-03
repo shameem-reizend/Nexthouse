@@ -1,4 +1,4 @@
-import { Bell, Calendar, Handbag, Heart, LayoutDashboard, ListOrdered, ListOrderedIcon, ShoppingCart,X} from "lucide-react"
+import { Bell, Calendar, Handbag, Heart, LayoutDashboard, ListOrdered, ListOrderedIcon, MessageCircleIcon, ShoppingCart,X} from "lucide-react"
 import { Link, useLocation } from "react-router-dom"
 
 
@@ -18,6 +18,7 @@ const menuItems:Record<Role,MenuItem[]> = {
         {name:"Invitation",path:"/invitations",icon:Bell},
         {name:"My Products",path:"/my-product",icon:Handbag },
         {name:"Orders",path:"/order",icon: ListOrdered},
+        {name:"Messages",path:"/message",icon: MessageCircleIcon},
     ],
     admin:[
         {name:"Dashboard",path:"/admin/dashboard",icon:LayoutDashboard},
