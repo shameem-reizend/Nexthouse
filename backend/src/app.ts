@@ -11,6 +11,7 @@ import userRoutes from './routes/user.routes';
 import cors from "cors";
 import orderRoutes from "./routes/order.routes";
 import adminRoutes from "./routes/admin.routes";
+import firebaseRoutes from './routes/firebase.routes';
 
 const app = express();
 app.use(express.json());
@@ -33,6 +34,7 @@ app.use("/invite", inviteRoutes);
 app.use("/address", addressRoutes);
 app.use('/user', userRoutes);
 app.use("/order",orderRoutes);
+app.use('/firebase', firebaseRoutes);
 
 app.get("/", (req: Request, res: Response) => {
   res.send("Hello, TypeScript + Express");

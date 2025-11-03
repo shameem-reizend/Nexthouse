@@ -2,6 +2,7 @@ import { MenuIcon,UserRound} from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { disconnectSocket } from "../utility/socket";
+import { deleteToken } from "../api/modules/firebase.api";
 
 interface NavbarProps {
     onMenuClick:() => void;
@@ -12,10 +13,11 @@ const Navbar:React.FC<NavbarProps> = ({onMenuClick}) => {
 
   const [isProfileOpen,setIsProfileOpen] = useState(false);
     const navigate = useNavigate();
-    const handleLogout =() =>{
+    const handleLogout = async () =>{
+        await deleteToken();
         localStorage.clear();
         disconnectSocket();
-        navigate("/login");       
+        navigate("/");       
     }
 
     const handleProfileNavigate = () => {

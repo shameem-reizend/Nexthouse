@@ -121,3 +121,9 @@ export const rejectOrder = async(userId:string,orderId:string) => {
     return await orderRepo.save(order);
 }
 
+export const findOrderById = async(order_id: string) => {
+  return orderRepo.findOne({
+    where: {order_id},
+    relations: ['buyer']
+  })
+}

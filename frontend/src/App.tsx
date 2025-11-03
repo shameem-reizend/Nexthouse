@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Login } from "./pages/Login";
 import { ToastContainer } from "react-toastify";
@@ -21,10 +21,19 @@ import AdminEvents from "./pages/admin/events/AdminEvents";
 import ProductListing from "./pages/admin/dashborad/ProductListing";
 import CategoryPage from "./pages/admin/category/CategoryPage";
 import { SampleSocket } from "./pages/messages/Messages";
+import { messaging } from "./pushNotification/firebase";
+import { onMessage } from "firebase/messaging";
 
 const queryClient = new QueryClient();
 
 export const App: React.FC = () => {
+
+  useEffect(() => {
+    onMessage(messaging, (payload) => {
+      console.log(payload);
+    })
+  }, [])
+
   return (
     <>
       <QueryClientProvider client={queryClient}>
