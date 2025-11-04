@@ -12,9 +12,8 @@ const orderRepo = AppDataSource.getRepository(Order);
 const entityManager=AppDataSource.manager;
 
 export const getAllProductsForAdmin = async() =>{
-
-    const res =  await productRepo.find()
-    return res
+    const res =  await productRepo.find();
+    return res;
 
 }
 

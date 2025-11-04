@@ -12,6 +12,7 @@ import { Exclude } from "class-transformer";
 import { Order } from "./Order.entity";
 import { Invite } from "./Invite.entity";
 import { Address } from "./Address.entity";
+import { Message } from "./Message.enitity";
 
 export enum UserRole {
   ADMIN = "admin",
@@ -55,7 +56,12 @@ export class User {
   @OneToMany(()=>Invite,(invt)=>invt.reciever)
   invites:Invite[];
 
-
   @OneToOne(()=>Address,(address)=>address.user)
-  address:Address
+  address:Address;
+
+  @OneToMany(() => Message,(message) => message.sender)
+  snd_messages:Message[];
+
+  @OneToMany(() => Message, (message) => message.receiver)
+  rec_messages:Message[];
 }
