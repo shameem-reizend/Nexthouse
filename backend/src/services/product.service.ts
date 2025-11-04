@@ -170,3 +170,7 @@ export const getProductsFromLocation = async (
 
   return products;
 };
+
+export const fetchAllProducts=async()=>{
+  return await productRepo.find({relations:['category']})
+}

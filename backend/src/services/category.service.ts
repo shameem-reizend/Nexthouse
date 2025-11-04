@@ -26,3 +26,8 @@ export const getCategoryById = async (category_id: string) => {
 export const fetchCategories = async () => {
   return await categoryRepo.find();
 };
+
+export const deleteCategory=async(category_id:string)=>{
+  const category= await categoryRepo.delete({category_id})
+  return category;
+}

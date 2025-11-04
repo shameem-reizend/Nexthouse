@@ -85,7 +85,7 @@ const AdminEvents = () => {
           <table className="w-full text-left text-gray-500 dark:text-gray-400 ">
             <thead className="hidden lg:table-header-group text-lg capitalize text-gray-600 ">
               <tr>
-                <th className="px-6 py-3">Event name</th>
+                <th className="px-6 py-3">Event Name</th>
                 <th className="px-6 py-3">Event Date</th>
                 <th className="px-6 py-3">Event Venue</th>
                 <th className="px-6 py-3">Organizer</th>
@@ -94,18 +94,24 @@ const AdminEvents = () => {
             </thead>
             <tbody>
               {events?.map((evnt: EventType) => (
-                <tr key={evnt.event_id} className="block lg:table-row capitalize border-b">
+                <tr
+                  key={evnt.event_id}
+                  className="block lg:table-row capitalize border-b"
+                >
                   <td className="lg:hidden p-4 flex flex-col gap-2">
                     <div className="flex justify-between items-start ">
                       <div className="mt-1 flex items-center gap-3 ">
                         <div className="flex flex-col gap-1">
-                          <p className="font-sans text-lg antialiased font-medium text-blue-gray-900">
-                            {evnt?.event_name}
-                          </p>
+                          <div className="flex gap-2">
+                            <p className="font-sans text-lg antialiased font-medium text-blue-gray-900">
+                              {evnt?.event_name}
+                            </p>
+                            <p className="font-sans text-sm antialiased mt-1  font-medium text-blue-gray-900  ">organizer {evnt?.createdBy.name}</p>
+                          </div>
                           <p className="font-sans text-md antialiased font-normal text-blue-gray-700">
                             {evnt?.event_description}
                           </p>
-                          <div className=" flex gap-2 mt-2">
+                          <div className=" sm:flex gap-2 mt-2">
                             <p className="font-sans text-sm antialiased font-normal text-blue-gray-700 opacity-70">
                               Event Date
                             </p>
@@ -113,9 +119,9 @@ const AdminEvents = () => {
                               {new Date(evnt.event_date).toLocaleString()}
                             </p>
                           </div>
-                           <div>
+                          <div>
                             <p className="flex gap-1 mt-1">
-                              <MapPin width={20}/> {evnt.event_venue}
+                              <MapPin width={20} /> {evnt.event_venue}
                             </p>
                           </div>
                         </div>
