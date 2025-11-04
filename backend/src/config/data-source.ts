@@ -9,6 +9,7 @@ import { Event } from "../entities/Event.entity";
 import { Invite } from "../entities/Invite.entity";
 import { Order } from "../entities/Order.entity";
 import { FirebaseToken } from "../entities/FirebaseToken.Entity";
+import { Message } from "../entities/Message.enitity";
 dotenv.config();
 
 export const AppDataSource = new DataSource({
@@ -21,5 +22,5 @@ export const AppDataSource = new DataSource({
   synchronize: true,
   logging: false,
 
-  entities: [User, Address, Product, Category, Event, LikedProducts,Invite,Order, FirebaseToken],
+  entities: [User, Address, Product, Category, Event, LikedProducts,Invite,Order, FirebaseToken,Message],
 });
