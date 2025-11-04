@@ -41,7 +41,6 @@ const ProductListing = () => {
       queryKey:["productDashboard"],
       queryFn:fetchAdminProductDashoard
     })
-    console.log(data1)
 
     const[filter,setFilter]=useState("All")
     const[products,setProducts]=useState<ProductProp[]>([])
@@ -91,7 +90,7 @@ const ProductListing = () => {
               <MetricsCard heading="Sold Products" value={Number(data1.data.soldcount)}/>
                <MetricsCard heading="Total Category" value={Number(data1.data.categorycount)}/>
           </div>
-          <div className="flex justify-between items-center">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
           <FilterProduct filter={filter} setFilter={setFilter} />
           <div className="flex space-x-4 items-center">
           
