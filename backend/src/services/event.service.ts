@@ -1,5 +1,5 @@
 import { AppDataSource } from "../config/data-source"
-import { Event } from "../entities/Event.entity";
+import { Event, EventStatus } from "../entities/Event.entity";
 import { User } from "../entities/User.entity";
 import { ApiError } from "../utils/apiError";
 
@@ -79,3 +79,24 @@ export const getAllEvents = async() => {
     }});
     return events;
 }
+
+export const makePastEventComplete = async (events: Event[]) => {
+  const now = new Date();
+
+  const pastEvents = events.filter((event) =>
+    new Date(event.event_date) < now && event.event_status !== EventStatus.COMPLETED
+  );
+
+  if (pastEvents.length === 0) {
+    console.log(`All past events have completed status`);
+    return
+  };
+
+  await Promise.all(
+    pastEvents.map((event) =>
+      eventRepo.update(event.event_id, { event_status: EventStatus.COMPLETED })
+    )
+  );
+
+  console.log(`${pastEvents.length} past events marked as COMPLETED`);
+};
