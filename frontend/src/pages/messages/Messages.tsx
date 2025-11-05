@@ -1,61 +1,97 @@
-import React, { useEffect, useState } from 'react';
-import { getSocket } from '../../utility/socket';
-import { fetchAllUsersAPI } from '../../api/modules/user.api';
-import type { UserType } from '../../pages/product/Products';
+import React, { useCallback, useEffect, useState } from "react";
 
-type messageResponse  = {
-    from: string;
-    message: string
-}
+import { fetchAllUsersAPI } from "../../api/modules/user.api";
+
+import SidebarMessage, { type allUserProps } from "./SidebarMessage";
+import ChatSide from "./ChatSide";
+
+export type messageResponse = {
+  from: string;
+  newMessage: string;
+};
 
 export const SampleSocket: React.FC = () => {
-    const [message, setMessage] = useState('');
-    const [receivedMessage, setReceivedMessage] = useState<messageResponse []>([]);
-    const [sentUser, setSentUser] = useState('f622476e-9484-44f6-8ae1-b441b454f18e');
-    const [users, setUsers] = useState<UserType[]>([]);
+  
+  const [users, setUsers] = useState<allUserProps[]>([]);
+  const [selectedUser, setSelectedUser] = useState<allUserProps | undefined>();
+  const [mobileView, setMobileView] = useState<boolean>(false);
 
-    const socket = getSocket();
-    const currentUser = JSON.parse(localStorage!.getItem('userData')!);
+  const currentUser = JSON.parse(localStorage!.getItem("userData")!);
 
-    const sendMessage = () => {
-      if(socket){
-          socket.emit('message', message, sentUser);
-            setMessage('');
-      }
+  const checkScreenSize = () => {
+    setMobileView(window.innerWidth < 1024);
+  };
+
+  const fetAllUsers = useCallback(async () => {
+    try {
+      const userData = await fetchAllUsersAPI();
+
+      const filteredUsers = userData.users.filter(
+        (user: allUserProps) => user.user_id !== currentUser.user_id
+      );
+      setUsers(filteredUsers);
+    } catch (error) {
+      console.log(error);
+    }
+  }, [currentUser.user_id]);
+
+
+
+  const handleBackToSidebar = () => {
+    setSelectedUser(undefined);
+  };
+
+  useEffect(() => {
+    fetAllUsers();
+    checkScreenSize();
+
+    // Add resize listener
+    window.addEventListener("resize", checkScreenSize);
+
+    return () => {
+      window.removeEventListener("resize", checkScreenSize);
     };
+  }, [fetAllUsers]);
 
-    const fetAllUsers = async () => {
-        try {
-            const userData = await fetchAllUsersAPI();
-            const filteredUsers = userData.users.filter((user: UserType) => user.user_id !== currentUser.user_id);
-            setUsers(filteredUsers);
-        } catch (error) {
-            console.log(error)
-        }
-    }
+  return (
+    <div className="h-full -m-8">
+      <div className="h-full border-2 border-zinc-200 bg-gray-200 flex lg:flex-row">
+        {!mobileView && (
+          <>
+            <SidebarMessage
+              users={users}
+              setSelectedUser={setSelectedUser}
+              mobileView={mobileView}
+            />
+            <ChatSide
+              selectedUser={selectedUser}
+              onBackClick={handleBackToSidebar}
+              mobileView={mobileView}
+            />
+          </>
+        )}
 
-    const findUser = (user_id: string) => {
-       const user = users.filter((user) => user.user_id === user_id);
-        return user[0].name;
-    }
+        {mobileView && (
+          <>
+            {!selectedUser && (
+              <SidebarMessage
+                users={users}
+                setSelectedUser={setSelectedUser}
+                mobileView={mobileView}
+              />
+            )}
+            {selectedUser && (
+              <ChatSide
+                selectedUser={selectedUser}
+                onBackClick={handleBackToSidebar}
+                mobileView={mobileView}
+              />
+            )}
+          </>
+        )}
+      </div>
 
-    useEffect(() => {
-        if(!socket) return
-        socket.on('message', (data: messageResponse) => {
-            console.log(data.message, data.from);   
-            setReceivedMessage((prevMsg) => [...prevMsg, data]);
-        })
-
-    }, []);
-
-    useEffect(() => {
-        fetAllUsers();
-    }, [])
-
-
-    return (
-        <div>
-            <h1>Real-time Chat</h1>
+      {/* <h1>Real-time Chat</h1>
             <div className="flex gap-10">
                 <div className='flex flex-col'>
                     {users.map((user) => (
@@ -78,7 +114,7 @@ export const SampleSocket: React.FC = () => {
                     ))}
                 </div>
             </div>
-            
-        </div>
-    );
-}
+             */}
+    </div>
+  );
+};
