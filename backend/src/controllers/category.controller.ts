@@ -2,7 +2,6 @@ import { Request, Response, NextFunction } from "express"
 import { createCategory, deleteCategory, fetchCategories, getCategoryById, getCategoryByName } from "../services/category.service";
 import { ApiError } from "../utils/apiError";
 import { fetchAllProducts } from "../services/product.service";
-import { data } from "react-router-dom";
 
 export const addCategoryHandler = async (req: Request, res: Response, next: NextFunction) => {
     try {
