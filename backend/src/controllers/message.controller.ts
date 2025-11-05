@@ -38,7 +38,7 @@ export const handleSendMessage = async(req:AuthRequest,res:Response,next:NextFun
 export const handleGetMessage = async(req:AuthRequest,res:Response,next:NextFunction) => {
     try{
         const senderId = req.user?.id;
-        const receiverId = req.params.id;
+        const receiverId = req.params.receiverId;
 
         const result = await getMessage(senderId,receiverId);
         console.log(result);
