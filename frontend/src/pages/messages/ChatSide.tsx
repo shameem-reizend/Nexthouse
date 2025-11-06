@@ -2,7 +2,7 @@ import {  MoveLeftIcon, PlusIcon, SendIcon } from "lucide-react"
 import { NoResults } from "../NoResults"
 import type { allUserProps, userProp,  } from "./SidebarMessage"
 import { Input } from "../../components/ui/input"
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 
 import { getSocket } from "../../utility/socket"
 import { toast } from "react-toastify"
@@ -50,6 +50,8 @@ const ChatSide = ({selectedUser,onBackClick,mobileView}:{selectedUser:allUserPro
   //     };
 
 
+  const messsageEndRef = useRef<HTMLDivElement>(null);
+
     useEffect(() => {
       if (!socket) return;
 
@@ -81,6 +83,24 @@ const ChatSide = ({selectedUser,onBackClick,mobileView}:{selectedUser:allUserPro
   }, [queryClient, selectedUser?.user_id, socket]);
 
 
+    const {data,isPending}=useQuery<chatResponse>({
+    queryKey:['chatMessages',selectedUser?.user_id],
+    queryFn:({queryKey})=>{
+      const [,user_id]=queryKey
+      return fetchChatMessage(user_id as string)
+    },
+    enabled:!!selectedUser?.user_id,
+    refetchOnWindowFocus:true
+
+  })
+
+      useEffect(()=>{
+        if(messsageEndRef.current && data?.totalMessages){
+            messsageEndRef.current.scrollIntoView({behavior:"instant"});
+        }
+    },[data?.totalMessages]);
+
+
 
   const {mutate}=useMutation({
     mutationFn:({receiverId,message}: { receiverId: string; message: string })=>sendMessages(receiverId,message),
@@ -93,16 +113,6 @@ const ChatSide = ({selectedUser,onBackClick,mobileView}:{selectedUser:allUserPro
     }
   })
 
-  const {data,isPending}=useQuery<chatResponse>({
-    queryKey:['chatMessages',selectedUser?.user_id],
-    queryFn:({queryKey})=>{
-      const [,user_id]=queryKey
-      return fetchChatMessage(user_id as string)
-    },
-    enabled:!!selectedUser?.user_id,
-    refetchOnWindowFocus:true
-
-  })
 
   
 
@@ -137,10 +147,12 @@ const ChatSide = ({selectedUser,onBackClick,mobileView}:{selectedUser:allUserPro
         <div className="flex-1 overflow-y-auto p-4">
               {isPending?<div className="flex items-center justify-center"><Spinner/></div>:
               
-              <div className="space-y-2 flex flex-col">  
+              <div className="space-y-2 flex flex-col"
+              
+              >  
                 {data?.totalMessages.map((message)=>(
 
-                  <div className={`max-w-2/5 text-md lg:text-base px-4 py-3 ${message.sender.user_id===selectedUser.user_id?"self-start rounded-[15px] rounded-bl-none bg-white":"self-end rounded-[15px] rounded-br-none bg-lime-100"}`}>
+                  <div key={message.message_id} ref={messsageEndRef} className={`max-w-2/5 text-md lg:text-base px-4 py-3 ${message.sender.user_id===selectedUser.user_id?"self-start rounded-[15px] rounded-bl-none bg-white":"self-end rounded-[15px] rounded-br-none bg-lime-100"}`}>
                     {message.message}
                   </div>
                 ))}
@@ -149,14 +161,16 @@ const ChatSide = ({selectedUser,onBackClick,mobileView}:{selectedUser:allUserPro
         </div>
         <div className=" w-full bg-gray-400 border-2 border-zinc-600 px-4 lg:px-8 py-3 lg:py-4 flex space-x-2 lg:space-x-3 items-center rounded-t-3xl">
             <PlusIcon className="w-7 h-7 lg:w-9 lg:h-9 rounded-full bg-white p-1.5 cursor-pointer"/>
-            <div className=" w-full flex items-center">
+            <form   className=" w-full flex items-center" onSubmit={(e)=>{ 
+              e.preventDefault()
+              mutate({receiverId:selectedUser.user_id,message})}}>
             <Input type="text" placeholder="Enter your message" value={message} onChange={(e)=>setMessage(e.target.value)} className="tracking-wider w-full border-0 text-sm lg:text-base"/>
               <div className="relative flex items-center justify-between">
              <SendIcon className="absolute right-3 text-white" size={16} /> 
-            <button className="pl-3 pr-8 lg:pl-4 lg:pr-9 py-1.5 lg:py-2 rounded-3xl text-sm lg:text-md bg-gray-600 text-white border-2 border-zinc-700 cursor-pointer hover:bg-gray-700 transition-colors" onClick ={()=>mutate({receiverId:selectedUser.user_id,message})}>Send</button>
+            <button  disabled={message.trim()==""} type="submit" className=" pl-3 pr-8 lg:pl-4 lg:pr-9 py-1.5 lg:py-2 rounded-3xl text-sm lg:text-md bg-gray-600 text-white border-2 border-zinc-700 cursor-pointer hover:bg-gray-700 transition-colors" >Send</button>
               </div>
 
-            </div>
+            </form>
         </div>
         </div>
         )}

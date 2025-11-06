@@ -31,7 +31,7 @@ const SidebarMessage = ({users,setSelectedUser,mobileView}:{users:allUserProps[]
   };
 
   return (
-    <div className={`${mobileView?"w-full":"w-1/4"} bg-white border-2 p-4 lg:p-8 overflow-hidden`}>
+    <div className={`${mobileView?"w-full":"w-1/4"} bg-white border-2 p-4 lg:p-8 overflow-y-scroll`}>
       <div className="flex space-x-3 lg:space-x-5">
         <img className="w-8 h-8 lg:w-10 lg:h-10 rounded-full"
           src={
