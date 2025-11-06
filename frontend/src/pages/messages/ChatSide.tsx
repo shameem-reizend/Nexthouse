@@ -83,7 +83,7 @@ const ChatSide = ({selectedUser,onBackClick,mobileView}:{selectedUser:allUserPro
   }, [queryClient, selectedUser?.user_id, socket]);
 
 
-    const {data,isPending}=useQuery<chatResponse>({
+  const {data,isPending}=useQuery<chatResponse>({
     queryKey:['chatMessages',selectedUser?.user_id],
     queryFn:({queryKey})=>{
       const [,user_id]=queryKey
@@ -94,11 +94,12 @@ const ChatSide = ({selectedUser,onBackClick,mobileView}:{selectedUser:allUserPro
 
   })
 
-      useEffect(()=>{
+
+    useEffect(()=>{
         if(messsageEndRef.current && data?.totalMessages){
             messsageEndRef.current.scrollIntoView({behavior:"instant"});
         }
-        console.log(data?.totalMessages)
+        // console.log(data?.totalMessages)
     },[data?.totalMessages]);
 
 
@@ -108,8 +109,23 @@ const ChatSide = ({selectedUser,onBackClick,mobileView}:{selectedUser:allUserPro
     onSuccess:(response)=>{
       console.log(response)
         // socket?.emit('message', message, selectedUser?.user_id);
-      setMessage('');
-      queryClient.invalidateQueries({queryKey:["chatMessages",selectedUser?.user_id]})
+        // queryClient.invalidateQueries({})
+        queryClient.setQueryData(['chatMessages',selectedUser?.user_id],(oldData:chatResponse)=>{
+          if(!oldData){
+            return{
+              success:true,
+              message:"Successfully fetched",
+              totalMessages:[response.newMessage]
+            }
+          }
+
+          return {
+            ...oldData,
+            totalMessages:[...oldData.totalMessages,response.newMessage]
+
+          }
+        })
+        setMessage('');
       
     }
   })
