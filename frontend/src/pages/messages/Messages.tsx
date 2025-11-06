@@ -25,7 +25,7 @@ export const SampleSocket: React.FC = () => {
   const fetAllUsers = useCallback(async () => {
     try {
       const userData = await fetchAllUsersAPI();
-
+      console.log(userData)
       const filteredUsers = userData.users.filter(
         (user: allUserProps) => user.user_id !== currentUser.user_id
       );
