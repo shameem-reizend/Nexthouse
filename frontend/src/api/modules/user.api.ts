@@ -2,6 +2,7 @@ import axiosInstance from "../axios/axiosInstance";
 
 export const fetchAllUsersAPI = async () => {
   const response = await axiosInstance.get("/user/all");
+  console.log(response.data)
   return response.data;
 };
 

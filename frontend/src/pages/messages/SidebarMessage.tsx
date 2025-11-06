@@ -1,5 +1,5 @@
 // import { ChatBubbleLeftIcon } from "@heroicons/react/24/solid";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Input } from "../../components/ui/input";
 import {  SearchIcon } from "lucide-react";
 
@@ -25,10 +25,18 @@ const SidebarMessage = ({users,setSelectedUser,mobileView}:{users:allUserProps[]
   const [user] = useState<userProp | null>(JSON.parse(localStorage.getItem("userData")!));
   const[activeTab,setActiveTab]=useState("All")
 
+  const [search,setSearch]=useState("")
+
+  const [filteredUsers,setFilteredUser]=useState<allUserProps[]>([])
 
   const handleUserSelect = (user: allUserProps) => {
     setSelectedUser(user);
   };
+
+  useEffect(()=>{
+    const temp_users=search===""?users:users.filter((user)=>user.name.toLowerCase().includes(search.toLowerCase()))
+    setFilteredUser(temp_users)
+  },[search, users])
 
   return (
     <div className={`${mobileView?"w-full":"w-1/4"} bg-white border-2 p-4 lg:p-8 no-scrollbar overflow-y-auto`}>
@@ -43,7 +51,7 @@ const SidebarMessage = ({users,setSelectedUser,mobileView}:{users:allUserProps[]
         />
         <div className="relative w-full flex items-center">
           <SearchIcon className="absolute right-2 aspect-square max-w-4 lg:max-w-5 text-slate-400"/>
-          <Input placeholder="Enter name to search" className="pl-3 tracking-wider text-sm lg:text-base"/>
+          <Input placeholder="Enter name to search" className="pl-3 tracking-wider text-sm lg:text-base" value={search} onChange={(e)=>setSearch(e.target.value)}/>
         </div>
       </div>
 
@@ -55,9 +63,9 @@ const SidebarMessage = ({users,setSelectedUser,mobileView}:{users:allUserProps[]
         </nav>
       </div>
       <div className="">
-        {users.length==0? <div className="text-center text-gray-500 py-8">No user found</div>:
+        {filteredUsers.length==0? <div className="text-center text-gray-500 py-8">No user found</div>:
           <div>
-            {users.map((user:allUserProps)=>{
+            {filteredUsers.map((user:allUserProps)=>{
               return (
                 <div key={user.user_id} className="border-b-2 border-zinc-300 flex  my-2 lg:my-3  p-3 lg:py-2  lg:px-5  items-center -m-3 cursor-pointer hover:bg-gray-50 transition-colors" onClick={()=>handleUserSelect(user)}>
                   <img src={user.profile_pic ||  "https://randomuser.me/api/portraits/men/32.jpg"} className="w-8 h-8 lg:w-10 lg:h-10 rounded-full" alt={user.name} />

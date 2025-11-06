@@ -29,7 +29,7 @@ export const sendMessage = async(message:string,senderId:string, receiverId:stri
             receiver:receiver,
             message:message
         })
-         await messageRepo.save(newMessage);
+        await messageRepo.save(newMessage);
         // console.log(newMessage)
 
         const targetSocket = getReceiverSocketId(receiverId);
@@ -45,11 +45,13 @@ export const sendMessage = async(message:string,senderId:string, receiverId:stri
                 });
             });
         }
+        return newMessage
+
 
 }
 
 export const getMessage = async(senderId:string, receiverId:string) => {
-
+    
     const sender =  await userRepo.findOne({where:{user_id:senderId}});
     if(!sender){
         throw new ApiError("User not found ",404);

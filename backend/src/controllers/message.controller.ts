@@ -41,7 +41,7 @@ export const handleGetMessage = async(req:AuthRequest,res:Response,next:NextFunc
         const receiverId = req.params.receiverId;
 
         const result = await getMessage(senderId,receiverId);
-        console.log(result);
+        // console.log(result);
         
 
         res.status(200).json({
