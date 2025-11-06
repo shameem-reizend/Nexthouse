@@ -65,7 +65,8 @@ export const getMessage = async(senderId:string, receiverId:string) => {
             {sender:{user_id:senderId},receiver:{user_id:receiverId}},
             {sender:{user_id:receiverId},receiver:{user_id:senderId}}
         ],
-        relations:["sender","receiver"]
+        relations:["sender","receiver"],
+        order:{created_at:"ASC"}
     })
 
     return messages;

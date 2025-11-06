@@ -98,6 +98,7 @@ const ChatSide = ({selectedUser,onBackClick,mobileView}:{selectedUser:allUserPro
         if(messsageEndRef.current && data?.totalMessages){
             messsageEndRef.current.scrollIntoView({behavior:"instant"});
         }
+        console.log(data?.totalMessages)
     },[data?.totalMessages]);
 
 
