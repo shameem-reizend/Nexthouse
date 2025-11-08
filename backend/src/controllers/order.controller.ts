@@ -118,7 +118,36 @@ export const handleRejectOrder = async(req:AuthRequest,res:Response,next:NextFun
         const {orderId} = req.body;
         const userId  = req.user.id;
 
+        const order = await findOrderById(orderId);
+        const fcmToken = await findTokenByUser(order.buyer.user_id);
+        console.log(fcmToken)
+
+        if (!order || !order.buyer) {
+            throw new ApiError("Order not found or buyer missing", 404);
+        }
+
         const result = await rejectOrder(userId,orderId);
+
+         if(!fcmToken.fcm_token){
+            throw new ApiError("User has no fcm token", 404);
+        }
+
+        const message = {
+            token: fcmToken.fcm_token,
+            notification: {
+                title: "Order Rejected",
+                body: `Your order #${orderId} has been rejected.`
+            },
+            data: {
+                orderId: orderId.toString(),
+                type: "order_status"
+            }
+        };
+
+
+        const response = await fcm.send(message);
+        console.log("Notification sent",response);
+
         res.status(200).json({
             success:true,
             message:"Order rejected",
